@@ -1,0 +1,45 @@
+buff_data
+    added code update for command not found error
+
+Common query update
+    For platform series
+    Check for base product in csv
+
+ch_hard_data
+    in EX updated please copy to all its common
+    I have to work work on parttype column, for now I am skipping parttype.
+    ex-4200-sn1_phdc_jmb_ais_health_20150827_112128.txt
+    ******For now base product is removed from common query. in EX
+
+pfe_tr_data
+    avail in mx and ex
+
+sys-ver_data_query
+In SRX only two fields are matched
+verkernelsoftware and chassiname
+
+Old code
+print json.dumps(sys_ver_data, indent=4)
+        chassisname = sys_ver_data.get("chassisname","")
+        verbaseosboot = sys_ver_data.get("JUNOS Base OS boot","")
+        verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "")
+        verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "")
+        vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "")
+        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (MX Common)", "")
+        verdoc = sys_ver_data.get("JUNOS Online Documentation", "")
+        versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "")
+        verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "")
+        verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (M/T/EX Common)", "")
+        firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "")
+        self.command_query = ""
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" \
+            and verbaseosboot"+str(" is NULL" if verbaseosboot=="" else "='"+str(verbaseosboot)+"'" )+" and \
+            verbaseossoftware"+str(" is NULL" if verbaseossoftware=="" else "='"+str(verbaseossoftware)+"'" )+" and \
+            verkernelsoftware"+str(" is NULL" if verkernelsoftware=="" else "='"+str(verkernelsoftware)+"'" )+" and \
+            vercryptosoftware"+str(" is NULL" if vercryptosoftware=="" else "='"+str(vercryptosoftware)+"'" )+" and \
+            verpfesupportcommon"+str(" is NULL" if verpfesupportcommon=="" else "='"+str(verpfesupportcommon)+"'" )+" and \
+            verdoc"+str(" is NULL" if verdoc=="" else "='"+str(verdoc)+"'" )+" and \
+            versoftwarerelease"+str(" is NULL" if versoftwarerelease=="" else "='"+str(versoftwarerelease)+"'" )+" and \
+            verroutingsoftware"+str(" is NULL" if verroutingsoftware=="" else "='"+str(verroutingsoftware)+"'" )+" and \
+            verpfesupport"+str(" is NULL" if verpfesupport=="" else "='"+str(verpfesupport)+"'" )+" order by collector_time"
+        print self.command_query
