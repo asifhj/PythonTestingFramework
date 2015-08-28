@@ -11,6 +11,10 @@ Common query update
     For platform series
     Check for base product in csv
 
+proc_mem_data
+    usedmempercentage is floor not ceil.
+    floor goes lower integer and ceil goes to upper integer
+
 ch_hard_data
     in EX updated please copy to all its common
     I have to work work on parttype column, for now I am skipping parttype.

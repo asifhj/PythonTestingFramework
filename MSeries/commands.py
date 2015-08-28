@@ -657,12 +657,14 @@ class Commands:
                     self.proc_mem_data[record_count]["totalmem"] = (int(m.groupdict(0)["activemem"] )+int( m.groupdict(0)["inactmem"] )+int( m.groupdict(0)["wiredmem"] )+int( m.groupdict(0)["cachemem"] )+int( m.groupdict(0)["freemem"])) * 1000 * 1000
                     self.proc_mem_data[record_count]["usedmem"] = (int(m.groupdict(0)["activemem"] )+int( m.groupdict(0)["inactmem"] )+int( m.groupdict(0)["wiredmem"] )) * 1000 * 1000
                     #self.proc_mem_data[record_count]["usedmempercentage"] = int(self.proc_mem_data[record_count]["usedmem"]) * 100 / int(self.proc_mem_data[record_count]["totalmem"])
-                    self.proc_mem_data[record_count]["usedmempercentage"] = int(math.ceil((float(self.proc_mem_data[record_count]["usedmem"]) * 100) / float(self.proc_mem_data[record_count]["totalmem"])))
+                    self.proc_mem_data[record_count]["usedmempercentage"] = int(math.floor((float(self.proc_mem_data[record_count]["usedmem"]) * 100) / float(self.proc_mem_data[record_count]["totalmem"])))
                     self.proc_mem_data[record_count]["chassisname"] = chassisname
+                    #print math.floor(float(self.proc_mem_data[record_count]["usedmem"]) * 100 / (float(self.proc_mem_data[record_count]["totalmem"])))
                 m = re.match(r'Swap:\s+(?P<swap_total>\d+)M\s+\S+\s(?P<swap_free>\d+)M\s+.*', line.strip(), re.M|re.I)
                 if m:
                     self.proc_mem_data[record_count]["swap_total"] = int( m.groupdict(0)["swap_total"] ) * 1000 * 1000
                     self.proc_mem_data[record_count]["swap_free"] = int( m.groupdict(0)["swap_free"] ) * 1000 * 1000
+        print json.dumps(self.proc_mem_data, indent=4)
 
     def get_ps_data(self):
         output = ""
