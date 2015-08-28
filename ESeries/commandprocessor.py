@@ -487,7 +487,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric map")
                         command_report.append("ch_fab_map_data")
                         command_report = C.command_report4(command_report)
