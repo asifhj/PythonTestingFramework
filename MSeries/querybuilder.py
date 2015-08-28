@@ -1,11 +1,18 @@
 __author__ = 'asifj'
 import json
 import re
+import csv
 
 class Querybuilder:
 
     def build_common_query(self, tablename):
+        # OS value will be Platform Meta data field and baseproductname will be get from csv and platform will be series like M series or E series.
         tmp = ""
+        ifile  = open('..\\Baseproduct-mapping.csv', "rb")
+        reader = csv.reader(ifile)
+        for row in reader:
+            if row[0].strip()==self.product.strip():
+                self.base_product_name = row[1].strip()
         if self.node==None:
             tmp = "devicenode is " + str(self.node)
         else:
