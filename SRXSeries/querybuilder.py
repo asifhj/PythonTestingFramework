@@ -5,9 +5,15 @@ import re
 class Querybuilder:
 
     def build_common_query(self, tablename):
+        # OS value will be Platform Meta data field and baseproductname will be get from csv and platform will be series like M series or E series.
         tmp = ""
-        if self.node==None:
-            tmp = "devicenode is " + str(self.node)
+        ifile  = open('..\\Baseproduct-mapping.csv', "rb")
+        reader = csv.reader(ifile)
+        for row in reader:
+            if row[0].strip()==self.product.strip():
+                self.base_product_name = row[1].strip()
+        if self.node==None or self.node=='NULL':
+            tmp = "devicenode is NULL"
         else:
             tmp = "devicenode='" + str(self.node) + "'"
         self.common_query = "select accountuuid, accountname, collector_time, received_time, hostname, \
