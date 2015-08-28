@@ -259,7 +259,6 @@ if __name__ == "__main__":
             C.phdct_utc = C.epochToUTC(C.phd_collected_time)
             C.phdrt_utc = C.epochToUTC(C.received_time)
             tmp = phc.replace(phcs_home_dir, "").replace(".txt","")+"_PHC_"+str(C.phdct_utc).replace(":", "-")
-
             size = 0
             try:
                 size = os.path.getsize(reports_dir+str(tmp)+".csv") / 1000
@@ -677,46 +676,47 @@ if __name__ == "__main__":
                     cur.execute("refresh fpc_data")
                     how_many = len(C.fpc_data)
                     for i in range(0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show chassis fpc | display xml")
-                        command_report.append("fpc_data")
-                        status = []
-                        status.append("FPC")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("fpc_data")
-                        C.build_fpc_data_query(C.fpc_data[i])
-                        #print json.dumps(C.fpc_data, indent=4)
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No FPC Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
+                        if not C.fpc_data[i]['state'].strip()=="Empty":
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append("show chassis fpc | display xml")
+                            command_report.append("fpc_data")
+                            status = []
+                            status.append("FPC")
+                            status.append(C.phdct_utc)
+                            C.build_common_query("fpc_data")
+                            C.build_fpc_data_query(C.fpc_data[i])
+                            #print json.dumps(C.fpc_data, indent=4)
+                            query = C.common_query + C.command_query
+                            cur.execute(query)
                             result_set = cur.fetchall()
                             if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
+                                print "\n\t\t\t\t\t\t******************No FPC Match Found*********************"
+                                status.append("NA")
+                                print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                                cur.execute(C.common_query)
+                                result_set = cur.fetchall()
+                                if len(result_set) < 1:
+                                    command_report = C.command_report1(C, command_report)
+                                else:
+                                    command_report = C.command_report2(C, command_report, result_set)
+                                status.append("fpc_data No Match Found")
                             else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("fpc_data No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************FPC Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.fpc_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                                print "\n\t\t\t\t\t\t******************FPC Match Found*********************"
+                                # C.tabulate_print(result_set)
+                                #print result_set
+                                status.append(result_set[0][2])
+                                command_report = C.command_report3(C, command_report, result_set)
+                                status.append("Match Found")
+                            if print_query == 1:
+                                print query
+                            if print_data == 1:
+                                print json.dumps(C.fpc_data[i], indent=4)
+                            if print_output == 1:
+                                print C.output
+                            status.append(phc)
+                            summary.append(status)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
 
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
@@ -725,6 +725,7 @@ if __name__ == "__main__":
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
+
 
                 # jtree_mem
                 if jtree_mem==1:
@@ -751,6 +752,7 @@ if __name__ == "__main__":
                             cur.execute(C.common_query)
                             result_set = cur.fetchall()
                             if len(result_set) < 1:
+                                print "Collected time: "+str(C.phdct_utc)
                                 command_report = C.command_report1(C, command_report)
                             else:
                                 command_report = C.command_report2(C, command_report, result_set)
@@ -1442,7 +1444,7 @@ if __name__ == "__main__":
                     how_many = len(C.sys_stats_data)
                     if how_many:
                         command_report.append(phc)
-                        command_report.append("show system statistics arp")
+                        command_report.append("show system statistics")
                         command_report.append("sys_stats_data")
                         status = ["sys_stats_data", C.phdct_utc]
                         C.build_common_query("sys_stats_data")
@@ -1480,7 +1482,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system statistics")
                         command_report.append("sys_stats_data")
                         command_report = C.command_report4(command_report)
@@ -1707,7 +1709,7 @@ if __name__ == "__main__":
                     how_many = len(C.task_mem_data)
                     if how_many:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show task memory")
+                        command_report.append("show task memory fragmentation")
                         command_report.append("task_mem_data")
                         status = []
                         status.append("task_mem_data")
@@ -1749,7 +1751,7 @@ if __name__ == "__main__":
 
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show task memory")
+                        command_report.append("show task memory fragmentation")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)

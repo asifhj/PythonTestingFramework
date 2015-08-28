@@ -118,7 +118,9 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
                     break
                 output += line
+        #print output
         self.output = output
+        chassisname = ""
         soup = BeautifulSoup(output, "lxml")
         i = 0
         for record in soup.findAll("alarm-detail"):
@@ -664,7 +666,7 @@ class Commands:
                 if m:
                     self.proc_mem_data[record_count]["swap_total"] = int( m.groupdict(0)["swap_total"] ) * 1000 * 1000
                     self.proc_mem_data[record_count]["swap_free"] = int( m.groupdict(0)["swap_free"] ) * 1000 * 1000
-        print json.dumps(self.proc_mem_data, indent=4)
+        #print json.dumps(self.proc_mem_data, indent=4)
 
     def get_ps_data(self):
         output = ""

@@ -35,6 +35,7 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         self.ch_fpc_pic_data = OrderedDict()
         self.fpc_data = OrderedDict()
         self.ipsec_stats_data = OrderedDict()
+        self.jtree_mem = OrderedDict()
         self.up_data = OrderedDict()
         self.sys_ver_data = OrderedDict()
         self.ch_hard_data = OrderedDict()
@@ -183,64 +184,65 @@ if __name__ == "__main__":
     print_data = 0
     print_output = 0
 
-    arp_data = 0
-    buff_data = 0
-    ch_alarm_data = 0
-    ch_fab_map_data = 0
-    ch_fab_sum_data = 0
-    ch_fpc_pic_data = 0
-    ch_hard_data = 0
-    env_data = 0
-    eth_sw_err_age_msg_data = 0
-    eth_sw_stat_maclrnerr_data = 0
-    eth_sw_tbl_summ_data = 0
-    fan_data = 0
-    fpc_data = 0
-    ipsec_stats_data = 0
-    jtree_mem = 0
-    krt_q = 0
-    krt_st = 0
-    mpc_jnh_summ_data = 0
-    nhdb_zones = 0
-    pfe_err_ichip = 0
-    pfe_err_ichip_mx = 0
-    pfe_err_lchip = 0
-    pfe_heap_mem = 0
-    pfe_st_err = 0
+    arp_data = 1
+    buff_data = 1
+    ch_alarm_data = 1
+    ch_fab_map_data = 1
+    ch_fab_sum_data = 1
+    ch_fpc_pic_data = 1
+    ch_hard_data = 1
+    env_data = 1
+    eth_sw_err_age_msg_data = 1
+    eth_sw_stat_maclrnerr_data = 1
+    eth_sw_tbl_summ_data = 1
+    fan_data = 1
+    fpc_data = 1
+    ipsec_stats_data = 1
+    jtree_mem = 1
+    krt_q = 1
+    krt_st = 1
+    mpc_jnh_summ_data = 1
+    nhdb_zones = 1
+    pfe_err_ichip = 1
+    pfe_err_ichip_mx = 1
+    pfe_err_lchip = 1
+    pfe_heap_mem = 1
+    pfe_st_err = 1
     pfe_st_notif_data = 1
-    pfe_tr_data = 0
-    proc_mem_data = 0
-    ps_data = 0
-    pwr_data = 0
-    re_data = 0
-    rt_sum_data = 0
-    sec_alg_st_data = 0
-    sec_nat_intf_nat_prts_data = 0
-    sec_utm_aspam_stats_data = 0
-    sec_utm_av_st_data = 0
-    sec_utm_av_stats_data = 0
-    sec_utm_st_data = 0
+    pfe_tr_data = 1
+    proc_mem_data = 1
+    ps_data = 1
+    pwr_data = 1
+    re_data = 1
+    rt_sum_data = 1
+    sec_alg_st_data = 1
+    sec_nat_intf_nat_prts_data = 1
+    sec_utm_aspam_stats_data = 1
+    sec_utm_av_st_data = 1
+    sec_utm_av_stats_data = 1
+    sec_utm_st_data = 1
     sec_utm_web_st_data = 1
     sec_utm_web_stat_data = 1
-    sh_mem_frag_data = 0
-    stp_stats_data = 0
-    sys_cores_data = 0
-    sys_license_data = 0
-    sys_stats_data = 0
-    sys_stor_data = 0
-    sys_ver_data = 0
-    sys_vm_swap = 0
-    task_io_data = 0
-    task_mem_data = 0
-    ukern_trace_mem_comp_data = 0
-    up_data = 0
-    vc_prtcl_adj_data = 0
-    vc_prtcl_stat_data = 0
-    vc_stat_data = 0
-    vc_vcp_stat_data = 0
-    chassis_cluster_statistics_data = 0
+    sh_mem_frag_data = 1
+    stp_stats_data = 1
+    sys_cores_data = 1
+    sys_license_data = 1
+    sys_stats_data = 1
+    sys_stor_data = 1
+    sys_ver_data = 1
+    sys_vm_swap = 1
+    task_io_data = 1
+    task_mem_data = 1
+    ukern_trace_mem_comp_data = 1
+    up_data = 1
+    vc_prtcl_adj_data = 1
+    vc_prtcl_stat_data = 1
+    vc_stat_data = 1
+    vc_vcp_stat_data = 1
+    chassis_cluster_statistics_data = 1
 
     report = []
+    file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\srx\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
@@ -998,46 +1000,47 @@ if __name__ == "__main__":
                     cur.execute("refresh fpc_data")
                     how_many = len(C.fpc_data)
                     for i in range(0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show chassis fpc | display xml")
-                        command_report.append("fpc_data")
-                        status = []
-                        status.append("FPC")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("fpc_data")
-                        C.build_fpc_data_query(C.fpc_data[i])
-                        #print json.dumps(C.fpc_data, indent=4)
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No FPC Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
+                        if not C.fpc_data[i]['state'].strip()=="Empty":
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append("show chassis fpc | display xml")
+                            command_report.append("fpc_data")
+                            status = []
+                            status.append("FPC")
+                            status.append(C.phdct_utc)
+                            C.build_common_query("fpc_data")
+                            C.build_fpc_data_query(C.fpc_data[i])
+                            #print json.dumps(C.fpc_data, indent=4)
+                            query = C.common_query + C.command_query
+                            cur.execute(query)
                             result_set = cur.fetchall()
                             if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
+                                print "\n\t\t\t\t\t\t******************No FPC Match Found*********************"
+                                status.append("NA")
+                                print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                                cur.execute(C.common_query)
+                                result_set = cur.fetchall()
+                                if len(result_set) < 1:
+                                    command_report = C.command_report1(C, command_report)
+                                else:
+                                    command_report = C.command_report2(C, command_report, result_set)
+                                status.append("fpc_data No Match Found")
                             else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("fpc_data No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************FPC Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.fpc_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                                print "\n\t\t\t\t\t\t******************FPC Match Found*********************"
+                                # C.tabulate_print(result_set)
+                                #print result_set
+                                status.append(result_set[0][2])
+                                command_report = C.command_report3(C, command_report, result_set)
+                                status.append("Match Found")
+                            if print_query == 1:
+                                print query
+                            if print_data == 1:
+                                print json.dumps(C.fpc_data[i], indent=4)
+                            if print_output == 1:
+                                print C.output
+                            status.append(phc)
+                            summary.append(status)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
 
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
@@ -1384,7 +1387,7 @@ if __name__ == "__main__":
                     cur.execute("refresh pfe_tr_data")
                     how_many = len(C.pfe_tr_data)
                     for i in range (0,how_many):
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics traffic")
                         command_report.append("pfe_tr_data")
                         status = []
@@ -1425,7 +1428,7 @@ if __name__ == "__main__":
                         command_report = C.report_writer(writer, command_report)
 
                     if len(C.output)==1:
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics traffic")
                         command_report.append("pfe_tr_data")
                         command_report = C.command_report4(command_report)
@@ -2352,7 +2355,7 @@ if __name__ == "__main__":
                     how_many = len(C.sys_stats_data)
                     if how_many:
                         command_report.append(phc)
-                        command_report.append("show system statistics arp")
+                        command_report.append("show system statistics")
                         command_report.append("sys_stats_data")
                         status = ["sys_stats_data", C.phdct_utc]
                         C.build_common_query("sys_stats_data")
@@ -2390,8 +2393,8 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(phc)
-                        command_report.append("show system statistics arp")
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show system statistics")
                         command_report.append("sys_stats_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
@@ -2617,7 +2620,7 @@ if __name__ == "__main__":
                     how_many = len(C.task_mem_data)
                     if how_many:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show task memory")
+                        command_report.append("show task memory fragmentation")
                         command_report.append("task_mem_data")
                         status = []
                         status.append("task_mem_data")
@@ -2659,7 +2662,7 @@ if __name__ == "__main__":
 
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show task memory")
+                        command_report.append("show task memory fragmentation")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)

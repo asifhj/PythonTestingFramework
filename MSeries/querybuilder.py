@@ -44,7 +44,7 @@ class Querybuilder:
         self.command_query =" and totalarpentries="+str(totalarpentries)+"  order by collector_time"
 
     def build_buff_data_query(self, buff_data):
-        chassisname = buff_data.get("chassisname", "NULL")
+        chassisname = buff_data.get("chassisname", "")
         currentMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[0]
         cacheMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[1]
         totalMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[2]
@@ -761,7 +761,7 @@ class Querybuilder:
         for i in range(0, len(sys_stats_data)):
             ssd = sys_stats_data[i]
             for k, v in ssd.iteritems():
-                print k
+                #print k
                 output = ssd[k]
                 output = output.split("\n")
                 if k=="icmp":
@@ -959,6 +959,7 @@ class Querybuilder:
                         if m:
                             udpfullsocbufs = m.groups(0)[0]
                         m = re.match(r"", line.strip(), re.M | re.I)
+
         self.command_query = ""
         self.command_query = " and icmpratelimitdrops="+str(icmpratelimitdrops)+"" \
             " and icmp6ratelimitnotgen="+str(icmp6ratelimitnotgen)+" and deadnexthop="+str(deadnexthop)+"" \

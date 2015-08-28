@@ -1,6 +1,7 @@
 __author__ = 'asifj'
 import json
 import re
+import csv
 
 class Querybuilder:
 
@@ -43,7 +44,7 @@ class Querybuilder:
         self.command_query =" and totalarpentries="+str(totalarpentries)+"  order by collector_time"
 
     def build_buff_data_query(self, buff_data):
-        chassiname = buff_data.get("chassisname", "NULL")
+        chassisname = buff_data.get("chassisname", "")
         currentMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[0]
         cacheMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[1]
         totalMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[2]
@@ -60,7 +61,7 @@ class Querybuilder:
         reqsForClustersDelayed = buff_data.get("cluster requests delayed", 0)[0]
 
         self.command_query = ""
-        self.command_query =" and chassisname='"+chassiname+"' and currentmbufs="+str(currentMbufs)+" and cachembufs="+str(cacheMbufs)+" and \
+        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and currentmbufs="+str(currentMbufs)+" and cachembufs="+str(cacheMbufs)+" and \
                             totalmbufs="+str(totalMbufs)+" and currentmbufclusters="+str(currentMbufClusters)+" and \
                             cachembufclusters="+str(cacheMbufClusters)+" and totalmbufclusters="+str(totalMbufClusters)+" \
                             and reqsformbufsdenied="+str(reqsForMbufsDenied)+" and reqsforclustersdenied="+str(reqsForClustersDenied)+" " \
@@ -327,7 +328,7 @@ class Querybuilder:
     def build_pfe_tr_data_query(self, pfe_tr_data):
         inputpackets = pfe_tr_data.get("Input  packets", 0)
         inputpps = pfe_tr_data.get("Input  packets PPS", 0)
-        outputpackets = pfe_tr_data.get("Ouput packets", 0)
+        outputpackets = pfe_tr_data.get("Output packets", 0)
         outputpps = pfe_tr_data.get("Output packets PPS", 0)
         localpacketsinput = pfe_tr_data.get("Local packets input", 0)
         localpacketsoutput = pfe_tr_data.get("Local packets output", 0)
