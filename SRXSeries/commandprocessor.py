@@ -257,8 +257,13 @@ if __name__ == "__main__":
             C.phdct_utc = C.epochToUTC(C.phd_collected_time)
             C.phdrt_utc = C.epochToUTC(C.received_time)
             tmp = phc.replace(phcs_home_dir, "").replace(".txt","")+"_PHC_"+str(C.phdct_utc).replace(":", "-")
-            #if os.path.isfile(reports_dir+str(tmp)+".csv"):
-            if True:
+            size = 0
+            try:
+                size = os.path.getsize(reports_dir+str(tmp)+".csv") / 1000
+            except Exception:
+                size = 0
+            #  os.path.isfile(reports_dir+str(tmp)+".csv") and
+            if size < 2:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 

@@ -213,6 +213,9 @@ class Querybuilder:
                             and replay_errors"+str(" is NULL" if replay_errors=="NULL" else "='"+str(replay_errors)+"'" )+" \
                             order by collector_time"
 
+    def build_jtree_mem_query(self, jtree_mem):
+        self.command_query = ""
+
     def build_krt_q_query(self, krt_q):
         routetbladd = krt_q.get("Routing table add queue", 0)
         indadddelchange = krt_q.get("Interface add/delete/change queue", 0)
@@ -538,7 +541,7 @@ class Querybuilder:
         if memory_dram_size=="NULL":
             tmp += " and memory_dram_size is NULL "
         else:
-            tmp += " and memory_dram_size='"+str(memory_dram_size)+"' "
+            tmp += " and memory_dram_size="+str(memory_dram_size)+" "
         memory_buffer_utilization = re_data.get('memory_buffer_utilization', 0)
         tmp += " and memory_buffer_utilization="+str(memory_buffer_utilization)+""
         mastershipstate = re_data.get('mastership_state', "NULL")

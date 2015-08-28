@@ -361,7 +361,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         self.output = output
-        print output
+        #print output
         output = output.split("\n")
         record_count = 0
         self.jtree_mem[record_count] = {}
@@ -369,11 +369,11 @@ class Commands:
             if line.strip():
                 m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+total\s+\([0-9]+\s+banks\)', line.strip(), re.M|re.I)
                 if m:
-                    print m.groups(0)[0]
+                    #print m.groups(0)[0]
                     self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
                 m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+total', line.strip(), re.M|re.I)
                 if m:
-                    print m.groups(0)[0]
+                    #print m.groups(0)[0]
                     self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
                 m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+used', line.strip(), re.M|re.I)
                 if m:
@@ -391,7 +391,7 @@ class Commands:
                     self.jtree_mem[record_count]['jtreemembadcookies'] = m.groups(0)[0]
                     record_count += 1
                     self.jtree_mem[record_count] = {}
-        print json.dumps(self.jtree_mem, indent=4)
+        #print json.dumps(self.jtree_mem, indent=4)
 
     def get_krt_q(self):
         # hi#

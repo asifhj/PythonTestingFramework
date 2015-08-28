@@ -537,7 +537,7 @@ class Querybuilder:
         if memory_dram_size=="NULL":
             tmp += " and memory_dram_size is NULL "
         else:
-            tmp += " and memory_dram_size='"+str(memory_dram_size)+"' "
+            tmp += " and memory_dram_size="+str(memory_dram_size)+" "
         memory_buffer_utilization = re_data.get('memory_buffer_utilization', 0)
         tmp += " and memory_buffer_utilization="+str(memory_buffer_utilization)+""
         mastershipstate = re_data.get('mastership_state', "NULL")
