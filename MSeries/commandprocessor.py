@@ -1010,7 +1010,7 @@ if __name__ == "__main__":
                     cur.execute("refresh pfe_tr_data")
                     how_many = len(C.pfe_tr_data)
                     for i in range (0,how_many):
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics traffic")
                         command_report.append("pfe_tr_data")
                         status = []
@@ -1051,7 +1051,7 @@ if __name__ == "__main__":
                         command_report = C.report_writer(writer, command_report)
 
                     if len(C.output)==1:
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics traffic")
                         command_report.append("pfe_tr_data")
                         command_report = C.command_report4(command_report)
