@@ -17,8 +17,7 @@ class Querybuilder:
             tmp = "devicenode is NULL"
         else:
             tmp = "devicenode='" + str(self.node) + "'"
-        self.common_query = "select accountuuid, accountname, collector_time, received_time, hostname, \
-            product from "+tablename+" where \
+        self.common_query = "select * from "+tablename+" where \
             hostname='" + str(self.host_name) + "' and serialnumber='" + str(self.serial_number) + "' and \
             product='" + str(self.product) + "' and baseproduct='" + str(self.base_product_name) + "' and \
             os='" + str(self.platform) + "' and aiscriptversion='" + str(self.aiscript_version) + "' and \
@@ -28,8 +27,7 @@ class Querybuilder:
             servicenowversion='" + str(self.servicenow_version) + "' and softwarerelease='" + str(self.software_release) + "' and \
             collector_time between '" + str(self.phdct_utc) + "' and '" + str(self.phdct_utc) + "' "
         '''
-        self.common_query = "select accountuuid, accountname, collector_time, received_time, hostname, \
-            product from "+tablename+" where \
+        self.common_query = "select * from "+tablename+" where \
             hostname='" + str(self.host_name) + "' and serialnumber='" + str(self.serial_number) + "' and \
             product='" + str(self.product) + "' and baseproduct='" + str(self.base_product_name) + "' and \
             platform is NULL and os='"+self.platform+"' and aiscriptversion='" + str(self.aiscript_version) + "' and \
