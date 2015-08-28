@@ -733,7 +733,7 @@ if __name__ == "__main__":
                     how_many = len(C.jtree_mem)
                     if how_many:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show krt queue")
+                        command_report.append('request pfe execute command "show jtree 0 memory extensive" target fpc(NUMBER)')
                         command_report.append("jtree_mem")
                         status = []
                         status.append("jtree_mem")
@@ -774,7 +774,7 @@ if __name__ == "__main__":
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show krt queue")
+                        command_report.append('request pfe execute command "show jtree 0 memory extensive" target fpc(NUMBER)')
                         command_report.append("jtree_mem")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)

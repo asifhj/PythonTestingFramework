@@ -333,8 +333,8 @@ class Querybuilder:
     def build_pfe_tr_data_query(self, pfe_tr_data):
         inputpackets = pfe_tr_data.get("Input  packets", 0)
         inputpps = pfe_tr_data.get("Input  packets PPS", 0)
-        outputpackets = pfe_tr_data.get("Ouput packets", 0)
-        outputpps = pfe_tr_data.get("Output packets PPS", 0)
+        outputpackets = pfe_tr_data.get("Ouput  packets", 0)
+        outputpps = pfe_tr_data.get("Output  packets PPS", 0)
         localpacketsinput = pfe_tr_data.get("Local packets input", 0)
         localpacketsoutput = pfe_tr_data.get("Local packets output", 0)
         swinputctlplanedrops = pfe_tr_data.get("Software input control plane drops", 0)
