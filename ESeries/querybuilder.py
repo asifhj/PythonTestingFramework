@@ -72,7 +72,7 @@ class Querybuilder:
     def build_ch_alarm_query(self, ch_alarm_data):
         chassisname = ch_alarm_data.get('chassisname', "NULL")
         alarm_class = ch_alarm_data.get('alarm_class', "NULL")
-        alarm_text = ch_alarm_data.get('alarm_text', "NULL")
+        alarm_text = ch_alarm_data.get('alarm_description', "NULL")
         alarm_time = ch_alarm_data.get('alarm_time', "NULL")
         self.command_query = ""
         self.command_query =" and chassisname"+str(" is NULL" if chassisname=="NULL" else "='"+str(chassisname)+"'" )+" \
