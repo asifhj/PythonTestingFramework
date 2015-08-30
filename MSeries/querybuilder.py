@@ -116,10 +116,13 @@ class Querybuilder:
         parttype = ""
         self.command_query = ""
         q = ""
+        bk_parttype = ""
         m = re.match(r'([\S|\s]+)(\d)$', str(self.ch_hard_data[k]["item"]), re.M | re.I)
+        bk_parttype = self.ch_hard_data[k]["item"]
         if m:
             #print m.groups()
             parttype = m.groups()[0].strip()
+            print bk_parttype
             if len(parttype.split(" "))>1:
                 parttype = parttype.split(" ")[1]
             slot = m.groups()[1]
@@ -132,6 +135,8 @@ class Querybuilder:
                 q = "and slot is NULL and pic_slot is NULL and sfp_slot="+str(slot)+""
         else:
             parttype = k
+            bk_parttype =
+            #print parttype
             slot = "NULL"
             q = "and slot is "+str(slot)+""
         q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].upper().strip())+"' \
