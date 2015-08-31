@@ -2,11 +2,6 @@ buff_data
     added code update for command not found error
     chassisname NULL updated
 
-ch_alarm_data
-    update query
-    alarm description
-    done
-
 Common query update
     For platform series
     Check for base product in csv

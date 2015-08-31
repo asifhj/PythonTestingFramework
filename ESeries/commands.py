@@ -126,7 +126,7 @@ class Commands:
                 m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:)', line, re.M|re.I)
                 if m:
                     chassisname = m.groups(0)[0]
-                m = re.match(r'(?P<alarm_time>\d+\-\d+\-\d+\s\d+:\d+:\d+\s[A-Z]+)\s+(?P<alarm_class>\S+)\s+(?P<alarm_text>.*)', line, re.M|re.I)
+                m = re.match(r'(?P<alarm_time>\d+\-\d+\-\d+\s\d+:\d+:\d+\s[A-Z]+)\s+(?P<alarm_class>\S+)\s+(?P<alarm_description>.*)', line, re.M|re.I)
                 if m:
                     self.ch_alarm_data[record_count] = m.groupdict(0)
                     self.ch_alarm_data[record_count]['chassisname'] = chassisname

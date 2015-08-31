@@ -184,62 +184,62 @@ if __name__ == "__main__":
     print_data = 0
     print_output = 0
 
-    arp_data = 0
-    buff_data = 0
-    ch_alarm_data = 0
-    ch_fab_map_data = 0
-    ch_fab_sum_data = 0
-    ch_fpc_pic_data = 0
+    arp_data = 1
+    buff_data = 1
+    ch_alarm_data = 1
+    ch_fab_map_data = 1
+    ch_fab_sum_data = 1
+    ch_fpc_pic_data = 1
     ch_hard_data = 1
-    env_data = 0
-    eth_sw_err_age_msg_data = 0
-    eth_sw_stat_maclrnerr_data = 0
-    eth_sw_tbl_summ_data = 0
-    fan_data = 0
-    fpc_data = 0
-    ipsec_stats_data = 0
-    jtree_mem = 0
-    krt_q = 0
-    krt_st = 0
-    mpc_jnh_summ_data = 0
-    nhdb_zones = 0
-    pfe_err_ichip = 0
-    pfe_err_ichip_mx = 0
-    pfe_err_lchip = 0
-    pfe_heap_mem = 0
-    pfe_st_err = 0
-    pfe_st_notif_data = 0
-    pfe_tr_data = 0
-    proc_mem_data = 0
-    ps_data = 0
-    pwr_data = 0
-    re_data = 0
-    rt_sum_data = 0
-    sec_alg_st_data = 0
-    sec_nat_intf_nat_prts_data = 0
-    sec_utm_aspam_stats_data = 0
-    sec_utm_av_st_data = 0
-    sec_utm_av_stats_data = 0
-    sec_utm_st_data = 0
-    sec_utm_web_st_data = 0
-    sec_utm_web_stat_data = 0
-    sh_mem_frag_data = 0
-    stp_stats_data = 0
-    sys_cores_data = 0
-    sys_license_data = 0
-    sys_stats_data = 0
-    sys_stor_data = 0
-    sys_ver_data = 0
-    sys_vm_swap = 0
-    task_io_data = 0
-    task_mem_data = 0
-    ukern_trace_mem_comp_data = 0
-    up_data = 0
-    vc_prtcl_adj_data = 0
-    vc_prtcl_stat_data = 0
-    vc_stat_data = 0
-    vc_vcp_stat_data = 0
-    chassis_cluster_statistics_data = 0
+    env_data = 1
+    eth_sw_err_age_msg_data = 1
+    eth_sw_stat_maclrnerr_data = 1
+    eth_sw_tbl_summ_data = 1
+    fan_data = 1
+    fpc_data = 1
+    ipsec_stats_data = 1
+    jtree_mem = 1
+    krt_q = 1
+    krt_st = 1
+    mpc_jnh_summ_data = 1
+    nhdb_zones = 1
+    pfe_err_ichip = 1
+    pfe_err_ichip_mx = 1
+    pfe_err_lchip = 1
+    pfe_heap_mem = 1
+    pfe_st_err = 1
+    pfe_st_notif_data = 1
+    pfe_tr_data = 1
+    proc_mem_data = 1
+    ps_data = 1
+    pwr_data = 1
+    re_data = 1
+    rt_sum_data = 1
+    sec_alg_st_data = 1
+    sec_nat_intf_nat_prts_data = 1
+    sec_utm_aspam_stats_data = 1
+    sec_utm_av_st_data = 1
+    sec_utm_av_stats_data = 1
+    sec_utm_st_data = 1
+    sec_utm_web_st_data = 1
+    sec_utm_web_stat_data = 1
+    sh_mem_frag_data = 1
+    stp_stats_data = 1
+    sys_cores_data = 1
+    sys_license_data = 1
+    sys_stats_data = 1
+    sys_stor_data = 1
+    sys_ver_data = 1
+    sys_vm_swap = 1
+    task_io_data = 1
+    task_mem_data = 1
+    ukern_trace_mem_comp_data = 1
+    up_data = 1
+    vc_prtcl_adj_data = 1
+    vc_prtcl_stat_data = 1
+    vc_stat_data = 1
+    vc_vcp_stat_data = 1
+    chassis_cluster_statistics_data = 1
 
     report = []
     file_report = []
@@ -247,7 +247,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\mx\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\"
 
-    file = "mx-480-sn2_phdc_jmb_ais_health_20150827*.txt"
+    file = "*20150831*.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -1443,7 +1443,7 @@ if __name__ == "__main__":
                     cur.execute("refresh sys_stats_data")
                     how_many = len(C.sys_stats_data)
                     if how_many:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system statistics")
                         command_report.append("sys_stats_data")
                         status = ["sys_stats_data", C.phdct_utc]
@@ -1655,7 +1655,7 @@ if __name__ == "__main__":
                     cur.execute("refresh task_io_data")
                     how_many = len(C.task_io_data)
                     for i in range(0, how_many):
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task io data")
                         command_report.append("task_io_data")
                         status = []
@@ -1695,7 +1695,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task io data")
                         command_report.append("task_io_data")
                         command_report = C.command_report4(command_report)

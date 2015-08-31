@@ -120,7 +120,6 @@ class Querybuilder:
         m = re.match(r'([\S|\s]+)(\d)$', str(self.ch_hard_data[k]["item"]), re.M | re.I)
         bk_parttype = self.ch_hard_data[k]["item"]
         if m:
-            #print m.groups()
             parttype = m.groups()[0].strip()
             print bk_parttype
             if len(parttype.split(" "))>1:
@@ -135,14 +134,13 @@ class Querybuilder:
                 q = "and slot is NULL and pic_slot is NULL and sfp_slot="+str(slot)+""
         else:
             parttype = k
-            bk_parttype =
             #print parttype
             slot = "NULL"
             q = "and slot is "+str(slot)+""
         q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].upper().strip())+"' \
-            and partasnum='"+str(self.ch_hard_data[k]["part_number"])+"' " \
-            "and partserial='"+str(self.ch_hard_data[k]["serial_number"])+"' \
-             and partdesc='"+str(self.ch_hard_data[k]["description"])+"'"
+            and partasnum='"+str(self.ch_hard_data[k]["part_number"]).strip()+"' " \
+            "and partserial='"+str(self.ch_hard_data[k]["serial_number"]).strip()+"' \
+             and partdesc='"+str(self.ch_hard_data[k]["description"]).strip()+"'"
         self.command_query = q
 
     def build_env_data_query(self, env_data):
@@ -1116,7 +1114,7 @@ class Querybuilder:
             capacity = int(capacity)
 
         self.command_query = ""
-        self.command_query = " and chassisname='"+str(chassisname)+"' and filesystem='"+str(filesystem)+"' and \
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and filesystem='"+str(filesystem)+"' and \
             `size`="+str(size)+" and used="+str(used)+" and avail="+str(avail)+" and \
             capacity="+str(capacity)+" and mountedon='"+str(mountedon)+"' order by collector_time"
 
@@ -1132,6 +1130,8 @@ class Querybuilder:
         versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "")
         verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "")
         verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (M/T/EX Common)", "")
+        if verpfesupport.strip()=="":
+            verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (M/T Common)", "")
         firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "")
         self.command_query = ""
         self.command_query = " and chassisname='"+str(chassisname)+"' and verbaseosboot='"+str(verbaseosboot)+"' and \

@@ -134,9 +134,9 @@ class Querybuilder:
             slot = "NULL"
             q = "and slot is "+str(slot)+""
         q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].upper().strip())+"' \
-            and partasnum='"+str(self.ch_hard_data[k]["part_number"])+"' " \
-            "and partserial='"+str(self.ch_hard_data[k]["serial_number"])+"' \
-             and partdesc='"+str(self.ch_hard_data[k]["description"])+"'"
+            and partasnum='"+str(self.ch_hard_data[k]["part_number"]).strip()+"' " \
+            "and partserial='"+str(self.ch_hard_data[k]["serial_number"]).strip()+"' \
+             and partdesc='"+str(self.ch_hard_data[k]["description"]).strip()+"'"
         self.command_query = q
 
     def build_env_data_query(self, env_data):
@@ -1107,7 +1107,7 @@ class Querybuilder:
             capacity = int(capacity)
 
         self.command_query = ""
-        self.command_query = " and chassisname='"+str(chassisname)+"' and filesystem='"+str(filesystem)+"' and \
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and filesystem='"+str(filesystem)+"' and \
             `size`="+str(size)+" and used="+str(used)+" and avail="+str(avail)+" and \
             capacity="+str(capacity)+" and mountedon='"+str(mountedon)+"' order by collector_time"
 

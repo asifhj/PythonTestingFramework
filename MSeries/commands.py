@@ -246,7 +246,7 @@ class Commands:
                     self.ch_hard_data[str(record_num)]=m.groupdict()
                     record_num = record_num + 1
         self.ch_hard_data = self.removeWhiteSpaceFromDict(self.ch_hard_data)
-        print json.dumps(self.ch_hard_data, indent=4)
+        #print json.dumps(self.ch_hard_data, indent=4)
 
     def get_env_data(self):
         # env_data

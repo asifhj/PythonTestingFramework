@@ -208,7 +208,7 @@ if __name__ == "__main__":
     pfe_err_lchip = 1
     pfe_heap_mem = 1
     pfe_st_err = 1
-    pfe_st_notif_data = 1
+    pfe_st_notif_data = 0
     pfe_tr_data = 1
     proc_mem_data = 1
     ps_data = 1
@@ -230,7 +230,7 @@ if __name__ == "__main__":
     sys_stats_data = 1
     sys_stor_data = 1
     sys_ver_data = 1
-    sys_vm_swap = 1
+    sys_vm_swap = 0
     task_io_data = 1
     task_mem_data = 1
     ukern_trace_mem_comp_data = 1
@@ -244,10 +244,10 @@ if __name__ == "__main__":
     report = []
     file_report = []
 
-    reports_dir = "C:\\tmp\\PHCreports\\"
+    reports_dir = "C:\\tmp\\PHCreports\\ex\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\"
 
-    file = "ex-4200-sn1_phdc_jmb_ais_health_20150827_112128.txt"
+    file = "*20150830*.txt"
     #file = "sn-space-ex6200-sys_phdc_jmb_ais_health_20150823_091949.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -2301,7 +2301,7 @@ if __name__ == "__main__":
                     cur.execute("refresh sys_stats_data")
                     how_many = len(C.sys_stats_data)
                     if how_many:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system statistics arp")
                         command_report.append("sys_stats_data")
                         status = ["sys_stats_data", C.phdct_utc]
