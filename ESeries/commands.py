@@ -20,7 +20,7 @@ class Commands:
                     if not re.match(".*@.*>\\s+show\\s+system\\s+statistics\\s+arp.*", line, re.M | re.I) == None:
                         break
                 for line in fopen:
-                    if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                         break
                     if line.strip():
                         output = output + line
@@ -39,7 +39,7 @@ class Commands:
                     if not re.match(".*@.*>\\s+show\\s+arp.*", line, re.M | re.I) == None:
                         break
                 for line in fopen:
-                    if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                         break
                     if line.strip():
                         output = output + line
@@ -60,7 +60,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+system\\s+buffers.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                     break
                 output = output + line
         #print output
@@ -112,7 +112,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+chassis\\s+alarm\s*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
         #print output
@@ -147,7 +147,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+map.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -193,7 +193,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+summary.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -220,7 +220,7 @@ class Commands:
                 if not re.match(".*@.*>\\s*show\\s*chassis\\s*fpc\\s*pic\-status\\s*.\\s*display\\s*xml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
         #print output
@@ -265,7 +265,7 @@ class Commands:
                         break
                 for line in fopen:
                     if not line.strip() == "":
-                        if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                        if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                             break
                         output += line
         self.output = output
@@ -317,7 +317,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+chassis\\s+environment.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -361,7 +361,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+ethernet\-switching\\s+statistics\\s+aging.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -384,7 +384,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+ethernet\-switching\\s+statistics\\s+mac\-learning.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -407,7 +407,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+ethernet\-switching\\s+table\\s+summar.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -430,7 +430,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+spanning\-tree\\s+bridge\\s+brief.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -458,10 +458,10 @@ class Commands:
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+chassis\\s+environment\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+environment.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -499,7 +499,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+chassis\\s+fpc\\s+.\\s+display.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
         #print output
@@ -522,7 +522,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+security\\s+ipsec\\sstatistics\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
         print output
@@ -553,7 +553,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+krt\\s+queue.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -575,7 +575,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+krt\\s+state.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -671,7 +671,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+request\\s+pfe\\s+execute\\s+command\\s+\"show\\s+jnh\\s+pool.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -748,7 +748,7 @@ class Commands:
                     output = output + line
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -816,7 +816,7 @@ class Commands:
                 if line.startswith("[----BEGIN"):
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -844,11 +844,11 @@ class Commands:
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+system\\s+processes\\s+extensive\\s*.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+system\\s+processes\\s+extensive.*", line, re.M | re.I) == None:
                     output = output + line
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -888,11 +888,11 @@ class Commands:
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+system\\s+processes\\s+extensive\\s*.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+system\\s+processes\\s+extensive.*", line, re.M | re.I) == None:
                     output = output + line
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -917,10 +917,10 @@ class Commands:
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+chassis\\s+environment\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+environment.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -959,7 +959,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+chassis\\s+routing-engine.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output = output + line
         self.output = output
@@ -987,7 +987,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+route\\s+summary\\s+.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1021,7 +1021,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+security\\s+alg\\sstatus\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1046,7 +1046,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+security\\s+nat\\sinterface\-nat\-ports.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1076,7 +1076,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+security\\s+utm\\santi\-spam\\s+statistics\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1101,7 +1101,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+security\\s+utm\\santi\-virus\\s+status\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1126,7 +1126,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+security\\s+utm\\santi\-virus\\s+statistics\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1151,7 +1151,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+security\\s+utm\\sstatus\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1176,7 +1176,7 @@ class Commands:
                 if not re.match(".*@.*>\\s*show\\s+security\\s+utm\\s+web\-filtering\\sstatus\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1201,7 +1201,7 @@ class Commands:
                 if not re.match(".*@.*>\\s*show\\s+security\\s+utm\\s+web\-filtering\\sstatistics\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1226,7 +1226,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+task\\s+memory\\s+fragmentation.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                     break
@@ -1249,7 +1249,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+spanning\-tree\\s+bridge\\s+brief.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1282,7 +1282,7 @@ class Commands:
                     if not re.match(".*@.*>\\s+show\\s+system\\s+core-dumps\\s+no-forwarding.*", line, re.M | re.I) == None:
                         break
                 for line in fopen:
-                    if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                         break
                     if line.startswith("[----BEGIN"):
                         break
@@ -1312,7 +1312,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+system\\s+license\\s.\\sdisplay\\sxml", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.startswith("[----BEGIN"):
                         break
@@ -1367,7 +1367,7 @@ class Commands:
                     if not re.match(".*@.*>\\s+show\\s+system\\s+storage\\s+.*", line, re.M | re.I) == None:
                         break
                 for line in fopen:
-                    if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                         break
                     if line.startswith("[----BEGIN"):
                         break
@@ -1400,7 +1400,7 @@ class Commands:
                     break
             for line in fopen:
                 if not line.strip() == "":
-                    if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                         break
                     output = output + line
         output = output.split("\n")
@@ -1431,7 +1431,7 @@ class Commands:
                     break
             for line in fopen:
                 if not line.strip() == "":
-                    if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                         break
                     output += line
         if not output:
@@ -1442,7 +1442,7 @@ class Commands:
                         break
                 for line in fopen:
                     if not line.strip() == "":
-                        if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                        if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                             break
                         output += line
         self.output = output
@@ -1482,7 +1482,7 @@ class Commands:
                     break
             for line in fopen:
                 if not line.strip() == "":
-                    if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                         break
                     output = output + line
         chassisname = ""
@@ -1508,7 +1508,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+task\\s+io.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\sshow\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                     break
                 output += line
         self.output = output
@@ -1537,7 +1537,7 @@ class Commands:
                     break
             for line in fopen:
                 if not line.strip() == "":
-                    if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                         break
                     output = output + line
         chassisname = ""
@@ -1574,7 +1574,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+request\\s+pfe\\s+execute\\s+command\\s+\"show\\s+ukern.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1616,7 +1616,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+system\\s+uptime.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1657,7 +1657,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1692,7 +1692,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1727,7 +1727,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1762,7 +1762,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 if line.strip():
                     output = output + line
@@ -1820,7 +1820,7 @@ class Commands:
                         output = output + line
                         break
                 for line in fopen:
-                    if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
+                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                         break
                     if line.strip():
                         output = output + line

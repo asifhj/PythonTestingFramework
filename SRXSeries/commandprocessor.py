@@ -247,7 +247,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\srx\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
 
-    file = "srx-650-sn2_phdc_jmb_ais_health_20150825_222422.txt"
+    file = "usrx3ka-phdc-20150831-103929_ais_attach_AISESI"
     #file = "srx-220-sn1_phdc_jmb_ais_health_20150821_142136.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -265,7 +265,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            if size < 2:
+            #if size < 2:
+            if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
@@ -2566,45 +2567,46 @@ if __name__ == "__main__":
                     cur.execute("refresh task_io_data")
                     how_many = len(C.task_io_data)
                     for i in range(0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show task io data")
-                        command_report.append("task_io_data")
-                        status = []
-                        status.append("task_io_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("task_io_data")
-                        C.build_task_io_data_query(C.task_io_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No task_io_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
+                        if C.task_io_data[i]['dropped']>0:
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append("show task io data")
+                            command_report.append("task_io_data")
+                            status = []
+                            status.append("task_io_data")
+                            status.append(C.phdct_utc)
+                            C.build_common_query("task_io_data")
+                            C.build_task_io_data_query(C.task_io_data[i])
+                            query = C.common_query + C.command_query
+                            cur.execute(query)
                             result_set = cur.fetchall()
                             if len(result_set) < 1:
-                                print "Collected time: "+str(C.phdct_utc)
-                                command_report = C.command_report1(C, command_report)
+                                print "\n\t\t\t\t\t\t******************No task_io_data Match Found*********************"
+                                status.append("NA")
+                                print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                                cur.execute(C.common_query)
+                                result_set = cur.fetchall()
+                                if len(result_set) < 1:
+                                    print "Collected time: "+str(C.phdct_utc)
+                                    command_report = C.command_report1(C, command_report)
+                                else:
+                                    command_report = C.command_report2(C, command_report, result_set)
+                                status.append("No Match Found")
                             else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************task_io_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("task_io_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.task_io_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                                print "\n\t\t\t\t\t\t******************task_io_data Match Found*********************"
+                                # C.tabulate_print(result_set)
+                                status.append(result_set[0][2])
+                                command_report = C.command_report3(C, command_report, result_set)
+                                status.append("task_io_data Match Found")
+                            if print_query == 1:
+                                print query
+                            if print_data == 1:
+                                print json.dumps(C.task_io_data[i], indent=4)
+                            if print_output == 1:
+                                print C.output
+                            status.append(phc)
+                            summary.append(status)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task io data")
