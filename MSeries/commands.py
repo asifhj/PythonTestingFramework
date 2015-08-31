@@ -582,7 +582,7 @@ class Commands:
                     break
                 if line.strip():
                     output = output + line
-        #print output
+        print output
         chassisname = ""
         output = output.split("\n")
         self.output = output
@@ -603,6 +603,7 @@ class Commands:
                     self.nhdb_zones[record_count]["devicenum"] = devicenum
                     self.nhdb_zones[record_count]["chassisname"] = chassisname
                     record_count += 1
+        print json.dumps(self.nhdb_zones, indent=4)
 
     def get_pfe_heap_mem(self):
         output = ""

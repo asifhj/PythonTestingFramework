@@ -203,7 +203,7 @@ if __name__ == "__main__":
     krt_q = 0
     krt_st = 0
     mpc_jnh_summ_data = 0
-    nhdb_zones = 0
+    nhdb_zones = 1
     pfe_err_ichip = 0
     pfe_err_ichip_mx = 0
     pfe_err_lchip = 0
@@ -232,7 +232,7 @@ if __name__ == "__main__":
     sys_stor_data = 0
     sys_ver_data = 0
     sys_vm_swap = 0
-    task_io_data = 1
+    task_io_data = 0
     task_mem_data = 0
     ukern_trace_mem_comp_data = 0
     up_data = 0
@@ -248,7 +248,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\mx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\"
 
-    file = "mx-480-sn2_phdc_jmb_ais_health_20150827_172037.txt"
+    file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150831_021936.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 

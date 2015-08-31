@@ -298,8 +298,8 @@ class Querybuilder:
 
     def build_nhdb_zones_query(self, nhdb_zones):
         device = nhdb_zones.get("device","")
-        state = nhdb_zones.get("devicenum","")
-        nhdbchip = nhdb_zones.get("nhdbchip","")
+        devicenum = nhdb_zones.get("devicenum", 0)
+        nhdbchip = nhdb_zones.get("nhdbchip", 0)
         nhdbstart = nhdb_zones.get("nhdbstart","")
         nhdbsize1 = nhdb_zones.get("nhdbsize1","")
         nhdbrsvd = nhdb_zones.get("nhdbrsvd","")
@@ -308,7 +308,18 @@ class Querybuilder:
         nhdbtotal = nhdb_zones.get("nhdbtotal","")
         nhdbsize2 = nhdb_zones.get("nhdbsize2","")
         nhdbname = nhdb_zones.get("nhdbname","")
-        self.command_query = ""
+        self.command_query = " and device"+str(" is NULL" if device=="" else "='"+str(device)+"'" )+" \
+        and devicenum="+str(devicenum)+" \
+        and nhdbchip="+str(nhdbchip)+"  \
+        and nhdbstart"+str(" is NULL" if nhdbstart=="" else "='"+str(nhdbstart)+"'" )+" \
+        and nhdbsize1"+str(" is NULL" if nhdbsize1=="" else "='"+str(nhdbsize1)+"'" )+" \
+        and nhdbrsvd"+str(" is NULL" if nhdbrsvd=="" else "='"+str(nhdbrsvd)+"'" )+" \
+        and nhdbused"+str(" is NULL" if nhdbused=="" else "='"+str(nhdbused)+"'" )+" \
+        and nhdbhiwater"+str(" is NULL" if nhdbhiwater=="" else "='"+str(nhdbhiwater)+"'" )+" \
+        and nhdbtotal"+str(" is NULL" if nhdbtotal=="" else "='"+str(nhdbtotal)+"'" )+" \
+        and nhdbsize2"+str(" is NULL" if nhdbsize2=="" else "='"+str(nhdbsize2)+"'" )+" \
+        and nhdbname"+str(" is NULL" if nhdbname=="" else "='"+str(nhdbname)+"'" )+" "
+
         
         query = " order by collector_time"
 
