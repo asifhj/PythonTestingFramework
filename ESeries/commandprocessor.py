@@ -326,7 +326,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show arp")
                         command_report.append("arp_data")
                         command_report = C.command_report4(command_report)
@@ -383,7 +383,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system buffers | display xml")
                         command_report.append("buff_data")
                         command_report = C.command_report4(command_report)
@@ -449,7 +449,7 @@ if __name__ == "__main__":
                     cur.execute("refresh ch_fab_map_data")
                     how_many = len(C.ch_fab_map_data)
                     for i in range(0, how_many):
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric map")
                         command_report.append("ch_fab_map_data")
                         status = []
@@ -2513,7 +2513,7 @@ if __name__ == "__main__":
                     cur.execute("refresh task_io_data")
                     how_many = len(C.task_io_data)
                     for i in range(0, how_many):
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task io data")
                         command_report.append("task_io_data")
                         status = []
@@ -2553,7 +2553,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(phc)
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task io data")
                         command_report.append("task_io_data")
                         command_report = C.command_report4(command_report)
