@@ -515,31 +515,44 @@ class Commands:
         #     6      Spare    127 days, 7 hours, 41 minutes, 31 seconds
         #     7      Spare    127 days, 7 hours, 41 minutes, 28 seconds
         # Note: Regex 2699 perl 2-24
-
+        i = 0
+        #while i<4:
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+request\\s+pfe\\s+execute\\s+command\\s+\"show\\s+jnh\\s+pool.*", line, re.M | re.I) == None:
+                #root@mx-480-sn2> request pfe execute command "show jnh 0 pool summary" target fpc4
+                if not re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+\d\s+pool\s+.*', line, re.M | re.I) == None:
+                    output = output + line
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show\\s.*", line, re.M | re.I) == None:
                     break
+                #if not re.match(".*@.*>\\s+request\\s.*", line, re.M | re.I) == None:
+                #    break
                 if line.strip():
                     output = output + line
         #print output
         chassisname = ""
+        jnhid = ""
+        mpc = ""
         output = output.split("\n")
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:)', line, re.M|re.I)
+                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+(\d)\s+pool\s+summary"\s+target\s+(\w+)(\d)', line, re.M | re.I)
                 if m:
-                    chassisname = m.groups(0)[0]
-                m = re.match(r'(?P<plane>\d+)\s+(?P<state>\S+)\s+(?P<uptime>[\S|\s]+)$', line.strip(), re.M|re.I)
+                    mpc = m.groups(0)[2]
+                    chassisname = m.groups(0)[1]
+                    jnhid = m.groups(0)[0]
+                m = re.match(r'GOT:\s+(?P<name>[\S|\s]+)\s+(?P<size>\d+)\s+(?P<allocated>\d+)\s+(?P<utilization>\d+)%$', line.strip(), re.M|re.I)
                 if m:
                     #print m.groupdict(0)
                     self.mpc_jnh_summ_data[record_count] = m.groupdict()
+                    self.mpc_jnh_summ_data[record_count]['chassiname'] = chassisname
+                    self.mpc_jnh_summ_data[record_count]['jnhid'] = jnhid
+                    self.mpc_jnh_summ_data[record_count]['mpc'] = mpc
                     record_count = record_count + 1
+        #print json.dumps(self.mpc_jnh_summ_data, indent=4)
 
     def get_nhdb_zones(self):
         #   root@sn-space-mx320-sys> request pfe execute command "show nhdb zones" target fpc0
@@ -590,6 +603,61 @@ class Commands:
                     self.nhdb_zones[record_count]["devicenum"] = devicenum
                     self.nhdb_zones[record_count]["chassisname"] = chassisname
                     record_count += 1
+
+    def get_pfe_heap_mem(self):
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                #root@mx-480-sn2> request pfe execute command "show jnh 0 pool summary" target fpc4
+                if not re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+heap\s+\d"\s+target\s+.*', line, re.M | re.I) == None:
+                    output = output + line
+                    break
+            for line in fopen:
+                if not re.match(".*show\\sjtree.*", line, re.M | re.I) == None:
+                    break
+                #if not re.match(".*@.*>\\s+request\\s.*", line, re.M | re.I) == None:
+                #    break
+                if line.strip():
+                    output = output + line
+        print output
+        heapid = ""
+        jnhid = ""
+        device = ""
+        devicenum = ""
+        mpc = ""
+        pfe_dict = {}
+        output = output.split("\n")
+        record_count = 0
+        for line in output:
+            if line.strip():
+                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+heap\s+(\d)"\s+target\s+(\w+)(\d)', line, re.M | re.I)
+                if m:
+                    devicenum = m.groups(0)[2]
+                    device = m.groups(0)[1]
+                    heapid = m.groups(0)[0]
+                m = re.match(r'GOT:\s+(?P<pfeheapid>[0-9]+)\s+(?P<pfeheapbase>[0-9a-fA-F]+)\s+(?P<pfeheaptotal>[0-9]+)\s+(?P<pfeheapfree>[0-9]+)\s+(?P<pfeheapused>[0-9]+)\s+(?P<pfeheappercent>[0-9]+)[ \t\r]+(?P<pfeheapname>[a-zA-Z]+)', line.strip(), re.M|re.I)
+                if m:
+                    #print m.groupdict(0)
+                    pfe_dict = m.groupdict()
+                    #self.pfe_heap_mem[record_count]['device'] = device
+                    #self.pfe_heap_mem[record_count]['devicenum'] = devicenum
+                    #self.pfe_heap_mem[record_count]['heapid'] = heapid
+                m = re.match(r'GOT:\s+Total\s+(?P<totalfreebytes>[0-9]+)\s+(?P<totalfreeblocks>[0-9]+)\s+(?P<totalallocs>[0-9]+)\s+(?P<totalfrees>[0-9]+)', line, re.M | re.I)
+                if m:
+                    tmp = m.groupdict().copy()
+                    tmp.update(pfe_dict)
+                    self.pfe_heap_mem[record_count] = tmp
+                    record_count = record_count + 1
+                m = re.match(r'GOT:\s+(?P<pfeheapsize>[0-9]+)[ \t]+(?P<pfeheapfree>[0-9]+)[ \t]+(?P<pfeheapblocks>[0-9]+)[ \t]+(?P<pfeheapallocs>[0-9]+)[ \t]+(?P<pfeheapfrees>[0-9]+)[ \t]+\([ \t]*(?P<pfeheapmin>[0-9]+)[ \t]*,[ \t]*(?P<pfeheapmax>[0-9]+)[ \t]*\)', line, re.M | re.I)
+                if m:
+                    self.pfe_heap_mem[record_count] = m.groupdict()
+                    record_count = record_count + 1
+                m = re.match(r'GOT:\s+(?P<pfeheapsize>-)[ \t]+(?P<pfeheapfree>[0-9]+)[ \t]+(?P<pfeheapblocks>[0-9]+)[ \t]+(?P<pfeheapallocs>[0-9]+)[ \t]+(?P<pfeheapfrees>[0-9]+)[ \t]+\([ \t]*(?P<pfeheapmin>[0-9]+)[ \t]*,[ \t]*(?P<pfeheapmax>[0-9]+)[ \t]*\)', line, re.M | re.I)
+                if m:
+                    self.pfe_heap_mem[record_count] = m.groupdict()
+                    record_count = record_count + 1
+
+        print json.dumps(self.pfe_heap_mem, indent=4)
 
     def get_pfe_tr_data(self):
         output = ""

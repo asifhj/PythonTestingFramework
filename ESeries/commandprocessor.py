@@ -247,7 +247,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\ex\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\"
 
-    file = "*20150830*.txt"
+    file = "*2015083*.txt"
     #file = "sn-space-ex6200-sys_phdc_jmb_ais_health_20150823_091949.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
