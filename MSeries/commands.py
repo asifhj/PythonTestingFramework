@@ -619,12 +619,10 @@ class Commands:
                 #    break
                 if line.strip():
                     output = output + line
-        print output
+        #print output
         heapid = ""
-        jnhid = ""
         device = ""
         devicenum = ""
-        mpc = ""
         pfe_dict = {}
         output = output.split("\n")
         record_count = 0
@@ -639,25 +637,28 @@ class Commands:
                 if m:
                     #print m.groupdict(0)
                     pfe_dict = m.groupdict()
-                    #self.pfe_heap_mem[record_count]['device'] = device
-                    #self.pfe_heap_mem[record_count]['devicenum'] = devicenum
-                    #self.pfe_heap_mem[record_count]['heapid'] = heapid
+                    pfe_dict['device'] = device
+                    pfe_dict['devicenum'] = devicenum
+                    pfe_dict['heapid'] = heapid
                 m = re.match(r'GOT:\s+Total\s+(?P<totalfreebytes>[0-9]+)\s+(?P<totalfreeblocks>[0-9]+)\s+(?P<totalallocs>[0-9]+)\s+(?P<totalfrees>[0-9]+)', line, re.M | re.I)
                 if m:
                     tmp = m.groupdict().copy()
+                    tmp['type'] = "total"
                     tmp.update(pfe_dict)
                     self.pfe_heap_mem[record_count] = tmp
                     record_count = record_count + 1
                 m = re.match(r'GOT:\s+(?P<pfeheapsize>[0-9]+)[ \t]+(?P<pfeheapfree>[0-9]+)[ \t]+(?P<pfeheapblocks>[0-9]+)[ \t]+(?P<pfeheapallocs>[0-9]+)[ \t]+(?P<pfeheapfrees>[0-9]+)[ \t]+\([ \t]*(?P<pfeheapmin>[0-9]+)[ \t]*,[ \t]*(?P<pfeheapmax>[0-9]+)[ \t]*\)', line, re.M | re.I)
                 if m:
                     self.pfe_heap_mem[record_count] = m.groupdict()
+                    self.pfe_heap_mem[record_count]['type'] = "record"
                     record_count = record_count + 1
                 m = re.match(r'GOT:\s+(?P<pfeheapsize>-)[ \t]+(?P<pfeheapfree>[0-9]+)[ \t]+(?P<pfeheapblocks>[0-9]+)[ \t]+(?P<pfeheapallocs>[0-9]+)[ \t]+(?P<pfeheapfrees>[0-9]+)[ \t]+\([ \t]*(?P<pfeheapmin>[0-9]+)[ \t]*,[ \t]*(?P<pfeheapmax>[0-9]+)[ \t]*\)', line, re.M | re.I)
                 if m:
                     self.pfe_heap_mem[record_count] = m.groupdict()
+                    self.pfe_heap_mem[record_count]['type'] = "record"
                     record_count = record_count + 1
 
-        print json.dumps(self.pfe_heap_mem, indent=4)
+        #print json.dumps(self.pfe_heap_mem, indent=4)
 
     def get_pfe_tr_data(self):
         output = ""

@@ -207,7 +207,7 @@ if __name__ == "__main__":
     pfe_err_ichip = 0
     pfe_err_ichip_mx = 0
     pfe_err_lchip = 0
-    pfe_heap_mem = 1
+    pfe_heap_mem = 0
     pfe_st_err = 0
     pfe_st_notif_data = 0
     pfe_tr_data = 0
@@ -232,7 +232,7 @@ if __name__ == "__main__":
     sys_stor_data = 0
     sys_ver_data = 0
     sys_vm_swap = 0
-    task_io_data = 0
+    task_io_data = 1
     task_mem_data = 0
     ukern_trace_mem_comp_data = 0
     up_data = 0
@@ -1016,46 +1016,47 @@ if __name__ == "__main__":
                     how_many = len(C.pfe_heap_mem)
                     #print json.dumps(C.pfe_heap_mem, indent=4)
                     for i in range (0,how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append('request pfe execute command "show heap 0" target cfeb0')
-                        command_report.append("pfe_heap_mem")
-                        status = []
-                        status.append("pfe_heap_mem")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("pfe_heap_mem")
-                        C.build_pfe_heap_mem_query(C.pfe_heap_mem[i])
-                        #print json.dumps(C.pfe_heap_mem, indent=4)
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No pfe_heap_mem Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
+                        if C.pfe_heap_mem[i]['type']=="total":
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append('request pfe execute command "show heap 0" target cfeb0')
+                            command_report.append("pfe_heap_mem")
+                            status = []
+                            status.append("pfe_heap_mem")
+                            status.append(C.phdct_utc)
+                            C.build_common_query("pfe_heap_mem")
+                            C.build_pfe_heap_mem_query(C.pfe_heap_mem[i])
+                            #print json.dumps(C.pfe_heap_mem, indent=4)
+                            query = C.common_query + C.command_query
+                            cur.execute(query)
                             result_set = cur.fetchall()
                             if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
+                                print "\n\t\t\t\t\t\t******************No pfe_heap_mem Match Found*********************"
+                                status.append("NA")
+                                print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                                cur.execute(C.common_query)
+                                result_set = cur.fetchall()
+                                if len(result_set) < 1:
+                                    command_report = C.command_report1(C, command_report)
+                                else:
+                                    command_report = C.command_report2(C, command_report, result_set)
+                                status.append("pfe_heap_mem No Match Found")
                             else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("pfe_heap_mem No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************pfe_heap_mem Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("pfe_heap_mem Match Found")
-                        if print_query==1:
-                            print query
-                        if print_data==1:
-                            print json.dumps(C.fpc_data[i], indent=4)
-                        if print_output==1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                                print "\n\t\t\t\t\t\t******************pfe_heap_mem Match Found*********************"
+                                # C.tabulate_print(result_set)
+                                #print result_set
+                                status.append(result_set[0][2])
+                                command_report = C.command_report3(C, command_report, result_set)
+                                status.append("pfe_heap_mem Match Found")
+                            if print_query==1:
+                                print query
+                            if print_data==1:
+                                print json.dumps(C.fpc_data[i], indent=4)
+                            if print_output==1:
+                                print C.output
+                            status.append(phc)
+                            summary.append(status)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
                     #print C.pfe_heap_mem
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
@@ -1714,45 +1715,46 @@ if __name__ == "__main__":
                     cur.execute("refresh task_io_data")
                     how_many = len(C.task_io_data)
                     for i in range(0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show task io data")
-                        command_report.append("task_io_data")
-                        status = []
-                        status.append("task_io_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("task_io_data")
-                        C.build_task_io_data_query(C.task_io_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No task_io_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
+                        if C.task_io_data[i]['dropped']>0:
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append("show task io data")
+                            command_report.append("task_io_data")
+                            status = []
+                            status.append("task_io_data")
+                            status.append(C.phdct_utc)
+                            C.build_common_query("task_io_data")
+                            C.build_task_io_data_query(C.task_io_data[i])
+                            query = C.common_query + C.command_query
+                            cur.execute(query)
                             result_set = cur.fetchall()
                             if len(result_set) < 1:
-                                print "Collected time: "+str(C.phdct_utc)
-                                command_report = C.command_report1(C, command_report)
+                                print "\n\t\t\t\t\t\t******************No task_io_data Match Found*********************"
+                                status.append("NA")
+                                print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                                cur.execute(C.common_query)
+                                result_set = cur.fetchall()
+                                if len(result_set) < 1:
+                                    print "Collected time: "+str(C.phdct_utc)
+                                    command_report = C.command_report1(C, command_report)
+                                else:
+                                    command_report = C.command_report2(C, command_report, result_set)
+                                status.append("No Match Found")
                             else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************task_io_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("task_io_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.task_io_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                                print "\n\t\t\t\t\t\t******************task_io_data Match Found*********************"
+                                # C.tabulate_print(result_set)
+                                status.append(result_set[0][2])
+                                command_report = C.command_report3(C, command_report, result_set)
+                                status.append("task_io_data Match Found")
+                            if print_query == 1:
+                                print query
+                            if print_data == 1:
+                                print json.dumps(C.task_io_data[i], indent=4)
+                            if print_output == 1:
+                                print C.output
+                            status.append(phc)
+                            summary.append(status)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task io data")

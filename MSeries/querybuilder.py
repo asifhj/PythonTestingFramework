@@ -312,6 +312,35 @@ class Querybuilder:
         
         query = " order by collector_time"
 
+    def build_pfe_heap_mem_query(self, pfe_heap_mem):
+        pfeheapfree = pfe_heap_mem.get("pfeheapfree", "")
+        pfeheapused = pfe_heap_mem.get("pfeheapused", "")
+        pfeheapbase = pfe_heap_mem.get("pfeheapbase", "")
+        pfeheapname = pfe_heap_mem.get("pfeheapname", "")
+        pfeheapid = pfe_heap_mem.get("pfeheapid", 0)
+        pfeheaptotal = pfe_heap_mem.get("pfeheaptotal", "")
+        pfeheappercent = pfe_heap_mem.get("pfeheappercent", 0)
+        totalfreebytes = pfe_heap_mem.get("totalfreebytes", 0)
+        totalfreeblocks = pfe_heap_mem.get("totalfreeblocks", 0)
+        totalallocs = pfe_heap_mem.get("totalallocs", 0)
+        totalfrees = pfe_heap_mem.get("totalfrees", 0)
+        device = pfe_heap_mem.get("device", "NULL")
+        devicenum = pfe_heap_mem.get("devicenum", 0)
+
+        self.command_query = " and pfeheapfree"+str(" is NULL" if pfeheapfree=="" else "='"+str(pfeheapfree)+"'" )+" \
+                            and pfeheapused"+str(" is NULL" if pfeheapused=="" else "='"+str(pfeheapused)+"'" )+" \
+                            and pfeheapbase"+str(" is NULL" if pfeheapbase=="" else "='"+str(pfeheapbase)+"'" )+" \
+                            and pfeheapname"+str(" is NULL" if pfeheapname=="" else "='"+str(pfeheapname)+"'" )+" \
+                            and pfeheapid="+str(pfeheapid)+" \
+                            and pfeheappercent="+str(pfeheappercent)+" \
+                            and pfeheaptotal"+str(" is NULL" if pfeheaptotal=="" else "='"+str(pfeheaptotal)+"'" )+" \
+                            and totalfreeblocks="+str(totalfreeblocks)+" \
+                            and totalfreebytes="+str(totalfreebytes)+" \
+                            and totalallocs="+str(totalallocs)+" \
+                            and totalfrees="+str(totalfrees)+" \
+                            and device"+str(" is NULL" if device=="" else "='"+str(device)+"'" )+" \
+                            and devicenum="+str(devicenum)+" order by collector_time"
+
     def build_pfe_st_notif_data_query(self, pfe_st_notif_data):
         print json.dumps(pfe_st_notif_data, indent=4)
         discard_failed = pfe_st_notif_data.get("discard_failed", 0)
