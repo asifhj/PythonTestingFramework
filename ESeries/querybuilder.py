@@ -1204,36 +1204,52 @@ class Querybuilder:
     def build_vc_prtcl_adj_data_query(self, vc_prtcl_adj_data):
         interface = vc_prtcl_adj_data.get('interface', "")
         system = vc_prtcl_adj_data.get('system', "")
-        hold = vc_prtcl_adj_data.get('state', 0)
-        state = vc_prtcl_adj_data.get('hold', "")
+        hold = vc_prtcl_adj_data.get('hold', 0)
+        state = vc_prtcl_adj_data.get('state', "")
         member = vc_prtcl_adj_data.get('member', 0)
         self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+        if interface.startswith("vcp"):
+            print "hi"
+            self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system=''"
+        else:
+            self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  hold="+str(hold)+" and member="+str(member)+""
+        print self.command_query
 
     def build_vc_prtcl_stat_data_query(self, vc_prtcl_stat_data):
-        interface = vc_prtcl_stat_data.get('interface', "")
-        system = vc_prtcl_stat_data.get('system', "")
-        hold = vc_prtcl_stat_data.get('state', 0)
-        state = vc_prtcl_stat_data.get('hold', "")
+        pdutype = vc_prtcl_stat_data.get('pdutype', "")
+        drops = vc_prtcl_stat_data.get('drops', 0)
+        isisid = vc_prtcl_stat_data.get('isisid', "")
         member = vc_prtcl_stat_data.get('member', 0)
         self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+        self.command_query = " and pdutype='"+str(pdutype)+"' and drops="+str(drops)+" and isisid='"+str(isisid)+"'  and  member="+str(member)+" "
 
 
     def build_vc_stat_data_query(self, vc_stat_data):
-        interface = vc_stat_data.get('interface', "")
-        system = vc_stat_data.get('system', "")
-        hold = vc_stat_data.get('state', 0)
-        state = vc_stat_data.get('hold', "")
-        member = vc_stat_data.get('member', 0)
+        memberid = vc_stat_data.get('memberid', 0)
+        fpc = vc_stat_data.get('fpc', "")
+        status = vc_stat_data.get('status', "")
+        modelid = vc_stat_data.get('modelid', "")
+        priority = vc_stat_data.get('priority', "")
+        role = vc_stat_data.get('role', "")
+        vcid = vc_stat_data.get('vcid', 0)
         self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+        if vc_stat_data["type"]=="p4000" or vc_stat_data["type"]=="p8000" or vc_stat_data["type"]=="p8000-xre":
+            self.command_query = " and memberid="+str(memberid)+" and fpc='"+str(fpc)+"' and status='"+str(status)+"' \
+                and  modelid='"+str(modelid)+"' and priority='"+str(priority)+"' and `role`='"+str(role)+"' and vcid='"+str(vcid)+"'"
+        elif vc_stat_data["type"]=="u4000":
+            self.command_query = " and fpc='' and status='"+str(status)+"' \
+                and  modelid='' and priority='' and `role`='"+str(role)+"' and vcid=''"
 
     def build_vc_vcp_stat_data_query(self, vc_vcp_stat_data):
+        memberid = vc_vcp_stat_data.get('memberid', 0)
         interface = vc_vcp_stat_data.get('interface', "")
-        system = vc_vcp_stat_data.get('system', "")
-        hold = vc_vcp_stat_data.get('state', 0)
-        state = vc_vcp_stat_data.get('hold', "")
-        member = vc_vcp_stat_data.get('member', 0)
+        trunk = vc_vcp_stat_data.get('trunk', "")
+        status = vc_vcp_stat_data.get('status',"")
+        nghbrif = vc_vcp_stat_data.get('nghbrif', "")
+        type = vc_vcp_stat_data.get('type', "")
+        speed = vc_vcp_stat_data.get("speed", 0)
+        ngbhr = vc_vcp_stat_data.get("ngbhr", 0)
         self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+        self.command_query = " and memberid='"+str(memberid)+"' and interface='"+str(interface)+"' and type='"+str(type)+"' \
+                             and trunk='"+str(trunk)+"' and status='"+str(status)+"'  and speed="+str(speed)+" \
+                             and nghbr="+str(ngbhr)+" and nghbrif='"+str(nghbrif)+"' "

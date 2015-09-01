@@ -37,6 +37,10 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         self.ipsec_stats_data = OrderedDict()
         self.jtree_mem = OrderedDict()
         self.up_data = OrderedDict()
+        self.vc_prtcl_adj_data = OrderedDict()
+        self.vc_prtcl_stat_data = OrderedDict()
+        self.vc_stat_data = OrderedDict()
+        self.vc_vcp_stat_data = OrderedDict()
         self.sys_ver_data = OrderedDict()
         self.ch_hard_data = OrderedDict()
         self.env_data = OrderedDict()
@@ -241,6 +245,7 @@ if __name__ == "__main__":
     vc_vcp_stat_data = 1
     chassis_cluster_statistics_data = 1
 
+
     report = []
     file_report = []
 
@@ -265,7 +270,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            if size < 2:
+            #if size < 2:
+            if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
@@ -2719,7 +2725,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
-                '''
+
                 # vc_prtcl_adj_data
                 if vc_prtcl_adj_data==1:
                     C.get_vc_prtcl_adj_data()
@@ -2932,7 +2938,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
-                    '''
+
 
                 print "\nCollected Time: " + str(C.phdct_utc) + "\n"
                 print C.hashs() + "  END  " + C.hashs()

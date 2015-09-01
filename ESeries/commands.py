@@ -1665,33 +1665,38 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output
-
         record_count = 0
         #print output
         #print("hi")
         member = ""
-        for line in output:
+        self.vc_prtcl_adj_data[record_count] = {}
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
                     member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
-                if m:
-                    self.vc_prtcl_adj_data[record_count] = m.groupdict()
+                # m = re.match(r'(?P<interface>vcp-\d*.\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
 
+                m = re.match(r'(?P<interface>vcp-\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_prtcl_adj_data[record_count] = {}
+                    self.vc_prtcl_adj_data[record_count] = m.groupdict()
+                    self.vc_prtcl_adj_data[record_count]['member'] = member
+                    record_count += 1
                 m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_prtcl_adj_data[record_count] = {}
                     self.vc_prtcl_adj_data[record_count] = m.groupdict()
-                self.vc_prtcl_adj_data[record_count]['member'] = member
-                record_count = record_count + 1
+                    self.vc_prtcl_adj_data[record_count]['member'] = member
+                    record_count += 1
+        #print json.dumps(self.vc_prtcl_adj_data, indent=4)
 
     def get_vc_prtcl_stat_data(self):
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+statistics.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -1700,33 +1705,36 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output
 
         record_count = 0
-        #print output
-        #print("hi")
+        print output
         member = ""
-        for line in output:
+        isisid = ""
+        self.vc_prtcl_stat_data[record_count] = {}
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
                     member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                m = re.match(r'IS-IS statistics for (\w+.\w+.\w+):', line.strip(), re.M|re.I)
                 if m:
+                    isisid = m.groups(0)[0]
+                m = re.match(r'(?P<pdutype>[A-Z]+)\s+\d+\s+\d+\s+(?P<drops>\d+)\s+\d+\s+\d+', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_prtcl_stat_data[record_count] = {}
                     self.vc_prtcl_stat_data[record_count] = m.groupdict()
+                    self.vc_prtcl_stat_data[record_count]['isisid'] = isisid
+                    self.vc_prtcl_stat_data[record_count]['member'] = member
+                    record_count = record_count + 1
 
-                m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
-                if m:
-                    self.vc_prtcl_stat_data[record_count] = m.groupdict()
-                self.vc_prtcl_stat_data[record_count]['member'] = member
-                record_count = record_count + 1
+        #print json.dumps(self.vc_prtcl_stat_data, indent=4)
 
     def get_vc_stat_data(self):
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+status.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -1735,33 +1743,55 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output
-
         record_count = 0
         #print output
-        #print("hi")
         member = ""
-        for line in output:
+        vcid = ""
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
                     member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                m = re.match(r'Virtual\sChassis\sID: ([a-f0-9]{4}\.[a-f0-9]{4}\.[a-f0-9]{4})', line.strip(), re.M|re.I)
                 if m:
-                    self.vc_stat_data[record_count] = m.groupdict()
-
-                m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
+                    vcid = m.groups(0)[0]
+                m = re.match(r'(?P<memberid>[0-9]+)\s\(FPC\s(?P<fpc>[0-9]+)\)\s+(?P<status>[a-z]{5,8})\s+[a-z0-9]{11,14}\s+(?P<modelid>ex[0-8]{4}-?[0-9]?[0-9]?[ft]?)\s+(?P<priority>[0-9]{1,4})\s+(?P<role>[a-z]+).*', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_stat_data[record_count] = {}
                     self.vc_stat_data[record_count] = m.groupdict()
-                self.vc_stat_data[record_count]['member'] = member
-                record_count = record_count + 1
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "p4000"
+                    record_count = record_count + 1
+                m = re.match(r'.*(?P<status>Unprvsnd).*', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_stat_data[record_count] = {}
+                    self.vc_stat_data[record_count] = m.groupdict()
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "u4000"
+                    self.vc_stat_data[record_count]['role'] = ""
+                    self.vc_stat_data[record_count]['priority'] = ""
+                    record_count = record_count + 1
+                m = re.match(r'(?P<memberid>[0-9]+)\s\(FPC\s(?P<fpc>[0-9]+-[0-9]+)\)\s+(?P<status>[a-z]{5,8})\s+[a-z0-9]{11,14}\s+(?P<modelid>ex[0-8]{4}-?[0-9]?[0-9]?[ft]?)\s+(?P<priority>[0-9]{1,4})\s+(?P<role>[a-z]+).*', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_stat_data[record_count] = {}
+                    self.vc_stat_data[record_count] = m.groupdict()
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "p8000"
+                m = re.match(r'(?P<memberid>[0-9]+)\s\(FPC\s(?P<fpc>[0-9]+-[0-9]+)\)\s+(?P<status>[a-z]{5,8})\s+[a-z0-9]{11,14}\s+(?P<modelid>ex-xre)\s+(?P<priority>[0-9]{1,4})\s+(?P<role>[a-z]+).*', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_stat_data[record_count] = {}
+                    self.vc_stat_data[record_count] = m.groupdict()
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "p8000-xre"
+                    record_count = record_count + 1
+        #print json.dumps(self.vc_stat_data, indent=4)
 
     def get_vc_vcp_stat_data(self):
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+vc\-port.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -1770,78 +1800,67 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output
-
         record_count = 0
         #print output
-        #print("hi")
         member = ""
-        for line in output:
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
-                    member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                    memberid = m.groups(0)[0]
+                m = re.match(r'(?P<interface>vcp-\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>\w+)\s+(?P<speed>\d+)\s+(?P<nghbr>\d+)\s+(?P<nghbrif>.*)', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_vcp_stat_data[record_count] = {}
                     self.vc_vcp_stat_data[record_count] = m.groupdict()
-
-                m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    record_count += 1
+                m = re.match(r'(?P<interface>\d+\/?\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>\w+)\s+(?P<speed>\d+)\s+(?P<nghbr>\d+)\s+(?P<nghbrif>.*)', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_vcp_stat_data[record_count] = {}
                     self.vc_vcp_stat_data[record_count] = m.groupdict()
-                self.vc_vcp_stat_data[record_count]['member'] = member
-                record_count = record_count + 1
-    #####################################################################################
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    record_count += 1
+                m = re.match(r'(?P<interface>vcp-\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>Down|Disabled)\s+(?P<speed>\d+)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    record_count += 1
+                m = re.match(r'(?P<interface>\d+\/?\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>Down|Disabled)\s+(?P<speed>\d+)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    record_count += 1
 
+                m = re.match(r'(?P<interface>vcp-\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<status>Absent)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    self.vc_vcp_stat_data[record_count]["trunk"] = ""
+                    self.vc_vcp_stat_data[record_count]["speed"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    record_count += 1
 
-
-
-
-
-    def getNHDBZones(self):
-        #   root@sn-space-mx320-sys> request pfe execute command "show nhdb zones" target fpc0
-
-        #   SENT: Ukern command: show nhdb zones
-        #   GOT:
-        #   GOT: Chip  Start   Size   Rsvd   Used/Hi Water/Total  Size  Name
-        #   GOT: ----  -----  -----  -----  --------------------  ----  ----
-        #   GOT:    0  200000  200000  00000           0/0/2097024     1  Multicast Lists
-        #   GOT:    0  400000  400000  00200         14/14/4194176     2  L2 Descriptors
-        #   GOT:    0  250000  00200  00000                3/3/64     8  L2 Programs
-        #   GOT:    1  200000  200000  00000           0/0/2097024     1  Multicast Lists
-        #   GOT:    1  400000  400000  00200           0/0/4194176     2  L2 Descriptors
-        #   GOT:    1  250000  00200  00000                1/1/64     8  L2 Programs
-        #   LOCAL: End of file
-        if self.product.startswith("*"):
-            output = ""
-            device = ""
-            devicenum = ""
-            with open(self.file_name, "rb") as fopen:
-                for line in fopen:
-                    if not re.match(".*@.*>\\s+request\\s+pfe\\s+execute\\s+command\\s+\"show\\s+nhdb\\s+zones.*", line, re.M | re.I) == None:
-                        output = output + line
-                        break
-                for line in fopen:
-                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
-                        break
-                    if line.strip():
-                        output = output + line
-            #print output
-            chassisname = ""
-            output = output.split("\n")
-            record_count = 0
-            for line in output:
-                if line.strip():
-                    m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:)', line, re.M|re.I)
-                    if m:
-                        chassisname = m.groups(0)[0]
-                    m = re.match(".*@.*>\\s+request\\s+pfe\\s+execute\\s+command\\s+\"show\\s+nhdb\\s+zones.*target\\s+([a-z]+)(\d+)$", line, re.M | re.I)
-                    if m:
-                        device = m.groups(0)[0]
-                        devicenum = m.groups(0)[1]
-                    m = re.match(r'\S+:\s+(?P<nhdbchip>\d+)\s+(?P<nhdbstart>\d+)\s+(?P<nhdbsize1>\d+)\s+(?P<nhdbrsvd>\d+)\s+(?P<nhdbused>\d+)/(?P<nhdbhiwater>\d+)/(?P<nhdbtotal>\d+)\s+(?P<nhdbsize2>\d+)\s+(?P<nhdbname>.*)$', line.strip(), re.M|re.I)
-                    if m:
-                        self.nhdb_zones[record_count] = m.groupdict()
-                        self.nhdb_zones[record_count]["device"] = device
-                        self.nhdb_zones[record_count]["devicenum"] = devicenum
-                        record_count = record_count + 1
+                m = re.match(r'(?P<interface>\d+\/?\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<status>Absent)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    self.vc_vcp_stat_data[record_count]["trunk"] = ""
+                    self.vc_vcp_stat_data[record_count]["speed"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    record_count += 1
+        #print json.dumps(self.vc_vcp_stat_data, indent=4)
