@@ -1235,10 +1235,12 @@ class Querybuilder:
         self.command_query = ""
         if vc_stat_data["type"]=="p4000" or vc_stat_data["type"]=="p8000" or vc_stat_data["type"]=="p8000-xre":
             self.command_query = " and memberid="+str(memberid)+" and fpc='"+str(fpc)+"' and status='"+str(status)+"' \
-                and  modelid='"+str(modelid)+"' and priority='"+str(priority)+"' and `role`='"+str(role)+"' and vcid='"+str(vcid)+"'"
+                and  modelid='"+str(modelid)+"' and priority='"+str(priority)+"' and `role`='"+str(role)+"' "
+                #and vcid='"+str(vcid)+"'"
         elif vc_stat_data["type"]=="u4000":
             self.command_query = " and fpc='' and status='"+str(status)+"' \
-                and  modelid='' and priority='' and `role`='"+str(role)+"' and vcid=''"
+                and  modelid='' and priority='' and `role`='"+str(role)+"'"\
+                                 #and vcid=''"
 
     def build_vc_vcp_stat_data_query(self, vc_vcp_stat_data):
         memberid = vc_vcp_stat_data.get('memberid', 0)
