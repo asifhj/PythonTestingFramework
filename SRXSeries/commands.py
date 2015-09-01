@@ -1466,15 +1466,17 @@ class Commands:
                 m = re.match(r'(?P<chassisname>[sfc[0-9]+.*:|lcc[0-9]+.*:|fpc[0-9]+.*:])', line, re.M | re.I)
                 if m:
                     chassisname = m.groups(0)[0]
+                m = re.match(r'JUNOS Packet Forwarding Engine Support.*\[(.*)\]', line, re.M | re.I)
+                if m:
+                    self.sys_ver_data["JUNOS Packet Forwarding Engine Support"] = m.groups(0)[0].strip()
                 m = re.match(r'([a-z]+):(.*)', line, re.M | re.I)
                 if m:
                     self.sys_ver_data[m.groups(0)[0].strip()] = m.groups(0)[1].strip()
                     self.sys_ver_data['chassisname'] = chassisname
                 m = re.match(r'(.*)\[(.*)\]', line, re.M | re.I)
                 if m:
-                    self.sys_ver_data[m.groups(0)[0].strip()] = m.groups(0)[1]
+                    self.sys_ver_data[m.groups(0)[0].strip()] = m.groups(0)[1].strip()
                     self.sys_ver_data['chassisname'] = chassisname
-                    continue
 
     def get_sys_vm_swap(self):
         # hi#

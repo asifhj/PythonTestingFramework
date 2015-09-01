@@ -1114,16 +1114,16 @@ class Querybuilder:
     def build_sys_ver_data_query(self, sys_ver_data):
         #print json.dumps(sys_ver_data, indent=4)
         chassisname = sys_ver_data.get("chassisname","")
-        verbaseosboot = sys_ver_data.get("JUNOS Base OS boot","")
-        verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "")
-        verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "")
-        vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "")
-        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (MX Common)", "")
-        verdoc = sys_ver_data.get("JUNOS Online Documentation", "")
-        versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "")
-        verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "")
-        verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (M/T/EX Common)", "")
-        firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "")
+        verbaseosboot = sys_ver_data.get("JUNOS Base OS boot","not found")
+        verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "not found")
+        verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "not found")
+        vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
+        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (MX Common)", "not found")
+        verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
+        versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
+        verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")
+        verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
+        firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
         self.command_query = " and chassisname='"+str(chassisname)+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
             verbaseossoftware='"+str(verbaseossoftware)+"' and verkernelsoftware='"+str(verkernelsoftware)+"' and \
