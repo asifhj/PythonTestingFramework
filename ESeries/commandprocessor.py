@@ -2506,14 +2506,13 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
-
                 # task_io_data
                 if task_io_data==1:
                     C.get_task_io_data()
                     cur.execute("refresh task_io_data")
                     how_many = len(C.task_io_data)
                     for i in range(0, how_many):
-                        if C.task_io_data[i]['dropped']>0:
+                        if int(C.task_io_data[i]['dropped'])>0:
                             command_report.append(str(phc.replace(phcs_home_dir,"")))
                             command_report.append("show task io data")
                             command_report.append("task_io_data")

@@ -327,6 +327,8 @@ class Commands:
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
                         record_count += 1
+        if len(self.fan_data)==0:
+            self.output = ""
         #print json.dumps(self.fan_data, indent=4)
 
     def get_fpc_data(self):
@@ -532,6 +534,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
+        self.output = output
         chassisname = ""
         jnhid = ""
         mpc = ""
@@ -621,6 +624,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
+        self.output = output
         heapid = ""
         device = ""
         devicenum = ""
@@ -803,6 +807,8 @@ class Commands:
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname
                         record_count += 1
+        if len(self.pwr_data)==0:
+            self.output = ""
         #self.pwr_data = self.removeWhiteSpaceFromDict(self.pwr_data)
         #print json.dumps(self.pwr_data, indent=4)
 
@@ -967,8 +973,8 @@ class Commands:
                     if line.startswith("[----BEGIN"):
                         break
                     output = output + line
-            output = output.split("\n")
             self.output = output
+            output = output.split("\n")
             record_count = 0
             chassisname = ""
             for line in output:

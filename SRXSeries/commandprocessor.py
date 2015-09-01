@@ -247,7 +247,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\srx\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
 
-    file = "usrx3ka-phdc-20150831-103929_ais_attach_AISESI"
+    file = "usrx*"
     #file = "srx-220-sn1_phdc_jmb_ais_health_20150821_142136.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -2567,7 +2567,7 @@ if __name__ == "__main__":
                     cur.execute("refresh task_io_data")
                     how_many = len(C.task_io_data)
                     for i in range(0, how_many):
-                        if C.task_io_data[i]['dropped']>0:
+                        if int(C.task_io_data[i]['dropped'])>0:
                             command_report.append(str(phc.replace(phcs_home_dir,"")))
                             command_report.append("show task io data")
                             command_report.append("task_io_data")

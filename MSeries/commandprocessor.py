@@ -1715,7 +1715,7 @@ if __name__ == "__main__":
                     cur.execute("refresh task_io_data")
                     how_many = len(C.task_io_data)
                     for i in range(0, how_many):
-                        if C.task_io_data[i]['dropped']>0:
+                        if int(C.task_io_data[i]['dropped'])>0:
                             command_report.append(str(phc.replace(phcs_home_dir,"")))
                             command_report.append("show task io data")
                             command_report.append("task_io_data")
