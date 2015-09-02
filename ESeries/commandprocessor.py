@@ -475,13 +475,15 @@ if __name__ == "__main__":
                                 print "Collected time: "+str(C.phdct_utc)
                                 command_report = C.command_report1(C, command_report)
                             else:
-                                command_report = C.command_report2(C, command_report, result_set)
+                                #command_report = C.command_report2(C, command_report, result_set)
+                                command_report = C.command_report2(C, command_report, [])
                             status.append("No Match Found")
                         else:
                             print "\n\t\t\t\t\t\t******************ch_fab_map_data Match Found*********************"
                             # C.tabulate_print(result_set)
                             status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
+                            #command_report = C.command_report3(C, command_report, result_set)
+                            command_report = C.command_report2(C, command_report, [])
                             status.append("ch_fab_map_data Match Found")
                         if print_query == 1:
                             print query

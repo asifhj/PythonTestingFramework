@@ -242,13 +242,69 @@ if __name__ == "__main__":
     vc_vcp_stat_data = 0
     chassis_cluster_statistics_data = 0
 
+    arp_data = 0
+    buff_data = 0
+    ch_alarm_data = 0
+    ch_fab_map_data = 0
+    ch_fab_sum_data = 0
+    ch_fpc_pic_data = 0
+    ch_hard_data = 0
+    env_data = 0
+    eth_sw_err_age_msg_data = 0
+    eth_sw_stat_maclrnerr_data = 0
+    eth_sw_tbl_summ_data = 0
+    fan_data = 0
+    fpc_data = 0
+    ipsec_stats_data = 0
+    jtree_mem = 1
+    krt_q = 0
+    krt_st = 0
+    mpc_jnh_summ_data = 0
+    nhdb_zones = 0
+    pfe_err_ichip = 0
+    pfe_err_ichip_mx = 0
+    pfe_err_lchip = 0
+    pfe_heap_mem = 0
+    pfe_st_err = 0
+    pfe_st_notif_data = 0
+    pfe_tr_data = 0
+    proc_mem_data = 0
+    ps_data = 0
+    pwr_data = 0
+    re_data = 0
+    rt_sum_data = 0
+    sec_alg_st_data = 0
+    sec_nat_intf_nat_prts_data = 0
+    sec_utm_aspam_stats_data = 0
+    sec_utm_av_st_data = 0
+    sec_utm_av_stats_data = 0
+    sec_utm_st_data = 0
+    sec_utm_web_st_data = 0
+    sec_utm_web_stat_data = 0
+    sh_mem_frag_data = 0
+    stp_stats_data = 0
+    sys_cores_data = 0
+    sys_license_data = 0
+    sys_stats_data = 0
+    sys_stor_data = 0
+    sys_ver_data = 0
+    sys_vm_swap = 0
+    task_io_data = 0
+    task_mem_data = 0
+    ukern_trace_mem_comp_data = 0
+    up_data = 0
+    vc_prtcl_adj_data = 0
+    vc_prtcl_stat_data = 0
+    vc_stat_data = 0
+    vc_vcp_stat_data = 0
+    chassis_cluster_statistics_data = 0
     report = []
     file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\mx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\"
 
-    file = "*201509*.txt"
+    file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150902_021936.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -266,8 +322,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            if size < 2:
-            #if True:
+            #if size < 2:
+            if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 

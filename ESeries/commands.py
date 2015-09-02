@@ -1670,14 +1670,12 @@ class Commands:
         #print output
         #print("hi")
         member = ""
-        self.vc_prtcl_adj_data[record_count] = {}
+        #self.vc_prtcl_adj_data[record_count] = {}
         for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
                     member = m.groups(0)[0]
-                # m = re.match(r'(?P<interface>vcp-\d*.\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
-
                 m = re.match(r'(?P<interface>vcp-\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
                 if m:
                     self.vc_prtcl_adj_data[record_count] = {}
@@ -1711,7 +1709,7 @@ class Commands:
         print output
         member = ""
         isisid = ""
-        self.vc_prtcl_stat_data[record_count] = {}
+        #self.vc_prtcl_stat_data[record_count] = {}
         for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
