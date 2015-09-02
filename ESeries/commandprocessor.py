@@ -245,14 +245,13 @@ if __name__ == "__main__":
     vc_vcp_stat_data = 1
     chassis_cluster_statistics_data = 1
 
-
     report = []
     file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\ex\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\"
 
-    file = "*2015083*.txt"
+    file = "*201509*.txt"
     #file = "sn-space-ex6200-sys_phdc_jmb_ais_health_20150823_091949.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -837,7 +836,6 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
-
                 # eth_sw_tbl_summ_data
                 if eth_sw_tbl_summ_data==1:
                     C.get_eth_sw_tbl_summ_data()
@@ -890,61 +888,6 @@ if __name__ == "__main__":
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-
-
-                # stp_stats_data
-                if stp_stats_data==1:
-                    C.get_stp_stats_data()
-                    cur.execute("refresh stp_stats_data")
-                    how_many = len(C.stp_stats_data)
-                    for i in range (0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("stp_stats_data")
-                        status = []
-                        status.append("stp_stats_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("stp_stats_data")
-                        C.build_stp_stats_data_query(C.stp_stats_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No stp_stats_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
-                            result_set = cur.fetchall()
-                            if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
-                            else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("stp_stats_data No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************stp_stats_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("stp_stats_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.stp_stats_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-                    if len(C.output)==1:
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("stp_stats_data")
-                        command_report = C.command_report4(command_report)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-
 
                 # fan_data
                 if fan_data==1:
