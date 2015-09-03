@@ -2093,7 +2093,7 @@ if __name__ == "__main__":
                     cur.execute("refresh stp_stats_data")
                     how_many = len(C.stp_stats_data)
                     for i in range (0, how_many):
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show spanning-tree bridge brief")
                         command_report.append("stp_stats_data")
                         status = []
@@ -2133,7 +2133,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show spanning-tree bridge brief")
                         command_report.append("stp_stats_data")
                         command_report = C.command_report4(command_report)

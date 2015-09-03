@@ -9,6 +9,7 @@ Common query update
 proc_mem_data
     usedmempercentage is floor not ceil.
     floor goes lower integer and ceil goes to upper integer
+    its still not working in some cases
 
 ch_hard_data
     in EX updated please copy to all its common

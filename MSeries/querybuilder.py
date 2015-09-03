@@ -1167,7 +1167,7 @@ class Querybuilder:
             capacity="+str(capacity)+" and mountedon='"+str(mountedon)+"' order by collector_time"
 
     def build_sys_ver_data_query(self, sys_ver_data):
-        #print json.dumps(sys_ver_data, indent=4)
+        print json.dumps(sys_ver_data, indent=4)
         chassisname = sys_ver_data.get("chassisname","")
         verbaseosboot = sys_ver_data.get("JUNOS Base OS boot","not found")
         verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "not found")
@@ -1185,6 +1185,7 @@ class Querybuilder:
             vercryptosoftware='"+str(vercryptosoftware)+"' and verpfesupportcommon='"+str(verpfesupportcommon)+"' and \
             verdoc='"+str(verdoc)+"' and versoftwarerelease='"+str(versoftwarerelease)+"' and \
             verroutingsoftware='"+str(verroutingsoftware)+"' and verpfesupport='"+str(verpfesupport)+"' order by collector_time"
+        #print self.command_query
 
     def build_sys_vm_swap_query(self, sys_vm_swap):
         chassisname = sys_vm_swap.get("chassisname","")
