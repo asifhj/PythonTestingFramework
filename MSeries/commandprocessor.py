@@ -291,9 +291,9 @@ if __name__ == "__main__":
                 if buff_data==1:
                     C.get_buff_data()
                     cur.execute("refresh buff_data")
-                    how_many = len(C.buff_data[0])
-                    if how_many==0:
-                        how_many=0
+                    how_many = 0
+                    if bool(C.buff_data[0])==False:
+                        how_many = 0
                     else:
                         how_many = len(C.buff_data)
                     for i in range (0, how_many):
@@ -737,7 +737,11 @@ if __name__ == "__main__":
                 if jtree_mem==1:
                     C.get_jtree_mem()
                     cur.execute("refresh jtree_mem")
-                    how_many = len(C.jtree_mem[0])
+                    how_many = 0
+                    if bool(C.jtree_mem[0])==False:
+                        how_many = 0
+                    else:
+                        how_many = len(C.jtree_mem)
                     if how_many:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append('request pfe execute command "show jtree 0 memory extensive" target fpc(NUMBER)')
@@ -1075,7 +1079,11 @@ if __name__ == "__main__":
                 if pfe_tr_data==1:
                     C.get_pfe_tr_data()
                     cur.execute("refresh pfe_tr_data")
-                    how_many = len(C.pfe_tr_data)
+                    how_many = 0
+                    if bool(C.pfe_tr_data[0])==False:
+                        how_many = 0
+                    else:
+                        how_many = len(C.pfe_tr_data)
                     for i in range (0,how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics traffic")

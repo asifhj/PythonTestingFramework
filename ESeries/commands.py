@@ -752,7 +752,7 @@ class Commands:
                 m = re.match(r'([\S|\s]+):\s+(\d+)$', line.strip(), re.M|re.I)
                 if m:
                     self.pfe_tr_data[record_count][m.groups()[0].strip()] = m.groups(0)[1].strip()
-        #print json.dumps(self.pfe_tr_data, indent=4, sort_keys=True)
+        print json.dumps(self.pfe_tr_data, indent=4, sort_keys=True)
 
     def get_proc_mem_data(self):
         output = ""
@@ -1162,7 +1162,7 @@ class Commands:
 
     def get_stp_stats_data(self):
         output = ""
-        print "hi1"
+        #print "hi1"
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
                 if not re.match(".*@.*>\\s+show\\s+spanning\-tree\\s+bridge\\s+brief.*", line, re.M | re.I) == None:
@@ -1174,7 +1174,7 @@ class Commands:
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
         #
-        self.output = output
+        self.output = output.split("\n")
         record_count = 0
         #print output
         output = output.split("\n")

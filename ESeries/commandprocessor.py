@@ -344,9 +344,9 @@ if __name__ == "__main__":
                 if buff_data==1:
                     C.get_buff_data()
                     cur.execute("refresh buff_data")
-                    how_many = len(C.buff_data[0])
-                    if how_many==0:
-                        how_many=0
+                    how_many = 0
+                    if bool(C.buff_data[0])==False:
+                        how_many = 0
                     else:
                         how_many = len(C.buff_data)
                     for i in range (0, how_many):
@@ -1228,7 +1228,11 @@ if __name__ == "__main__":
                 if pfe_st_notif_data==1:
                     C.get_pfe_st_notif_data()
                     cur.execute("refresh pfe_st_notif_data")
-                    how_many = len(C.pfe_st_notif_data)
+                    how_many = 0
+                    if bool(C.pfe_st_notif_data[0])==False:
+                        how_many = 0
+                    else:
+                        how_many = len(C.pfe_st_notif_data)
                     for i in range (0,how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics notification")
@@ -1282,7 +1286,11 @@ if __name__ == "__main__":
                 if pfe_tr_data==1:
                     C.get_pfe_tr_data()
                     cur.execute("refresh pfe_tr_data")
-                    how_many = len(C.pfe_tr_data)
+                    how_many = 0
+                    if bool(C.pfe_tr_data[0])==False:
+                        how_many = 0
+                    else:
+                        how_many = len(C.pfe_tr_data)
                     for i in range (0,how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics traffic")
@@ -2090,7 +2098,11 @@ if __name__ == "__main__":
                 if stp_stats_data==1:
                     C.get_stp_stats_data()
                     cur.execute("refresh stp_stats_data")
-                    how_many = len(C.stp_stats_data)
+                    how_many = 0
+                    if bool(C.stp_stats_data[0])==False:
+                        how_many = 0
+                    else:
+                        how_many = len(C.stp_stats_data)
                     for i in range (0, how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show spanning-tree bridge brief")
