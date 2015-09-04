@@ -173,10 +173,12 @@ class Commands:
                     self.ch_fab_map_data[record_count] = {}
                     self.ch_fab_map_data[record_count]['fabricmap'] = m.groups(0)[0]
                     self.ch_fab_map_data[record_count]['mapstatus'] = m.groups(0)[1]
+                    self.ch_fab_map_data[record_count]['chassisname'] = chassisname
                     record_count += 1
                     self.ch_fab_map_data[record_count] = {}
                     self.ch_fab_map_data[record_count]['fabricmap'] = m.groups(0)[2]
                     self.ch_fab_map_data[record_count]['mapstatus'] = m.groups(0)[3]
+                    self.ch_fab_map_data[record_count]['chassisname'] = chassisname
                     record_count += 1
         #print self.ch_fab_map_data
 
@@ -751,7 +753,7 @@ class Commands:
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+system\\s+processes\\s+extensive\\s*.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+system\\s+processes\\s+extensive.*", line, re.M | re.I) == None:
                     output = output + line
                     break
             for line in fopen:
