@@ -1,5 +1,6 @@
-__author__ = 'asifj'
 
+from __future__ import division
+__author__ = 'asifj'
 import re
 from bs4 import BeautifulSoup
 import math
@@ -772,6 +773,7 @@ class Commands:
                 if m:
                     record_count = record_count + 1
                     self.proc_mem_data[record_count] = {}
+
                     self.proc_mem_data[record_count]["activemem"] = int(m.groupdict(0)["activemem"]) * 1000 * 1000
                     self.proc_mem_data[record_count]["inactmem"] = int(m.groupdict(0)["inactmem"]) * 1000 * 1000
                     self.proc_mem_data[record_count]["wiredmem"] = int(m.groupdict(0)["wiredmem"]) * 1000 * 1000
@@ -781,7 +783,7 @@ class Commands:
                     self.proc_mem_data[record_count]["totalmem"] = (int(m.groupdict(0)["activemem"] )+int( m.groupdict(0)["inactmem"] )+int( m.groupdict(0)["wiredmem"] )+int( m.groupdict(0)["cachemem"] )+int( m.groupdict(0)["freemem"])) * 1000 * 1000
                     self.proc_mem_data[record_count]["usedmem"] = (int(m.groupdict(0)["activemem"] )+int( m.groupdict(0)["inactmem"] )+int( m.groupdict(0)["wiredmem"] )) * 1000 * 1000
                     #self.proc_mem_data[record_count]["usedmempercentage"] = int(self.proc_mem_data[record_count]["usedmem"]) * 100 / int(self.proc_mem_data[record_count]["totalmem"])
-                    self.proc_mem_data[record_count]["usedmempercentage"] = int(math.floor((float(self.proc_mem_data[record_count]["usedmem"]) * 100) / float(self.proc_mem_data[record_count]["totalmem"])))
+                    self.proc_mem_data[record_count]["usedmempercentage"] = (float(self.proc_mem_data[record_count]["usedmem"]) * 100) / float(self.proc_mem_data[record_count]["totalmem"])
                     self.proc_mem_data[record_count]["chassisname"] = chassisname
                     #print math.floor(float(self.proc_mem_data[record_count]["usedmem"]) * 100 / (float(self.proc_mem_data[record_count]["totalmem"])))
                 m = re.match(r'Swap:\s+(?P<swap_total>\d+)M\s+\S+\s(?P<swap_free>\d+)M\s+.*', line.strip(), re.M|re.I)

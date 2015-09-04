@@ -453,18 +453,19 @@ class Querybuilder:
         swap_total = proc_mem_data.get("swap_total", 0)
         swap_free = proc_mem_data.get("swap_free", 0)
         self.command_query = ""
+
         if chassisname=="" or chassisname=="NULL":
             self.command_query = " and chassisname is NULL and activemem='"+str(activemem)+"' and \
                 inactmem='"+str(inactmem)+"' and wiredmem='"+str(wiredmem)+"' and  \
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
-                swap_total='"+str(swap_total)+"' and swap_free='"+str(swap_free)+"' and  \
+                swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
                 usedmempercentage="+str(usedmempercentage)+" order by collector_time"
         else:
             self.command_query = " and chassisname='"+chassisname+"' and activemem='"+str(activemem)+"' and \
                 inactmem='"+str(inactmem)+"' and wiredmem='"+str(wiredmem)+"' and  \
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
-                swap_total='"+str(swap_total)+"' and swap_free='"+str(swap_free)+"' and  \
+                swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
                 usedmempercentage="+str(usedmempercentage)+" order by collector_time"
 

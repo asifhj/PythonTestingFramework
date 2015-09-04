@@ -251,7 +251,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\ex\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\"
 
-    file = "*201509*.txt"
+    file = "*.txt"
     #file = "sn-space-ex6200-sys_phdc_jmb_ais_health_20150823_091949.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -2678,7 +2678,7 @@ if __name__ == "__main__":
                     how_many = len(C.vc_prtcl_adj_data)
                     for i in range (0, how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis protocol adjacency")
                         command_report.append("vc_prtcl_adj_data")
                         status = []
                         status.append("vc_prtcl_adj_data")
@@ -2718,7 +2718,7 @@ if __name__ == "__main__":
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis protocol adjacency")
                         command_report.append("vc_prtcl_adj_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
@@ -2731,7 +2731,7 @@ if __name__ == "__main__":
                     how_many = len(C.vc_prtcl_stat_data)
                     for i in range (0, how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis protocol statistics")
                         command_report.append("vc_prtcl_stat_data")
                         status = []
                         status.append("vc_prtcl_stat_data")
@@ -2771,7 +2771,7 @@ if __name__ == "__main__":
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis protocol statistics")
                         command_report.append("vc_prtcl_stat_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
@@ -2784,7 +2784,7 @@ if __name__ == "__main__":
                     how_many = len(C.vc_stat_data)
                     for i in range (0, how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis status")
                         command_report.append("vc_stat_data")
                         status = []
                         status.append("vc_stat_data")
@@ -2824,7 +2824,7 @@ if __name__ == "__main__":
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis status")
                         command_report.append("vc_stat_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
@@ -2837,7 +2837,7 @@ if __name__ == "__main__":
                     how_many = len(C.vc_vcp_stat_data)
                     for i in range (0, how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis vc-port")
                         command_report.append("vc_vcp_stat_data")
                         status = []
                         status.append("vc_vcp_stat_data")
@@ -2877,7 +2877,7 @@ if __name__ == "__main__":
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
+                        command_report.append("show virtual-chassis vc-port")
                         command_report.append("vc_vcp_stat_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
