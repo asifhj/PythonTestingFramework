@@ -1168,7 +1168,7 @@ class Querybuilder:
             capacity="+str(capacity)+" and mountedon='"+str(mountedon)+"' order by collector_time"
 
     def build_sys_ver_data_query(self, sys_ver_data):
-        print json.dumps(sys_ver_data, indent=4)
+        #print json.dumps(sys_ver_data, indent=4)
         chassisname = sys_ver_data.get("chassisname","")
         verbaseosboot = sys_ver_data.get("JUNOS Base OS boot","not found")
         verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "not found")
