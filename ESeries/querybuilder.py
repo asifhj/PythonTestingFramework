@@ -37,6 +37,7 @@ class Querybuilder:
             servicenowversion='" + str(self.servicenow_version) + "' and softwarerelease='" + str(self.software_release) + "' and \
             collector_time between '" + str(self.phdct_utc) + "' and '" + str(self.phdct_utc) + "' "'''
 
+    # For SRX series
     def build_arp_data_query(self, arp_data):
         totalarpentries = arp_data.get("total_entries", 0)
         self.command_query = ""
@@ -115,10 +116,13 @@ class Querybuilder:
         parttype = ""
         self.command_query = ""
         q = ""
+        bk_parttype = ""
         m = re.match(r'([\S|\s]+)(\d)$', str(self.ch_hard_data[k]["item"]), re.M | re.I)
+        bk_parttype = self.ch_hard_data[k]["item"]
         if m:
             #print m.groups()
             parttype = m.groups()[0].strip()
+            #print bk_parttype
             if len(parttype.split(" "))>1:
                 parttype = parttype.split(" ")[1]
             slot = m.groups()[1]
@@ -131,6 +135,7 @@ class Querybuilder:
                 q = "and slot is NULL and pic_slot is NULL and sfp_slot="+str(slot)+""
         else:
             parttype = k
+            #print parttype
             slot = "NULL"
             q = "and slot is "+str(slot)+""
         q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].upper().strip())+"' \
@@ -277,26 +282,6 @@ class Querybuilder:
                             rteslrndfrmkernel="+str(rtesLrndFrmKernel)+" and rtngskttimeuntlnextscan="+str(rtngSktTimeUntlNextScan)+" \
                             order by collector_time"
 
-    def build_mpc_jnh_summ_data_query(self, mpc_jnh_summ_data):
-        print json.dumps(mpc_jnh_summ_data, indent=4)
-        self.command_query = ""
-
-    def build_nhdb_zones_query(self, nhdb_zones):
-        device = nhdb_zones.get("device","")
-        state = nhdb_zones.get("devicenum","")
-        nhdbchip = nhdb_zones.get("nhdbchip","")
-        nhdbstart = nhdb_zones.get("nhdbstart","")
-        nhdbsize1 = nhdb_zones.get("nhdbsize1","")
-        nhdbrsvd = nhdb_zones.get("nhdbrsvd","")
-        nhdbused = nhdb_zones.get("nhdbused","")
-        nhdbhiwater = nhdb_zones.get("nhdbhiwater","")
-        nhdbtotal = nhdb_zones.get("nhdbtotal","")
-        nhdbsize2 = nhdb_zones.get("nhdbsize2","")
-        nhdbname = nhdb_zones.get("nhdbname","")
-        self.command_query = ""
-        
-        query = " order by collector_time"
-
     def build_pfe_st_notif_data_query(self, pfe_st_notif_data):
         print json.dumps(pfe_st_notif_data, indent=4)
         discard_failed = pfe_st_notif_data.get("discard_failed", 0)
@@ -398,6 +383,7 @@ class Querybuilder:
         swap_total = proc_mem_data.get("swap_total", 0)
         swap_free = proc_mem_data.get("swap_free", 0)
         self.command_query = ""
+
         if chassisname=="" or chassisname=="NULL":
             self.command_query = " and chassisname is NULL and activemem='"+str(activemem)+"' and \
                 inactmem='"+str(inactmem)+"' and wiredmem='"+str(wiredmem)+"' and  \
@@ -1129,7 +1115,8 @@ class Querybuilder:
             verbaseossoftware='"+str(verbaseossoftware)+"' and verkernelsoftware='"+str(verkernelsoftware)+"' and \
             vercryptosoftware='"+str(vercryptosoftware)+"' and verpfesupportcommon='"+str(verpfesupportcommon)+"' and \
             verdoc='"+str(verdoc)+"' and versoftwarerelease='"+str(versoftwarerelease)+"' and \
-            verroutingsoftware='"+str(verroutingsoftware)+"' and verpfesupport='"+str(verpfesupport)+"' order by collector_time"
+            verroutingsoftware='"+str(verroutingsoftware)+"' and verpfesupport='"+str(verpfesupport)+"' and firmware_software='"+str(firmware_software)+"' order by collector_time"
+        #print self.command_query
 
     def build_sys_vm_swap_query(self, sys_vm_swap):
         chassisname = sys_vm_swap.get("chassisname","")

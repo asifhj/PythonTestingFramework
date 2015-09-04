@@ -37,13 +37,8 @@ class Querybuilder:
             servicenowversion='" + str(self.servicenow_version) + "' and softwarerelease='" + str(self.software_release) + "' and \
             collector_time between '" + str(self.phdct_utc) + "' and '" + str(self.phdct_utc) + "' "'''
 
-    # For SRX series
-    def build_arp_data_query(self, arp_data):
-        totalarpentries = arp_data.get("total_entries", 0)
-        self.command_query = ""
-        self.command_query =" and totalarpentries="+str(totalarpentries)+"  order by collector_time"
 
-    def build_buff_data_query(self, buff_data):
+     def build_buff_data_query(self, buff_data):
         chassisname = buff_data.get("chassisname", "")
         currentMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[0]
         cacheMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[1]
@@ -120,8 +115,9 @@ class Querybuilder:
         m = re.match(r'([\S|\s]+)(\d)$', str(self.ch_hard_data[k]["item"]), re.M | re.I)
         bk_parttype = self.ch_hard_data[k]["item"]
         if m:
+            #print m.groups()
             parttype = m.groups()[0].strip()
-            print bk_parttype
+            #print bk_parttype
             if len(parttype.split(" "))>1:
                 parttype = parttype.split(" ")[1]
             slot = m.groups()[1]
@@ -594,12 +590,12 @@ class Querybuilder:
             tmp += " and cpu_temperature is NULL "
         else:
             tmp += " and cpu_temperature='"+str(cpu_temperature)+"' "
-        memory_dram_size = re_data.get('memory_dram_size', "NULL")
+        memory_dram_size = re_data.get('memory_dram_size', "NULL").replace(" MB", "")
         if memory_dram_size=="NULL":
             tmp += " and memory_dram_size is NULL "
         else:
             tmp += " and memory_dram_size="+str(memory_dram_size)+" "
-        memory_buffer_utilization = re_data.get('memory_buffer_utilization', 0)
+        memory_buffer_utilization = re_data.get('memory_buffer_utilization', 0).replace(" MB", "")
         tmp += " and memory_buffer_utilization="+str(memory_buffer_utilization)+""
         mastershipstate = re_data.get('mastership_state', "NULL")
         if mastershipstate=="NULL":
@@ -1257,40 +1253,3 @@ class Querybuilder:
                 boot_time='"+str(boot_time)+"' and protocols_start_date='"+str(protocols_start_date)+"' and \
                 protocol_start_time='"+str(protocol_start_time)+"' and config_date='"+str(config_date)+"' and \
                 config_time='"+str(config_time)+"' order by collector_time"
-
-    def build_vc_prtcl_adj_data_query(self, vc_prtcl_adj_data):
-        interface = vc_prtcl_adj_data.get('interface', "")
-        system = vc_prtcl_adj_data.get('system', "")
-        hold = vc_prtcl_adj_data.get('state', 0)
-        state = vc_prtcl_adj_data.get('hold', "")
-        member = vc_prtcl_adj_data.get('member', 0)
-        self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
-
-    def build_vc_prtcl_stat_data_query(self, vc_prtcl_stat_data):
-        interface = vc_prtcl_stat_data.get('interface', "")
-        system = vc_prtcl_stat_data.get('system', "")
-        hold = vc_prtcl_stat_data.get('state', 0)
-        state = vc_prtcl_stat_data.get('hold', "")
-        member = vc_prtcl_stat_data.get('member', 0)
-        self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
-
-
-    def build_vc_stat_data_query(self, vc_stat_data):
-        interface = vc_stat_data.get('interface', "")
-        system = vc_stat_data.get('system', "")
-        hold = vc_stat_data.get('state', 0)
-        state = vc_stat_data.get('hold', "")
-        member = vc_stat_data.get('member', 0)
-        self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
-
-    def build_vc_vcp_stat_data_query(self, vc_vcp_stat_data):
-        interface = vc_vcp_stat_data.get('interface', "")
-        system = vc_vcp_stat_data.get('system', "")
-        hold = vc_vcp_stat_data.get('state', 0)
-        state = vc_vcp_stat_data.get('hold', "")
-        member = vc_vcp_stat_data.get('member', 0)
-        self.command_query = ""
-        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
