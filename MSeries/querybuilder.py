@@ -1185,7 +1185,7 @@ class Querybuilder:
             verbaseossoftware='"+str(verbaseossoftware)+"' and verkernelsoftware='"+str(verkernelsoftware)+"' and \
             vercryptosoftware='"+str(vercryptosoftware)+"' and verpfesupportcommon='"+str(verpfesupportcommon)+"' and \
             verdoc='"+str(verdoc)+"' and versoftwarerelease='"+str(versoftwarerelease)+"' and \
-            verroutingsoftware='"+str(verroutingsoftware)+"' and verpfesupport='"+str(verpfesupport)+"' order by collector_time"
+            verroutingsoftware='"+str(verroutingsoftware)+"' and verpfesupport='"+str(verpfesupport)+"' and firmware_software='"+str(firmware_software)+"' order by collector_time"
         #print self.command_query
 
     def build_sys_vm_swap_query(self, sys_vm_swap):

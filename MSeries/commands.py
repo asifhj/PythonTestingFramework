@@ -70,7 +70,7 @@ class Commands:
                 if m:
                     chassisname = m.groups(0)[0]
                     break
-        self.output = output
+        self.output = output.split("\n")
         soup = BeautifulSoup(output, "lxml")
         record_count = 0
         self.buff_data[record_count] = {}
@@ -120,7 +120,7 @@ class Commands:
                     break
                 output += line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         chassisname = ""
         soup = BeautifulSoup(output, "lxml")
         i = 0
@@ -216,7 +216,7 @@ class Commands:
                 m = re.match(r'(?P<plane>\d+)\s+(?P<state>\S+)\s+(?P<uptime>[\S|\s]+)$', line.strip(), re.M|re.I)
                 if m:
                     self.ch_fab_sum_data[record_count] = m.groupdict()
-                    record_count = record_count + 1
+                    record_count += 1
 
     def get_ch_hard_data(self):
         # ch_hard_data
@@ -344,7 +344,7 @@ class Commands:
                     break
                 output += line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         soup = BeautifulSoup(output, "lxml")
         i = 0
         for record in soup.findAll("fpc"):
@@ -367,7 +367,7 @@ class Commands:
                     break
                 if line.strip():
                     output = output + line
-        self.output = output
+        self.output = output.split("\n")
         #print output
         output = output.split("\n")
         record_count = 0
@@ -458,7 +458,7 @@ class Commands:
                     break
                 if line.strip():
                     output = output + line
-        self.output = output
+        self.output = output.split("\n")
         #print output
         output = output.split("\n")
         for line in output:
@@ -481,7 +481,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         output = output.split("\n")
 
         for line in output:
@@ -582,7 +582,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         chassisname = ""
         jnhid = ""
         mpc = ""
@@ -672,7 +672,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         heapid = ""
         device = ""
         devicenum = ""
@@ -686,7 +686,7 @@ class Commands:
                     devicenum = m.groups(0)[2]
                     device = m.groups(0)[1]
                     heapid = m.groups(0)[0]
-                m = re.match(r'GOT:\s+(?P<pfeheapid>[0-9]+)\s+(?P<pfeheapbase>[0-9a-fA-F]+)\s+(?P<pfeheaptotal>[0-9]+)\s+(?P<pfeheapfree>[0-9]+)\s+(?P<pfeheapused>[0-9]+)\s+(?P<pfeheappercent>[0-9]+)[ \t\r]+(?P<pfeheapname>[a-zA-Z]+)', line.strip(), re.M|re.I)
+                m = re.match(r'GOT:\s+(?P<pfeheapid>[0-9]+)\s+(?P<pfeheapbase>[0-9a-fA-F]+)\s+(?P<pfeheaptotal>[0-9]+)\s+(?P<pfeheapfree>[0-9]+)\s+(?P<pfeheapused>[0-9]+)\s+(?P<pfeheappercent>[0-9]+)[ \t\r]+(?P<pfeheapname>[\S|\s]+)', line.strip(), re.M|re.I)
                 if m:
                     #print m.groupdict(0)
                     pfe_dict = m.groupdict()
@@ -728,7 +728,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         chassisname = ""
         record_count = 0
         output = output.split("\n")
@@ -760,7 +760,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         chassisname = ""
         record_count = -1
         output = output.split("\n")
@@ -807,6 +807,7 @@ class Commands:
         #print output
         chassisname = ""
         output = output.split("\n")
+        self.output = output
         record_count = 0
         for line in output:
            if line.strip():
@@ -833,7 +834,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         output = output.split("\n")
         self.pwr_data = {}
         record_count = 0
@@ -872,7 +873,7 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output = output + line
-        self.output = output
+        self.output = output.split("\n")
         rename = ""
         for line in output.split("\n"):
             m = re.match(r"<re-name>(.*)<\/re-name>", line.strip(), re.I | re.M)
@@ -938,7 +939,7 @@ class Commands:
                     break
                 output = output + line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         output = output.split("\n")
         record_count = 0
         for line in output:
@@ -964,6 +965,7 @@ class Commands:
                         break
                     output = output + line
             output = output.split("\n")
+            #print output
             self.output = output
             record_count = 0
             chassisname = ""
@@ -982,13 +984,10 @@ class Commands:
 
     def get_sys_stats_data(self):
         output_text = ""
-        hit = 0
         option = ""
-        output = ""
         chassisname = ""
         self.sys_stats_data = {}
         i = 0
-        first = 0
         with open(self.file_name, "rb+") as fopen:
             for line in fopen:
                 m = re.match(r'(?P<chassisname>[sfc[0-9]+.*:|lcc[0-9]+.*:|fpc[0-9]+.*:])', line, re.M | re.I)
@@ -996,7 +995,6 @@ class Commands:
                     chassisname = m.groups(0)[0]
                 m = re.match(r".*@.*>\s+show\s+system\s+statistics\s+(.+)", line, re.M | re.I)
                 if m:
-                    hit = 1
                     self.sys_stats_data[i] = {}
                     self.sys_stats_data[i][str(option).strip()] = {}
                     self.sys_stats_data[i][str(option).strip()] = output_text
@@ -1006,6 +1004,7 @@ class Commands:
                     i = i + 1
                 else:
                     output_text = output_text + line
+        self.output = output_text.split("\n")
 
 
     def get_sys_stor_data(self):
@@ -1022,7 +1021,7 @@ class Commands:
                     if line.startswith("[----BEGIN"):
                         break
                     output = output + line
-            self.output = output
+            self.output = output.split("\n")
             output = output.split("\n")
             record_count = 0
             chassisname = ""
@@ -1065,7 +1064,7 @@ class Commands:
                         if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                             break
                         output += line
-        self.output = output
+        self.output = output.split("\n")
         chassisname = ""
         if output_type == "xml":
             soup = BeautifulSoup(output, "lxml")
@@ -1118,10 +1117,11 @@ class Commands:
             m = re.match(r'\s+(\d+)\s+(swap.*)$', line, re.M | re.I)
             if m:
                 self.sys_vm_swap[m.groups(0)[1].strip()] = m.groups(0)[0]
+                self.sys_vm_swap["chassisname"] = chassisname
             m = re.match(r'\s+([\d])\s+(peak\s+swap\s+pages\s+used)$', line, re.M | re.I)
             if m:
                 self.sys_vm_swap[m.groups(0)[1].strip()] = m.groups(0)[0]
-        self.sys_vm_swap["chassisname"] = chassisname
+                self.sys_vm_swap["chassisname"] = chassisname
 
     def get_task_io_data(self):
         # hi#
@@ -1134,7 +1134,7 @@ class Commands:
                 if not re.match(".*@.*>\\sshow.*", line, re.M | re.I) == None:
                     break
                 output += line
-        self.output = output
+        self.output = output.split("\n")
         output = output.split("\n")
         record_count = 0
         for line in output:

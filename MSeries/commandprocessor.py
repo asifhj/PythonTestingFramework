@@ -37,6 +37,10 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         self.ipsec_stats_data = OrderedDict()
         self.jtree_mem = OrderedDict()
         self.up_data = OrderedDict()
+        self.vc_prtcl_adj_data = OrderedDict()
+        self.vc_prtcl_stat_data = OrderedDict()
+        self.vc_stat_data = OrderedDict()
+        self.vc_vcp_stat_data = OrderedDict()
         self.sys_ver_data = OrderedDict()
         self.ch_hard_data = OrderedDict()
         self.env_data = OrderedDict()
@@ -169,8 +173,9 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         return command_report
 
     def report_writer(self, writer, command_report):
-        print "\t\t\t\t\t\t\tWritten to report!"
+        print "\t\t\t\t\t\tWritten to report\t"+str(command_report[2])+"\t"+str(command_report[9])
         writer.writerow(command_report)
+        #print command_report
         command_report = []
         return command_report
 
@@ -248,7 +253,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\mx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\"
 
-    file = "*.txt"
+    file = "*20150904_*.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -266,8 +271,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            if size < 2:
-            #if True:
+            #if size < 2:
+            if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
@@ -388,6 +393,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis alarm")
+                        command_report.append("ch_alarm_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -493,8 +499,6 @@ if __name__ == "__main__":
                         summary.append(status)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-                    if how_many==0:
-                        print "\n\t\t\t\t\t\t******************ch_fab_sum_data command not found in file*********************"
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric summary")
@@ -733,7 +737,7 @@ if __name__ == "__main__":
                 if jtree_mem==1:
                     C.get_jtree_mem()
                     cur.execute("refresh jtree_mem")
-                    how_many = len(C.jtree_mem)
+                    how_many = len(C.jtree_mem[0])
                     if how_many:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append('request pfe execute command "show jtree 0 memory extensive" target fpc(NUMBER)')
@@ -888,6 +892,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show krt state")
+                        command_report.append("krt_st")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -1079,6 +1084,7 @@ if __name__ == "__main__":
                         status.append("pfe_tr_data")
                         status.append(C.phdct_utc)
                         C.build_common_query("pfe_tr_data")
+                        #print json.dumps(C.pfe_tr_data, indent=4)
                         C.build_pfe_tr_data_query(C.pfe_tr_data[i])
                         query = C.common_query + C.command_query
                         cur.execute(query)
@@ -1660,6 +1666,7 @@ if __name__ == "__main__":
                     C.get_sys_vm_swap()
                     cur.execute("refresh sys_vm_swap")
                     how_many = len(C.sys_vm_swap)
+                    #print C.sys_vm_swap
                     if how_many:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system virtual-memory")
@@ -1704,10 +1711,10 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system virtual-memory")
+                        command_report.append("sys_vm_swap")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-
 
                 # task_io_data
                 if task_io_data==1:
@@ -1813,6 +1820,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task memory fragmentation")
+                        command_report.append("task_mem_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -1866,6 +1874,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("request pfe execute command \"show ukern_trace memory-composition\" target fpc(NUMBER)")
+                        command_report.append("ukern_trace_mem_comp_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -1921,221 +1930,6 @@ if __name__ == "__main__":
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-
-                '''
-                # vc_prtcl_adj_data
-                if vc_prtcl_adj_data==1:
-                    C.get_vc_prtcl_adj_data()
-                    cur.execute("refresh vc_prtcl_adj_data")
-                    how_many = len(C.vc_prtcl_adj_data)
-                    for i in range (0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_prtcl_adj_data")
-                        status = []
-                        status.append("vc_prtcl_adj_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("vc_prtcl_adj_data")
-                        C.build_vc_prtcl_adj_data_query(C.vc_prtcl_adj_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No vc_prtcl_adj_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
-                            result_set = cur.fetchall()
-                            if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
-                            else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("vc_prtcl_adj_data No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************vc_prtcl_adj_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("vc_prtcl_adj_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.vc_prtcl_adj_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-                    if len(C.output)==1:
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_prtcl_adj_data")
-                        command_report = C.command_report4(command_report)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-
-                # vc_prtcl_stat_data
-                if vc_prtcl_stat_data==1:
-                    C.get_vc_prtcl_stat_data()
-                    cur.execute("refresh vc_prtcl_stat_data")
-                    how_many = len(C.vc_prtcl_stat_data)
-                    for i in range (0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_prtcl_stat_data")
-                        status = []
-                        status.append("vc_prtcl_stat_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("vc_prtcl_stat_data")
-                        C.build_vc_prtcl_stat_data_query(C.vc_prtcl_stat_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No vc_prtcl_stat_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
-                            result_set = cur.fetchall()
-                            if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
-                            else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("vc_prtcl_stat_data No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************vc_prtcl_stat_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("vc_prtcl_stat_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.vc_prtcl_stat_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-                    if len(C.output)==1:
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_prtcl_stat_data")
-                        command_report = C.command_report4(command_report)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-
-                # vc_stat_data
-                if vc_stat_data==1:
-                    C.get_vc_stat_data()
-                    cur.execute("refresh vc_stat_data")
-                    how_many = len(C.vc_stat_data)
-                    for i in range (0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_stat_data")
-                        status = []
-                        status.append("vc_stat_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("vc_stat_data")
-                        C.build_vc_stat_data_query(C.vc_stat_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No vc_stat_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
-                            result_set = cur.fetchall()
-                            if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
-                            else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("vc_stat_data No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************vc_stat_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("vc_stat_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.vc_stat_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-                    if len(C.output)==1:
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_stat_data")
-                        command_report = C.command_report4(command_report)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-
-                # vc_vcp_stat_data
-                if vc_vcp_stat_data==1:
-                    C.get_vc_vcp_stat_data()
-                    cur.execute("refresh vc_vcp_stat_data")
-                    how_many = len(C.vc_vcp_stat_data)
-                    for i in range (0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_vcp_stat_data")
-                        status = []
-                        status.append("vc_vcp_stat_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("vc_vcp_stat_data")
-                        C.build_vc_vcp_stat_data_query(C.vc_vcp_stat_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No vc_vcp_stat_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
-                            result_set = cur.fetchall()
-                            if len(result_set) < 1:
-                                command_report = C.command_report1(C, command_report)
-                            else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("vc_vcp_stat_data No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************vc_vcp_stat_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            #print result_set
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("vc_vcp_stat_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.vc_vcp_stat_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-                    if len(C.output)==1:
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show spanning-tree bridge brief")
-                        command_report.append("vc_vcp_stat_data")
-                        command_report = C.command_report4(command_report)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
-
-                    '''
 
                 print "\nCollected Time: " + str(C.phdct_utc) + "\n"
                 print C.hashs() + "  END  " + C.hashs()

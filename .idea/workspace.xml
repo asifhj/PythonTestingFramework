@@ -9,9 +9,7 @@
     <list default="true" id="d6d18802-d85c-4d33-8f14-93244e22b936" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ESeries/commandprocessor.py" afterPath="$PROJECT_DIR$/ESeries/commandprocessor.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/commandprocessor.py" afterPath="$PROJECT_DIR$/MSeries/commandprocessor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ESeries/commands.py" afterPath="$PROJECT_DIR$/ESeries/commands.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/commands.py" afterPath="$PROJECT_DIR$/MSeries/commands.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ESeries/querybuilder.py" afterPath="$PROJECT_DIR$/ESeries/querybuilder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/querybuilder.py" afterPath="$PROJECT_DIR$/MSeries/querybuilder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/update" afterPath="$PROJECT_DIR$/update" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -39,27 +37,17 @@
         <entry file="file://$PROJECT_DIR$/update">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="74" selection-start-line="23" selection-start-column="74" selection-end-line="23" selection-end-column="74" />
+              <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="commands.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MSeries/commands.py">
+      <file leaf-file-name="commandprocessor.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="commands.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ESeries/commands.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.02367688">
-              <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.24709302">
+              <caret line="1082" column="35" selection-start-line="1082" selection-start-column="35" selection-end-line="1082" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -75,11 +63,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="commandprocessor.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
+      <file leaf-file-name="commands.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MSeries/commands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="233" column="19" selection-start-line="233" selection-start-column="19" selection-end-line="233" selection-end-column="19" />
+            <state vertical-scroll-proportion="-0.86206895">
+              <caret line="715" column="8" selection-start-line="715" selection-start-column="8" selection-end-line="715" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="querybuilder.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MSeries/querybuilder.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-18.448277">
+              <caret line="1187" column="150" selection-start-line="1187" selection-start-column="150" selection-end-line="1187" selection-end-column="150" />
               <folding />
             </state>
           </provider>
@@ -119,13 +117,13 @@
         <option value="$PROJECT_DIR$/SRXSeries/commandprocessor.py" />
         <option value="$PROJECT_DIR$/SRXSeries/update" />
         <option value="$PROJECT_DIR$/Baseproduct-mapping.csv" />
-        <option value="$PROJECT_DIR$/update" />
-        <option value="$PROJECT_DIR$/MSeries/commandprocessor.py" />
-        <option value="$PROJECT_DIR$/MSeries/querybuilder.py" />
-        <option value="$PROJECT_DIR$/MSeries/commands.py" />
         <option value="$PROJECT_DIR$/ESeries/querybuilder.py" />
         <option value="$PROJECT_DIR$/ESeries/commandprocessor.py" />
         <option value="$PROJECT_DIR$/ESeries/commands.py" />
+        <option value="$PROJECT_DIR$/MSeries/querybuilder.py" />
+        <option value="$PROJECT_DIR$/update" />
+        <option value="$PROJECT_DIR$/MSeries/commands.py" />
+        <option value="$PROJECT_DIR$/MSeries/commandprocessor.py" />
       </list>
     </option>
   </component>
@@ -456,7 +454,13 @@
       <option name="project" value="LOCAL" />
       <updated>1441184081411</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Changes">
+      <created>1441379358647</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1441379358648</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -474,15 +478,15 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13371356" sideWeight="0.49463806" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32751676" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26174498" sideWeight="0.5025413" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26174498" sideWeight="0.4974587" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.4974587" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32751676" sideWeight="0.4974587" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14638783" sideWeight="0.5053619" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3994638" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -867,10 +871,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ESeries/commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.023709903">
+          <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MSeries/querybuilder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.56125355">
-          <caret line="455" column="0" selection-start-line="455" selection-start-column="0" selection-end-line="455" selection-end-column="0" />
+        <state vertical-scroll-proportion="-18.448277">
+          <caret line="1187" column="150" selection-start-line="1187" selection-start-column="150" selection-end-line="1187" selection-end-column="150" />
           <folding />
         </state>
       </provider>
@@ -878,7 +890,15 @@
     <entry file="file://$PROJECT_DIR$/update">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="74" selection-start-line="23" selection-start-column="74" selection-end-line="23" selection-end-column="74" />
+          <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MSeries/commands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.86206895">
+          <caret line="715" column="8" selection-start-line="715" selection-start-column="8" selection-end-line="715" selection-end-column="8" />
           <folding />
         </state>
       </provider>
@@ -893,24 +913,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="233" column="19" selection-start-line="233" selection-start-column="19" selection-end-line="233" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MSeries/commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ESeries/commands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.02367688">
-          <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+        <state vertical-scroll-proportion="0.24709302">
+          <caret line="1082" column="35" selection-start-line="1082" selection-start-column="35" selection-end-line="1082" selection-end-column="35" />
           <folding />
         </state>
       </provider>

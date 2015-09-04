@@ -62,6 +62,7 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         self.ch_fab_sum_data = OrderedDict()
         self.mpc_jnh_summ_data = OrderedDict()
         self.nhdb_zones = OrderedDict()
+        self.pfe_heap_mem = OrderedDict()
         self.ps_data = OrderedDict()
         self.pfe_st_err = OrderedDict()
         self.pfe_st_notif_data = OrderedDict()
@@ -172,8 +173,9 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         return command_report
 
     def report_writer(self, writer, command_report):
-        print "\t\t\t\t\t\t\tWritten to report!"
+        print "\t\t\t\t\t\tWritten to report\t"+str(command_report[2])+"\t"+str(command_report[9])
         writer.writerow(command_report)
+        #print command_report
         command_report = []
         return command_report
 
@@ -444,6 +446,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis alarm")
+                        command_report.append("ch_alarm_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -475,15 +478,13 @@ if __name__ == "__main__":
                                 print "Collected time: "+str(C.phdct_utc)
                                 command_report = C.command_report1(C, command_report)
                             else:
-                                #command_report = C.command_report2(C, command_report, result_set)
-                                command_report = C.command_report2(C, command_report, [])
+                                command_report = C.command_report2(C, command_report, result_set)
                             status.append("No Match Found")
                         else:
                             print "\n\t\t\t\t\t\t******************ch_fab_map_data Match Found*********************"
                             # C.tabulate_print(result_set)
                             status.append(result_set[0][2])
-                            #command_report = C.command_report3(C, command_report, result_set)
-                            command_report = C.command_report2(C, command_report, [])
+                            command_report = C.command_report3(C, command_report, result_set)
                             status.append("ch_fab_map_data Match Found")
                         if print_query == 1:
                             print query
@@ -551,8 +552,6 @@ if __name__ == "__main__":
                         summary.append(status)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-                    if how_many==0:
-                        print "\n\t\t\t\t\t\t******************ch_fab_sum_data command not found in file*********************"
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric summary")
@@ -691,7 +690,7 @@ if __name__ == "__main__":
                         m = re.match(r"([0-9]+).*", C.env_data['Temp'][i]['measurement'].strip(), re.I | re.M)
                         if m:
                             tempc = m.groups(0)[0]
-                        if int(tempc) >= 55:
+                        if int(tempc) > 55:
                             C.build_env_data_query(C.env_data['Temp'][i])
                             query = C.common_query + C.command_query
                             cur.execute(query)
@@ -1105,6 +1104,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show krt state")
+                        command_report.append("krt_st")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -1127,7 +1127,6 @@ if __name__ == "__main__":
                         C.build_mpc_jnh_summ_data_query(C.mpc_jnh_summ_data[i])
                         #print json.dumps(C.mpc_jnh_summ_data, indent=4)
                         query = C.common_query + C.command_query
-                        print query
                         cur.execute(query)
                         result_set = cur.fetchall()
                         if len(result_set) < 1:
@@ -1292,6 +1291,7 @@ if __name__ == "__main__":
                         status.append("pfe_tr_data")
                         status.append(C.phdct_utc)
                         C.build_common_query("pfe_tr_data")
+                        #print json.dumps(C.pfe_tr_data, indent=4)
                         C.build_pfe_tr_data_query(C.pfe_tr_data[i])
                         query = C.common_query + C.command_query
                         cur.execute(query)
@@ -2086,7 +2086,6 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
-
                 # stp_stats_data
                 if stp_stats_data==1:
                     C.get_stp_stats_data()
@@ -2409,6 +2408,7 @@ if __name__ == "__main__":
                     C.get_sys_vm_swap()
                     cur.execute("refresh sys_vm_swap")
                     how_many = len(C.sys_vm_swap)
+                    #print C.sys_vm_swap
                     if how_many:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system virtual-memory")
@@ -2453,6 +2453,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system virtual-memory")
+                        command_report.append("sys_vm_swap")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -2561,6 +2562,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show task memory fragmentation")
+                        command_report.append("task_mem_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -2614,6 +2616,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("request pfe execute command \"show ukern_trace memory-composition\" target fpc(NUMBER)")
+                        command_report.append("ukern_trace_mem_comp_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -2882,8 +2885,6 @@ if __name__ == "__main__":
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-
-
 
                 print "\nCollected Time: " + str(C.phdct_utc) + "\n"
                 print C.hashs() + "  END  " + C.hashs()
