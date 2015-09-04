@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6d18802-d85c-4d33-8f14-93244e22b936" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/querybuilder.py" afterPath="$PROJECT_DIR$/MSeries/querybuilder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="HadoopAutomation.iws" />
@@ -468,7 +467,13 @@
       <option name="project" value="LOCAL" />
       <updated>1441397548272</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Changes">
+      <created>1441397638616</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1441397638616</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView">
