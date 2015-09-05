@@ -274,7 +274,7 @@ class Querybuilder:
         #chassisname = mpc_jnh_summ_data.get("chassiname", "NULL")
         mpc = mpc_jnh_summ_data.get("mpc", 0)
         jnhid = mpc_jnh_summ_data.get("jnhid", "")
-        name = mpc_jnh_summ_data.get("name", "")
+        name = mpc_jnh_summ_data.get("name", "").strip()
         size = mpc_jnh_summ_data.get("size", 0)
         allocated = mpc_jnh_summ_data.get("allocated", 0)
         utilization = mpc_jnh_summ_data.get("utilization", 0)
