@@ -7,9 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6d18802-d85c-4d33-8f14-93244e22b936" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/commandprocessor.py" afterPath="$PROJECT_DIR$/MSeries/commandprocessor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ESeries/querybuilder.py" afterPath="$PROJECT_DIR$/ESeries/querybuilder.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/querybuilder.py" afterPath="$PROJECT_DIR$/MSeries/querybuilder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="HadoopAutomation.iws" />
@@ -44,7 +41,7 @@
       <file leaf-file-name="commandprocessor.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.010145">
+            <state vertical-scroll-proportion="1.4080808">
               <caret line="285" column="0" selection-start-line="285" selection-start-column="0" selection-end-line="285" selection-end-column="0" />
               <folding />
             </state>
@@ -522,7 +519,13 @@
       <option name="project" value="LOCAL" />
       <updated>1441442860782</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Changes">
+      <created>1441451853297</created>
+      <option name="number" value="00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1441451853297</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView">
@@ -536,12 +539,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14765526" sideWeight="0.49463806" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32751676" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26174498" sideWeight="0.5025413" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26174498" sideWeight="0.5025413" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26174498" sideWeight="0.4974587" order="8" side_tool="false" content_ui="tabs" />
@@ -975,7 +978,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.010145">
+        <state vertical-scroll-proportion="1.4080808">
           <caret line="285" column="0" selection-start-line="285" selection-start-column="0" selection-end-line="285" selection-end-column="0" />
           <folding />
         </state>
