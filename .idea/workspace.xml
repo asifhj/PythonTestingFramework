@@ -7,9 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6d18802-d85c-4d33-8f14-93244e22b936" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ESeries/commandprocessor.py" afterPath="$PROJECT_DIR$/ESeries/commandprocessor.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/commandprocessor.py" afterPath="$PROJECT_DIR$/MSeries/commandprocessor.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ESeries/commands.py" afterPath="$PROJECT_DIR$/ESeries/commands.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ESeries/querybuilder.py" afterPath="$PROJECT_DIR$/ESeries/querybuilder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSeries/querybuilder.py" afterPath="$PROJECT_DIR$/MSeries/querybuilder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -42,20 +41,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="commandprocessor.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="commandprocessor.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.333333">
-              <caret line="265" column="22" selection-start-line="265" selection-start-column="22" selection-end-line="265" selection-end-column="22" />
+            <state vertical-scroll-proportion="1.010145">
+              <caret line="285" column="0" selection-start-line="285" selection-start-column="0" selection-end-line="285" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="commandprocessor.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="commandprocessor.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ESeries/commandprocessor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.74281394">
+            <state vertical-scroll-proportion="-9.678572">
               <caret line="275" column="13" selection-start-line="275" selection-start-column="13" selection-end-line="275" selection-end-column="13" />
               <folding />
             </state>
@@ -75,8 +74,18 @@
       <file leaf-file-name="querybuilder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ESeries/querybuilder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.551724">
-              <caret line="1208" column="52" selection-start-line="1208" selection-start-column="52" selection-end-line="1208" selection-end-column="52" />
+            <state vertical-scroll-proportion="-11.413794">
+              <caret line="526" column="0" selection-start-line="526" selection-start-column="0" selection-end-line="539" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="querybuilder.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MSeries/querybuilder.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.75862">
+              <caret line="594" column="48" selection-start-line="594" selection-start-column="48" selection-end-line="594" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -116,13 +125,13 @@
         <option value="$PROJECT_DIR$/SRXSeries/commandprocessor.py" />
         <option value="$PROJECT_DIR$/SRXSeries/update" />
         <option value="$PROJECT_DIR$/Baseproduct-mapping.csv" />
-        <option value="$PROJECT_DIR$/ESeries/querybuilder.py" />
         <option value="$PROJECT_DIR$/update" />
         <option value="$PROJECT_DIR$/MSeries/commands.py" />
-        <option value="$PROJECT_DIR$/MSeries/commandprocessor.py" />
-        <option value="$PROJECT_DIR$/MSeries/querybuilder.py" />
         <option value="$PROJECT_DIR$/ESeries/commands.py" />
         <option value="$PROJECT_DIR$/ESeries/commandprocessor.py" />
+        <option value="$PROJECT_DIR$/ESeries/querybuilder.py" />
+        <option value="$PROJECT_DIR$/MSeries/querybuilder.py" />
+        <option value="$PROJECT_DIR$/MSeries/commandprocessor.py" />
       </list>
     </option>
   </component>
@@ -507,7 +516,13 @@
       <option name="project" value="LOCAL" />
       <updated>1441400649138</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Changes">
+      <created>1441442860782</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1441442860782</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView">
@@ -926,22 +941,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MSeries/querybuilder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.53052324">
-          <caret line="280" column="31" selection-start-line="280" selection-start-column="31" selection-end-line="280" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.333333">
-          <caret line="265" column="22" selection-start-line="265" selection-start-column="22" selection-end-line="265" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ESeries/commands.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -952,16 +951,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ESeries/querybuilder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.551724">
-          <caret line="1208" column="52" selection-start-line="1208" selection-start-column="52" selection-end-line="1208" selection-end-column="52" />
+        <state vertical-scroll-proportion="-11.413794">
+          <caret line="526" column="0" selection-start-line="526" selection-start-column="0" selection-end-line="539" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MSeries/querybuilder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.75862">
+          <caret line="594" column="48" selection-start-line="594" selection-start-column="48" selection-end-line="594" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ESeries/commandprocessor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.74281394">
+        <state vertical-scroll-proportion="-9.678572">
           <caret line="275" column="13" selection-start-line="275" selection-start-column="13" selection-end-line="275" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MSeries/commandprocessor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.010145">
+          <caret line="285" column="0" selection-start-line="285" selection-start-column="0" selection-end-line="285" selection-end-column="0" />
           <folding />
         </state>
       </provider>

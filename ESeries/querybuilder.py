@@ -524,18 +524,18 @@ class Querybuilder:
             tmp += " and cpu_temperature is NULL "
         else:
             tmp += " and cpu_temperature='"+str(cpu_temperature)+"' "
-        memory_dram_size = re_data.get('memory_dram_size', "NULL").replace(" MB", "")
+        memory_dram_size = re_data.get('memory_dram_size', 0)
         if memory_dram_size=="NULL":
             tmp += " and memory_dram_size is NULL "
         else:
-            tmp += " and memory_dram_size="+str(memory_dram_size)+" "
-        memory_buffer_utilization = re_data.get('memory_buffer_utilization', 0).replace(" MB", "")
+            tmp += " and memory_dram_size="+str(memory_dram_size).replace(" MB", "")+" "
+        memory_buffer_utilization = re_data.get('memory_buffer_utilization', 0)
         tmp += " and memory_buffer_utilization="+str(memory_buffer_utilization)+""
         mastershipstate = re_data.get('mastership_state', "NULL")
         if mastershipstate=="NULL":
             tmp += " and mastershipstate is NULL "
         else:
-            tmp += " and mastershipstate='"+str(mastershipstate)+"' "
+            tmp += " and mastershipstate='"+str(mastershipstate).replace(" MB", "")+"' "
         totalcpu = int(cpu_user) + int(cpu_background) + int(cpu_system)
         tmp += " and totalcpu="+str(totalcpu)+""
 
