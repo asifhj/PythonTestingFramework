@@ -46,6 +46,7 @@ class Commands:
                         output = output + line
             output = output.split("\n")
             #print output
+            self.output = output
             self.arp_data = {}
             for line in output:
                 if line.strip().startswith("Total entries:"):
@@ -465,10 +466,9 @@ class Commands:
                     break
                 if line.strip():
                     output = output + line
-        self.output = output
+        self.output = output.split("\n")
         #print output
         output = output.split("\n")
-        self.fan_data = {}
         record_count = 0
         chassisname = ""
         for line in output:
@@ -479,17 +479,18 @@ class Commands:
                 if line.startswith("Fans"):
                     m = re.match(r'Fans\s+(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
+                        self.fan_data[record_count] = {}
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 if line.strip().startswith("Fan"):
                     m = re.match(r'(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
+                        self.fan_data[record_count] = {}
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
                         record_count += 1
-        if len(self.fan_data)==0:
-            self.output = ""
+
         #print json.dumps(self.fan_data, indent=4)
 
     # For EX only
@@ -527,8 +528,8 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        print output
-        self.output = output
+        #print output
+        self.output = output.split("\n")
         chassisname = ""
         soup = BeautifulSoup(output, "lxml")
         output = output.split("\n")
@@ -545,7 +546,7 @@ class Commands:
                 self.ipsec_stats_data[i][child.name.strip().replace("-", "_")] = child.text.strip()
                 self.ipsec_stats_data[i]["chassiname"] = chassisname
             i += 1
-        print json.dumps(self.ipsec_stats_data, indent=4)
+        #print json.dumps(self.ipsec_stats_data, indent=4)
 
     def get_krt_q(self):
         # hi#
@@ -752,7 +753,7 @@ class Commands:
                 m = re.match(r'([\S|\s]+):\s+(\d+)$', line.strip(), re.M|re.I)
                 if m:
                     self.pfe_tr_data[record_count][m.groups()[0].strip()] = m.groups(0)[1].strip()
-        print json.dumps(self.pfe_tr_data, indent=4, sort_keys=True)
+        #print json.dumps(self.pfe_tr_data, indent=4, sort_keys=True)
 
     def get_proc_mem_data(self):
         output = ""
@@ -843,8 +844,8 @@ class Commands:
         #print output
         self.output = output.split("\n")
         output = output.split("\n")
-        self.pwr_data = {}
         record_count = 0
+
         chassisname = ""
         for line in output:
             if line.strip() and not line.strip().startswith("Class"):
@@ -855,17 +856,18 @@ class Commands:
                 if line.startswith("Power"):
                     m = re.match(r'Power\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
+                        self.pwr_data[record_count] = {}
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 else:
                     m = re.match(r'(?P<item>P[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
+                        self.pwr_data[record_count] = {}
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname
                         record_count += 1
-        if len(self.pwr_data)==0:
-            self.output = ""
+
         #self.pwr_data = self.removeWhiteSpaceFromDict(self.pwr_data)
         #print json.dumps(self.pwr_data, indent=4)
 
@@ -1554,7 +1556,7 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        self.output = output
+        self.output = output.split("\n")
         record_count = 0
         #print output
         #print("hi")
@@ -1592,11 +1594,10 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        self.output = output
+        self.output = output.split("\n")
 
         record_count = 0
-        print output
-        member = ""
+        member = 0
         isisid = ""
         #self.vc_prtcl_stat_data[record_count] = {}
         for line in output.split("\n"):
@@ -1614,7 +1615,6 @@ class Commands:
                     self.vc_prtcl_stat_data[record_count]['isisid'] = isisid
                     self.vc_prtcl_stat_data[record_count]['member'] = member
                     record_count = record_count + 1
-
         #print json.dumps(self.vc_prtcl_stat_data, indent=4)
 
     def get_vc_stat_data(self):
@@ -1630,7 +1630,7 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        self.output = output
+        self.output = output.split("\n")
         record_count = 0
         #print output
         member = ""
@@ -1687,7 +1687,7 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        self.output = output
+        self.output = output.split("\n")
         record_count = 0
         #print output
         member = ""

@@ -612,8 +612,8 @@ if __name__ == "__main__":
                                 print C.output
                             status.append(phc)
                             summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis environment no-forwarding-Temp")

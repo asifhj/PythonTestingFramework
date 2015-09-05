@@ -25,20 +25,10 @@ class Querybuilder:
             spaceversion='" + str(self.space_version) + "' and "+str(tmp)+" and\
             basesoftwarerlease='" + str(self.base_software_release) + "' and spaceversion='" + str(self.space_version) + "' and \
             servicenowversion='" + str(self.servicenow_version) + "' and softwarerelease='" + str(self.software_release) + "' and \
-            collector_time between '" + str(self.phdct_utc) + "' and '" + str(self.phdct_utc) + "' "
-        '''
-        self.common_query = "select * from "+tablename+" where \
-            hostname='" + str(self.host_name) + "' and serialnumber='" + str(self.serial_number) + "' and \
-            product='" + str(self.product) + "' and baseproduct='" + str(self.base_product_name) + "' and \
-            platform is NULL and os='"+self.platform+"' and aiscriptversion='" + str(self.aiscript_version) + "' and \
-            softwarerelease='" + str(self.software_release) + "' and collectortype='PHC' and \
-            spaceversion='" + str(self.space_version) + "' and "+str(tmp)+" and\
-            basesoftwarerlease='" + str(self.base_software_release) + "' and spaceversion='" + str(self.space_version) + "' and \
-            servicenowversion='" + str(self.servicenow_version) + "' and softwarerelease='" + str(self.software_release) + "' and \
-            collector_time between '" + str(self.phdct_utc) + "' and '" + str(self.phdct_utc) + "' "'''
+            collector_time between '" + str(self.phdct_utc) + "' and '" + str(self.phdct_utc) + "'"
 
 
-     def build_buff_data_query(self, buff_data):
+    def build_buff_data_query(self, buff_data):
         chassisname = buff_data.get("chassisname", "")
         currentMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[0]
         cacheMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[1]
@@ -281,15 +271,14 @@ class Querybuilder:
                             order by collector_time"
 
     def build_mpc_jnh_summ_data_query(self, mpc_jnh_summ_data):
-        chassisname = mpc_jnh_summ_data.get("chassiname", "NULL")
+        #chassisname = mpc_jnh_summ_data.get("chassiname", "NULL")
         mpc = mpc_jnh_summ_data.get("mpc", 0)
         jnhid = mpc_jnh_summ_data.get("jnhid", "")
         name = mpc_jnh_summ_data.get("name", "")
         size = mpc_jnh_summ_data.get("size", 0)
         allocated = mpc_jnh_summ_data.get("allocated", 0)
         utilization = mpc_jnh_summ_data.get("utilization", 0)
-        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="NULL" else "='"+str(chassisname)+"'" )+" \
-                               and mpc="+str(mpc)+" and jnhid="+str(jnhid)+" and name"+str(" is NULL" if name=="NULL" else "='"+str(name)+"'" )+" \
+        self.command_query = " and mpc="+str(mpc)+" and jnhid="+str(jnhid)+" and name"+str(" is NULL" if name=="NULL" else "='"+str(name)+"'" )+" \
                                and size="+str(size)+" and allocated="+str(allocated)+" and utilization="+str(utilization)+""
 
     def build_nhdb_zones_query(self, nhdb_zones):
