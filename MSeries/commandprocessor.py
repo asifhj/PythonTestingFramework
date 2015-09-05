@@ -253,7 +253,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\mx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\"
 
-    file = "*20150904_*.txt"
+    file = "*20150905_*.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -570,18 +570,19 @@ if __name__ == "__main__":
                     cur.execute("refresh env_data")
                     how_many = len(C.env_data.get('Temp',""))
                     for i in range (0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show chassis environment no-forwarding-Temp")
-                        command_report.append("env_data")
-                        status = []
-                        status.append("env_data")
-                        status.append(C.phdct_utc)
                         C.build_common_query("env_data")
                         tempc = 0
                         m = re.match(r"([0-9]+).*", C.env_data['Temp'][i]['measurement'].strip(), re.I | re.M)
                         if m:
                             tempc = m.groups(0)[0]
                         if int(tempc) > 55:
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append("show chassis environment no-forwarding-Temp")
+                            command_report.append("env_data")
+                            status = []
+                            status.append("env_data")
+                            status.append(C.phdct_utc)
+
                             C.build_env_data_query(C.env_data['Temp'][i])
                             query = C.common_query + C.command_query
                             cur.execute(query)

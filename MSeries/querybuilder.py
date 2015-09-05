@@ -445,14 +445,14 @@ class Querybuilder:
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
                 swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
-                usedmempercentage="+str(usedmempercentage)+" order by collector_time"
+                usedmempercentage>="+str(usedmempercentage)+" order by collector_time"
         else:
             self.command_query = " and chassisname='"+chassisname+"' and activemem='"+str(activemem)+"' and \
                 inactmem='"+str(inactmem)+"' and wiredmem='"+str(wiredmem)+"' and  \
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
                 swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
-                usedmempercentage="+str(usedmempercentage)+" order by collector_time"
+                usedmempercentage>="+str(usedmempercentage)+" order by collector_time"
 
 
     def build_ps_data_query(self, ps_data):
