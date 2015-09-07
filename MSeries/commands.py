@@ -1,6 +1,7 @@
 
 from __future__ import division
 __author__ = 'asifj'
+
 import re
 from bs4 import BeautifulSoup
 import math
@@ -46,6 +47,7 @@ class Commands:
                         output = output + line
             output = output.split("\n")
             #print output
+            self.output = output
             self.arp_data = {}
             for line in output:
                 if line.strip().startswith("Total entries:"):
@@ -307,7 +309,7 @@ class Commands:
                     break
                 if line.strip():
                     output = output + line
-        self.output = output
+        self.output = output.split("\n")
         #print output
         output = output.split("\n")
         self.fan_data = {}

@@ -253,8 +253,8 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\srx\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
 
-    file = "usrx*"
-    #file = "srx-220-sn1_phdc_jmb_ais_health_20150821_142136.txt"
+    file = "*20150906_*.txt"
+    #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
     for phc in phcs:
@@ -271,8 +271,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            #if size < 2:
-            if True:
+            if size < 2:
+            #if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
@@ -344,9 +344,9 @@ if __name__ == "__main__":
                 if buff_data==1:
                     C.get_buff_data()
                     cur.execute("refresh buff_data")
-                    how_many = len(C.buff_data[0])
-                    if how_many==0:
-                        how_many=0
+                    how_many = 0
+                    if bool(C.buff_data[0])==False:
+                        how_many = 0
                     else:
                         how_many = len(C.buff_data)
                     for i in range (0, how_many):
@@ -691,6 +691,13 @@ if __name__ == "__main__":
                         if m:
                             tempc = m.groups(0)[0]
                         if int(tempc) > 55:
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append("show chassis environment no-forwarding-Temp")
+                            command_report.append("env_data")
+                            status = []
+                            status.append("env_data")
+                            status.append(C.phdct_utc)
+
                             C.build_env_data_query(C.env_data['Temp'][i])
                             query = C.common_query + C.command_query
                             cur.execute(query)
@@ -721,8 +728,8 @@ if __name__ == "__main__":
                                 print C.output
                             status.append(phc)
                             summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis environment-Temp")
@@ -1391,7 +1398,11 @@ if __name__ == "__main__":
                 if pfe_tr_data==1:
                     C.get_pfe_tr_data()
                     cur.execute("refresh pfe_tr_data")
-                    how_many = len(C.pfe_tr_data)
+                    how_many = 0
+                    if bool(C.pfe_tr_data[0])==False:
+                        how_many = 0
+                    else:
+                        how_many = len(C.pfe_tr_data)
                     for i in range (0,how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show pfe statistics traffic")

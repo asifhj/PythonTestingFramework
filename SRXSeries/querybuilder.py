@@ -116,10 +116,13 @@ class Querybuilder:
         parttype = ""
         self.command_query = ""
         q = ""
+        bk_parttype = ""
         m = re.match(r'([\S|\s]+)(\d)$', str(self.ch_hard_data[k]["item"]), re.M | re.I)
+        bk_parttype = self.ch_hard_data[k]["item"]
         if m:
             #print m.groups()
             parttype = m.groups()[0].strip()
+            #print bk_parttype
             if len(parttype.split(" "))>1:
                 parttype = parttype.split(" ")[1]
             slot = m.groups()[1]
@@ -132,9 +135,10 @@ class Querybuilder:
                 q = "and slot is NULL and pic_slot is NULL and sfp_slot="+str(slot)+""
         else:
             parttype = k
+            #print parttype
             slot = "NULL"
             q = "and slot is "+str(slot)+""
-        q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].upper().strip())+"' \
+        q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].strip())+"' \
             and partasnum='"+str(self.ch_hard_data[k]["part_number"]).strip()+"' " \
             "and partserial='"+str(self.ch_hard_data[k]["serial_number"]).strip()+"' \
              and partdesc='"+str(self.ch_hard_data[k]["description"]).strip()+"'"
@@ -279,13 +283,20 @@ class Querybuilder:
                             order by collector_time"
 
     def build_mpc_jnh_summ_data_query(self, mpc_jnh_summ_data):
-        print json.dumps(mpc_jnh_summ_data, indent=4)
-        self.command_query = ""
+        #chassisname = mpc_jnh_summ_data.get("chassiname", "NULL")
+        mpc = mpc_jnh_summ_data.get("mpc", 0)
+        jnhid = mpc_jnh_summ_data.get("jnhid", "")
+        name = mpc_jnh_summ_data.get("name", "").strip()
+        size = mpc_jnh_summ_data.get("size", 0)
+        allocated = mpc_jnh_summ_data.get("allocated", 0)
+        utilization = mpc_jnh_summ_data.get("utilization", 0)
+        self.command_query = " and mpc="+str(mpc)+" and jnhid="+str(jnhid)+" and name"+str(" is NULL" if name=="NULL" else "='"+str(name)+"'" )+" \
+                               and size="+str(size)+" and allocated="+str(allocated)+" and utilization="+str(utilization)+""
 
     def build_nhdb_zones_query(self, nhdb_zones):
         device = nhdb_zones.get("device","")
-        state = nhdb_zones.get("devicenum","")
-        nhdbchip = nhdb_zones.get("nhdbchip","")
+        devicenum = nhdb_zones.get("devicenum", 0)
+        nhdbchip = nhdb_zones.get("nhdbchip", 0)
         nhdbstart = nhdb_zones.get("nhdbstart","")
         nhdbsize1 = nhdb_zones.get("nhdbsize1","")
         nhdbrsvd = nhdb_zones.get("nhdbrsvd","")
@@ -294,7 +305,18 @@ class Querybuilder:
         nhdbtotal = nhdb_zones.get("nhdbtotal","")
         nhdbsize2 = nhdb_zones.get("nhdbsize2","")
         nhdbname = nhdb_zones.get("nhdbname","")
-        self.command_query = ""
+        self.command_query = " and device"+str(" is NULL" if device=="" else "='"+str(device)+"'" )+" \
+        and devicenum="+str(devicenum)+" \
+        and nhdbchip="+str(nhdbchip)+"  \
+        and nhdbstart"+str(" is NULL" if nhdbstart=="" else "='"+str(nhdbstart)+"'" )+" \
+        and nhdbsize1"+str(" is NULL" if nhdbsize1=="" else "='"+str(nhdbsize1)+"'" )+" \
+        and nhdbrsvd"+str(" is NULL" if nhdbrsvd=="" else "='"+str(nhdbrsvd)+"'" )+" \
+        and nhdbused"+str(" is NULL" if nhdbused=="" else "='"+str(nhdbused)+"'" )+" \
+        and nhdbhiwater"+str(" is NULL" if nhdbhiwater=="" else "='"+str(nhdbhiwater)+"'" )+" \
+        and nhdbtotal"+str(" is NULL" if nhdbtotal=="" else "='"+str(nhdbtotal)+"'" )+" \
+        and nhdbsize2"+str(" is NULL" if nhdbsize2=="" else "='"+str(nhdbsize2)+"'" )+" \
+        and nhdbname"+str(" is NULL" if nhdbname=="" else "='"+str(nhdbname)+"'" )+" "
+
         
         query = " order by collector_time"
 
@@ -399,20 +421,21 @@ class Querybuilder:
         swap_total = proc_mem_data.get("swap_total", 0)
         swap_free = proc_mem_data.get("swap_free", 0)
         self.command_query = ""
+
         if chassisname=="" or chassisname=="NULL":
             self.command_query = " and chassisname is NULL and activemem='"+str(activemem)+"' and \
                 inactmem='"+str(inactmem)+"' and wiredmem='"+str(wiredmem)+"' and  \
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
-                swap_total='"+str(swap_total)+"' and swap_free='"+str(swap_free)+"' and  \
+                swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
-                usedmempercentage="+str(usedmempercentage)+" order by collector_time"
+                usedmempercentage>="+str(usedmempercentage)+" order by collector_time"
         else:
             self.command_query = " and chassisname='"+chassisname+"' and activemem='"+str(activemem)+"' and \
                 inactmem='"+str(inactmem)+"' and wiredmem='"+str(wiredmem)+"' and  \
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
-                swap_total='"+str(swap_total)+"' and swap_free='"+str(swap_free)+"' and  \
+                swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
-                usedmempercentage="+str(usedmempercentage)+" order by collector_time"
+                usedmempercentage>="+str(usedmempercentage)+" order by collector_time"
 
 
     def build_ps_data_query(self, ps_data):
@@ -504,17 +527,17 @@ class Querybuilder:
             tmp += " and up_time is NULL "
         else:
             tmp += " and up_time='"+str(up_time)+"' "
-        load_average_one = re_data.get('load_average_one', "NULL")
+        load_average_one = re_data.get('load_average_one', 0)
         if load_average_one=="NULL":
             tmp += " and load_average_one is NULL "
         else:
             tmp += " and load_average_one='"+str(load_average_one)+"' "
-        load_average_five = re_data.get('load_average_five', "NULL")
+        load_average_five = re_data.get('load_average_five', 0)
         if load_average_five=="NULL":
             tmp += " and load_average_five is NULL "
         else:
             tmp += " and load_average_five='"+str(load_average_five)+"' "
-        load_average_fifteen = re_data.get('load_average_fifteen', "NULL")
+        load_average_fifteen = re_data.get('load_average_fifteen', 0)
         if load_average_fifteen=="NULL":
             tmp += " and load_average_fifteen is NULL "
         else:
@@ -539,18 +562,18 @@ class Querybuilder:
             tmp += " and cpu_temperature is NULL "
         else:
             tmp += " and cpu_temperature='"+str(cpu_temperature)+"' "
-        memory_dram_size = re_data.get('memory_dram_size', "NULL")
+        memory_dram_size = re_data.get('memory_dram_size', 0)
         if memory_dram_size=="NULL":
             tmp += " and memory_dram_size is NULL "
         else:
-            tmp += " and memory_dram_size="+str(memory_dram_size)+" "
+            tmp += " and memory_dram_size="+str(memory_dram_size).replace(" MB", "")+" "
         memory_buffer_utilization = re_data.get('memory_buffer_utilization', 0)
         tmp += " and memory_buffer_utilization="+str(memory_buffer_utilization)+""
         mastershipstate = re_data.get('mastership_state', "NULL")
         if mastershipstate=="NULL":
             tmp += " and mastershipstate is NULL "
         else:
-            tmp += " and mastershipstate='"+str(mastershipstate)+"' "
+            tmp += " and mastershipstate='"+str(mastershipstate).replace(" MB", "")+"' "
         totalcpu = int(cpu_user) + int(cpu_background) + int(cpu_system)
         tmp += " and totalcpu="+str(totalcpu)+""
 
@@ -691,9 +714,9 @@ class Querybuilder:
         size = sys_cores_data.get("size",0)
         date = sys_cores_data.get("date","").strip()
         location = sys_cores_data.get("location","").strip()
-        chassisname = sys_cores_data.get("chassisname","NULL").strip()
+        chassisname = sys_cores_data.get("chassisname","").strip()
         self.command_query = ""
-        if chassisname=="NULL":
+        if chassisname=="":
             self.command_query = " and chassisname is NULL and `date`='"+str(date)+"' and `user`='"+user+"' " \
                                 "and `size`="+str(size)+" and `location`='"+str(location)+"' order by collector_time"
         else:
@@ -849,9 +872,16 @@ class Querybuilder:
     def build_sys_ver_data_query(self, sys_ver_data):
         #print json.dumps(sys_ver_data, indent=4)
         chassisname = sys_ver_data.get("chassisname","")
-        verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "")
-        if verkernelsoftware=="":
-            verkernelsoftware = sys_ver_data.get("JUNOS Software Release", "")
+        verbaseosboot = sys_ver_data.get("JUNOS Base OS boot","not found")
+        verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "not found")
+        verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "not found")
+        vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
+        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (MX Common)", "not found")
+        verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
+        versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
+        verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")
+        verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
+        firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
         self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" \
             and verkernelsoftware"+str(" is NULL" if verkernelsoftware=="" else "='"+str(verkernelsoftware)+"'" )+"  \

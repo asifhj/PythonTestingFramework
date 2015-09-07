@@ -138,7 +138,7 @@ class Querybuilder:
             #print parttype
             slot = "NULL"
             q = "and slot is "+str(slot)+""
-        q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].upper().strip())+"' \
+        q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].strip())+"' \
             and partasnum='"+str(self.ch_hard_data[k]["part_number"]).strip()+"' " \
             "and partserial='"+str(self.ch_hard_data[k]["serial_number"]).strip()+"' \
              and partdesc='"+str(self.ch_hard_data[k]["description"]).strip()+"'"
@@ -390,14 +390,14 @@ class Querybuilder:
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
                 swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
-                usedmempercentage="+str(usedmempercentage)+" order by collector_time"
+                usedmempercentage>="+str(usedmempercentage)+" order by collector_time"
         else:
             self.command_query = " and chassisname='"+chassisname+"' and activemem='"+str(activemem)+"' and \
                 inactmem='"+str(inactmem)+"' and wiredmem='"+str(wiredmem)+"' and  \
                 cachemem='"+str(cachemem)+"' and bufmem='"+str(bufmem)+"' and  freemem='"+str(freemem)+"' and  \
                 swap_total="+str(swap_total)+" and swap_free="+str(swap_free)+" and  \
                 usedmem="+str(usedmem)+" and totalmem="+str(totalmem)+" and \
-                usedmempercentage="+str(usedmempercentage)+" order by collector_time"
+                usedmempercentage>="+str(usedmempercentage)+" order by collector_time"
 
 
     def build_ps_data_query(self, ps_data):
@@ -489,17 +489,17 @@ class Querybuilder:
             tmp += " and up_time is NULL "
         else:
             tmp += " and up_time='"+str(up_time)+"' "
-        load_average_one = re_data.get('load_average_one', "NULL")
+        load_average_one = re_data.get('load_average_one', 0)
         if load_average_one=="NULL":
             tmp += " and load_average_one is NULL "
         else:
             tmp += " and load_average_one='"+str(load_average_one)+"' "
-        load_average_five = re_data.get('load_average_five', "NULL")
+        load_average_five = re_data.get('load_average_five', 0)
         if load_average_five=="NULL":
             tmp += " and load_average_five is NULL "
         else:
             tmp += " and load_average_five='"+str(load_average_five)+"' "
-        load_average_fifteen = re_data.get('load_average_fifteen', "NULL")
+        load_average_fifteen = re_data.get('load_average_fifteen', 0)
         if load_average_fifteen=="NULL":
             tmp += " and load_average_fifteen is NULL "
         else:
@@ -676,9 +676,9 @@ class Querybuilder:
         size = sys_cores_data.get("size",0)
         date = sys_cores_data.get("date","").strip()
         location = sys_cores_data.get("location","").strip()
-        chassisname = sys_cores_data.get("chassisname","NULL").strip()
+        chassisname = sys_cores_data.get("chassisname","").strip()
         self.command_query = ""
-        if chassisname=="NULL":
+        if chassisname=="":
             self.command_query = " and chassisname is NULL and `date`='"+str(date)+"' and `user`='"+user+"' " \
                                 "and `size`="+str(size)+" and `location`='"+str(location)+"' order by collector_time"
         else:
