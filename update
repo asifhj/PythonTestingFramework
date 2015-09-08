@@ -134,7 +134,7 @@ srx
     chassis_cluster_statistics_data = 1
 
 
-        arp_data = 0
+    arp_data = 0
     buff_data = 0
     ch_alarm_data = 0
     ch_fab_map_data = 0

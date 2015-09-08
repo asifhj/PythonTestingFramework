@@ -272,13 +272,13 @@ class Querybuilder:
 
     def build_mpc_jnh_summ_data_query(self, mpc_jnh_summ_data):
         #chassisname = mpc_jnh_summ_data.get("chassiname", "NULL")
-        mpc = mpc_jnh_summ_data.get("mpc", 0)
+        fpc = mpc_jnh_summ_data.get("fpc", "")
         jnhid = mpc_jnh_summ_data.get("jnhid", "")
         name = mpc_jnh_summ_data.get("name", "").strip()
         size = mpc_jnh_summ_data.get("size", 0)
         allocated = mpc_jnh_summ_data.get("allocated", 0)
         utilization = mpc_jnh_summ_data.get("utilization", 0)
-        self.command_query = " and mpc="+str(mpc)+" and jnhid="+str(jnhid)+" and name"+str(" is NULL" if name=="NULL" else "='"+str(name)+"'" )+" \
+        self.command_query = " and fpc='"+str(fpc)+"' and jnhid="+str(jnhid)+" and name"+str(" is NULL" if name=="NULL" else "='"+str(name)+"'" )+" \
                                and size="+str(size)+" and allocated="+str(allocated)+" and utilization="+str(utilization)+""
 
     def build_nhdb_zones_query(self, nhdb_zones):

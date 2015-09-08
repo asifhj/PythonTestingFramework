@@ -589,15 +589,14 @@ class Commands:
         self.output = output.split("\n")
         chassisname = ""
         jnhid = ""
-        mpc = ""
+        fpc = ""
         output = output.split("\n")
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+(\d)\s+pool\s+summary"\s+target\s+(\w+)(\d)', line, re.M | re.I)
+                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+(\d)\s+pool\s+summary"\s+target\s+(\w+)', line, re.M | re.I)
                 if m:
-                    mpc = m.groups(0)[2]
-                    chassisname = m.groups(0)[1]
+                    fpc = m.groups(0)[1]
                     jnhid = m.groups(0)[0]
                 m = re.match(r'GOT:\s+(?P<name>[\S|\s]+)\s+(?P<size>\d+)\s+(?P<allocated>\d+)\s+(?P<utilization>\d+)%$', line.strip(), re.M|re.I)
                 if m:
@@ -605,7 +604,7 @@ class Commands:
                     self.mpc_jnh_summ_data[record_count] = m.groupdict()
                     self.mpc_jnh_summ_data[record_count]['chassiname'] = chassisname
                     self.mpc_jnh_summ_data[record_count]['jnhid'] = jnhid
-                    self.mpc_jnh_summ_data[record_count]['mpc'] = mpc
+                    self.mpc_jnh_summ_data[record_count]['fpc'] = fpc
                     record_count = record_count + 1
         #print json.dumps(self.mpc_jnh_summ_data, indent=4)
 
