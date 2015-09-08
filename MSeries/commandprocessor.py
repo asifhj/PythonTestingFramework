@@ -251,9 +251,9 @@ if __name__ == "__main__":
     file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\mx1\\"
-    phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\"
+    phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\lat\\"
 
-    file = "*20150907*.txt"
+    file = "*.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
