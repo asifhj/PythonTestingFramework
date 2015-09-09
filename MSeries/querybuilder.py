@@ -208,7 +208,21 @@ class Querybuilder:
                             order by collector_time"
 
     def build_jtree_mem_query(self, jtree_mem):
+        jtreemembadcookies= jtree_mem.get("jtreemembadcookies", 0)
+        jtreebytesfromfreepages= jtree_mem.get("jtreebytesfromfreepages", 0)
+        jtreemembytesused= jtree_mem.get("jtreemembytesused", 0)
+        jtreememallocs= jtree_mem.get("jtreememallocs", 0)
+        jtreememfailedfrees= jtree_mem.get("jtreememfailedfrees", 0)
+        jtreemembytesfree= jtree_mem.get("jtreemembytesfree", 0)
+        jtreememallocsfailed= jtree_mem.get("jtreememallocsfailed", 0)
+        jtreememtotalbytes= jtree_mem.get("jtreememtotalbytes", 0)
+        device= jtree_mem.get("device", 0)
+        devicenum= jtree_mem.get("devicenum", 0)
         self.command_query = ""
+        self.command_query = " and jtreemembadcookies="+str(jtreemembadcookies)+" and jtreebytesfromfreepages="+str(jtreebytesfromfreepages)+" \
+        and jtreemembytesused="+str(jtreemembytesused)+" and jtreememallocs="+str(jtreememallocs)+" and jtreememfailedfrees="+str(jtreememfailedfrees)+" \
+        and jtreemembytesfree="+str(jtreemembytesfree)+" and jtreememallocsfailed="+str(jtreememallocsfailed)+" and jtreememtotalbytes="+str(jtreememtotalbytes)+" \
+        and device='"+str(device)+"' and devicenum="+str(devicenum)+" "
 
     def build_krt_q_query(self, krt_q):
         routetbladd = krt_q.get("Routing table add queue", 0)

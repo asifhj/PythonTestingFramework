@@ -364,13 +364,13 @@ class Commands:
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
                 if not re.match(".*@.*>\srequest pfe execute command \"show jtree 0 memory extensive\" target \S+\d+", line, re.M | re.I) == None:
-                    output = output + line
+                    output += line
                     break
             for line in fopen:
-                if line.startswith("[----BEGIN"):
+                if "show nhdb zones" in line:
                     break
                 if line.strip():
-                    output = output + line
+                    output += line
         self.output = output.split("\n")
         #print output
         output = output.split("\n")
@@ -378,76 +378,155 @@ class Commands:
         self.jtree_mem[record_count] = {}
         device = ""
         devicenum = ""
+        #print self.model
+
         for line in output:
             if line.strip():
                 m = re.match(".*@.*>\srequest pfe execute command \"show jtree 0 memory extensive\" target (\S+)(\d+)", line, re.M | re.I)
                 if m:
                     device = m.groups(0)[0]
                     devicenum = m.groups(0)[1]
-                m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+total\s+\([0-9]+\s+banks\)', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+total', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+used', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreemembytesused'] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+free', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+available\s+\(([0-9]+)\s+bytes\s+from\s+free\s+pages\)', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
-                    self.jtree_mem[record_count]['jtreebytesfromfreepages'] = m.groups(0)[1]
-                m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+available\s+\(([0-9]+)\s+bytes\s+from\s+free\s+pages\)', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
-                    self.jtree_mem[record_count]['jtreebytesfromfreepages'] = m.groups(0)[1]
 
-                m = re.match(r'GOT:\s+([0-9]+)\s+pages\s+total', line.strip(), re.M|re.I)
+                m = re.match(r'(m7i|m10i|m5|m10|m40e|m160|m40|m20)', self.model, re.M|re.I)
                 if m:
-                    self.jtree_mem[record_count]['jtreemempagestotal'] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+([0-9]+)\s+pages\s+used', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreemempagesused'] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+([0-9]+)\s*pages\s*used\s*\(([0-9]+)\s*pages\s+used\s+in\s+page\s+alloc\)\r*', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreemempagesused'] = m.groups(0)[0]
-                    self.jtree_mem[record_count]['jtreemembytesusedinpagealloc'] = m.groups(0)[1]
-                m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+wasted', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count]['jtreemembyteswasted'] = m.groups(0)[0]
-                '''m = re.match(r'GOT:\s+', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count][''] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count][''] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count][''] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count][''] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count][''] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count][''] = m.groups(0)[0]
-                m = re.match(r'GOT:\s+', line.strip(), re.M|re.I)
-                if m:
-                    self.jtree_mem[record_count][''] = m.groups(0)[0]
-                '''
+                    m = re.match(r'GOT:\s+Couldn\'t initiate connection', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count] = {}
+                        return
 
-                m = re.match(r'GOT:\s+([0-9]+)\s+bad\s+cookie', line.strip(), re.M|re.I)
+                    m = re.match(r'GOT:\s+Instance [\d]+ is not available*', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count] = {}
+                        return
+
+                    m = re.match(r'GOT:\s+([0-9]+)[ \t]+bytes[ \t]+total[ \t]+\([0-9]+[ \t]+banks\)', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+total', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+used', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesused'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+free', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+available\s+\(([0-9]+)\s+bytes\s+from\s+free\s+pages\)', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['jtreebytesfromfreepages'] = m.groups(0)[1]
+
+                    m = re.match(r'GOT:\s+([0-9]+)[ \t]+allocs.+(([0-9]+)\s+)failed', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememallocs'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['jtreememallocsfailed'] = m.groups(0)[1]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+failed\s+frees', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememfailedfrees'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bad\s+cookie', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembadcookies'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['device'] = device
+                        self.jtree_mem[record_count]['devicenum'] = devicenum
+                        record_count += 1
+                        self.jtree_mem[record_count] = {}
+
+                    m = re.match(r'GOT:\s+([0-9]+)[ \t]+max[ \t]+freelist[ \t]+size', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememmaxfreelistsize'] = m.groups(0)[0]
+
+                m = re.match(r'((m320)|(t[0-9]+)|txp)', self.model, re.M|re.I)
                 if m:
-                    self.jtree_mem[record_count]['jtreemembadcookies'] = m.groups(0)[0]
-                    self.jtree_mem[record_count]['device'] = device
-                    self.jtree_mem[record_count]['devicenum'] = devicenum
-                    record_count += 1
-                    self.jtree_mem[record_count] = {}
+                    m = re.match(r'GOT:\s+Couldn\'t initiate connection', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count] = {}
+                        return
+
+                    m = re.match(r'GOT:\s+Instance [\d]+ is not available*', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count] = {}
+                        return
+
+                    m = re.match(r'GOT:\s+segment\s+([0-9]+)', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememsegment'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+total', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+used', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesused'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+free', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+available\s+\(([0-9]+)\s+bytes\s+from\s+free\s+pages\)', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['jtreebytesfromfreepages'] = m.groups(0)[1]
+
+                    m = re.match(r'GOT:\s+([0-9]+)[ \t]+allocs.+(([0-9]+)\s+)failed', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememallocs'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['jtreememallocsfailed'] = m.groups(0)[1]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+failed\s+frees', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememfailedfrees'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bad\s+cookie', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembadcookies'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['device'] = device
+                        self.jtree_mem[record_count]['devicenum'] = devicenum
+                        record_count += 1
+                        self.jtree_mem[record_count] = {}
+
+                m = re.match(r'(m120)|(mx[0-9]+)', self.model, re.I | re.M)
+                if m:
+                    m = re.match(r'GOT:\s+Couldn\'t initiate connection', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count] = {}
+                        return
+
+                    m = re.match(r'GOT:\s+segment\s+([0-9]+)', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememsegment'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+total', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememtotalbytes'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+used', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesused'] = m.groups(0)[0]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+bytes\s+available\s+\(([0-9]+)\s+bytes\s+from\s+free\s+pages\)', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreemembytesfree'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['jtreebytesfromfreepages'] = m.groups(0)[1]
+
+                    m = re.match(r'GOT:\s+([0-9]+)[ \t]+allocs.+(([0-9]+)\s+)failed', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememallocs'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['jtreememallocsfailed'] = m.groups(0)[1]
+
+                    m = re.match(r'GOT:\s+([0-9]+)\s+failed\s+frees', line.strip(), re.M|re.I)
+                    if m:
+                        self.jtree_mem[record_count]['jtreememfailedfrees'] = m.groups(0)[0]
+                        self.jtree_mem[record_count]['device'] = device
+                        self.jtree_mem[record_count]['devicenum'] = devicenum
+                        record_count += 1
+                        self.jtree_mem[record_count] = {}
         #print json.dumps(self.jtree_mem, indent=4)
 
     def get_krt_q(self):
