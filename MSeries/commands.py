@@ -280,11 +280,11 @@ class Commands:
                 if not line.startswith("    "):
                     Class = line[0:5].strip()
                 if line.startswith("Temp"):
-                    m = re.match(r'Temp\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s+(?P<measurement>.*)$', line, re.M|re.I)
+                    m = re.match(r'Temp\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s+(?P<measurement>.*)$', line, re.M|re.I)
                 elif line.startswith("Fans"):
-                    m = re.match(r'Fans\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s+(?P<measurement>.*)$', line, re.M|re.I)
+                    m = re.match(r'Fans\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s+(?P<measurement>.*)$', line, re.M|re.I)
                 else:
-                    m = re.match(r'\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s+(?P<measurement>.*)$', line, re.M|re.I)
+                    m = re.match(r'\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s+(?P<measurement>.*)$', line, re.M|re.I)
                 if m:
                     count = 0
                     if Class in self.env_data:
@@ -321,13 +321,13 @@ class Commands:
                 if m:
                     chassisname = m.groups(0)[0]
                 if line.startswith("Fans"):
-                    m = re.match(r'Fans\s+(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
+                    m = re.match(r'Fans\s+(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent|Check)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 if line.strip().startswith("Fan"):
-                    m = re.match(r'(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
+                    m = re.match(r'(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent|Check)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
@@ -594,13 +594,12 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+(\d)\s+pool\s+summary"\s+target\s+(\w+)', line, re.M | re.I)
+                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+(\d)\s+pool\s+summary"\s+target\s+(\w+)(\d)', line, re.M | re.I)
                 if m:
                     fpc = m.groups(0)[1]
                     jnhid = m.groups(0)[0]
                 m = re.match(r'GOT:\s+(?P<name>[\S|\s]+)\s+(?P<size>\d+)\s+(?P<allocated>\d+)\s+(?P<utilization>\d+)%$', line.strip(), re.M|re.I)
                 if m:
-                    #print m.groupdict(0)
                     self.mpc_jnh_summ_data[record_count] = m.groupdict()
                     self.mpc_jnh_summ_data[record_count]['chassiname'] = chassisname
                     self.mpc_jnh_summ_data[record_count]['jnhid'] = jnhid
@@ -849,13 +848,13 @@ class Commands:
                 if m:
                     chassisname = m.groups(0)[0]
                 if line.startswith("Power"):
-                    m = re.match(r'Power\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
+                    m = re.match(r'Power\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 else:
-                    m = re.match(r'(?P<item>P[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
+                    m = re.match(r'[Temp|\s]*(?P<item>P[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname

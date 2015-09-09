@@ -1,6 +1,7 @@
 
 from __future__ import division
 __author__ = 'asifj'
+
 import re
 from bs4 import BeautifulSoup
 import math
@@ -338,11 +339,11 @@ class Commands:
                 if not line.startswith("    "):
                     Class = line[0:5].strip()
                 if line.startswith("Temp"):
-                    m = re.match(r'Temp\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s+(?P<measurement>.*)$', line, re.M|re.I)
+                    m = re.match(r'Temp\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s+(?P<measurement>.*)$', line, re.M|re.I)
                 elif line.startswith("Fans"):
-                    m = re.match(r'Fans\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s+(?P<measurement>.*)$', line, re.M|re.I)
+                    m = re.match(r'Fans\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s+(?P<measurement>.*)$', line, re.M|re.I)
                 else:
-                    m = re.match(r'\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s+(?P<measurement>.*)$', line, re.M|re.I)
+                    m = re.match(r'\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s+(?P<measurement>.*)$', line, re.M|re.I)
                 if m:
                     count = 0
                     if Class in self.env_data:
@@ -477,14 +478,14 @@ class Commands:
                 if m:
                     chassisname = m.groups(0)[0]
                 if line.startswith("Fans"):
-                    m = re.match(r'Fans\s+(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
+                    m = re.match(r'Fans\s+(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent|Check)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
                         self.fan_data[record_count] = {}
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 if line.strip().startswith("Fan"):
-                    m = re.match(r'(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
+                    m = re.match(r'(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent|Check)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
                         self.fan_data[record_count] = {}
                         self.fan_data[record_count] = m.groupdict()
@@ -844,8 +845,8 @@ class Commands:
         #print output
         self.output = output.split("\n")
         output = output.split("\n")
+        self.pwr_data = {}
         record_count = 0
-
         chassisname = ""
         for line in output:
             if line.strip() and not line.strip().startswith("Class"):
@@ -854,14 +855,14 @@ class Commands:
                 if m:
                     chassisname = m.groups(0)[0]
                 if line.startswith("Power"):
-                    m = re.match(r'Power\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
+                    m = re.match(r'Power\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
                         self.pwr_data[record_count] = {}
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 else:
-                    m = re.match(r'(?P<item>P[\S|\s|\d]{5,31})\s(?P<status>OK|Absent)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
+                    m = re.match(r'[Temp|\s]*(?P<item>P[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
                         self.pwr_data[record_count] = {}
                         self.pwr_data[record_count] = m.groupdict()

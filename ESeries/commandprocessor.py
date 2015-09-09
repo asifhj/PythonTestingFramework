@@ -252,7 +252,7 @@ if __name__ == "__main__":
     file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\ex\\"
-    phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\lat\\"
+    phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\"
 
     file = "*.txt"
     #file = "sn-space-ex6200-sys_phdc_jmb_ais_health_20150823_091949.txt"
