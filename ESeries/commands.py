@@ -276,7 +276,7 @@ class Commands:
         record_count = 0
         chassisname = ""
         if output_type == "xml":
-            print "hi"
+            #print "hi"
             soup = BeautifulSoup(output, "lxml")
             i = 0
             for record in soup.findAll("chassis"):
@@ -300,16 +300,15 @@ class Commands:
         else:
             output = output.split("\n")
             for line in output:
-                if line.strip() and not line.strip()=="hardware_data inventory:" and not line.strip()=="Item             Version  Part number  Serial number     Description":
-                    m = ""
-                    if len(line.strip().split(" "))<=2:
-                        line = line + "                                                                              "
-                        m = re.match(r'(?P<item>[\S|\s|\d]{4,18})\s(?P<version>[REV|\s\d|\s]+)\s+(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN|\s]{10,13})\s+(?P<serial_number>[A-Z0-9|\s]{10,18})\s(?P<description>.*)$', line, re.M|re.I)
-                    else:
-                        m = re.match(r'(?P<item>[\S|\s|\d]{4,18})\s(?P<version>[REV|\s\d|\s]{6,8})\s(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN|\s]{10,13})\s(?P<serial_number>[A-Z0-9|\s]{10,18})\s(?P<description>.*)$', line, re.M)
+                if line.strip() and not line.startswith("Hardware inventory") and not line.strip()=="Item             Version  Part number  Serial number     Description":
+                    if len(line)<=60:
+                        while len(line)<85:
+                            line = line + " "
+                    m = re.match(r'(?P<item>[\S|\s|\d]{17})(?P<version>[REV|\s\d|\s]{9})(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN]{13})(?P<serial_number>[\S|\s|BUILTIN]{18})(?P<description>.*)', line, re.M|re.I)
                     if m:
-                        self.ch_hard_data[str(record_count)]=m.groupdict()
-                        record_count = record_count + 1
+                        self.ch_hard_data[str(record_num)]=m.groupdict()
+                        record_num = record_num + 1
+            self.ch_hard_data = self.removeWhiteSpaceFromDict(self.ch_hard_data)
         #print json.dumps(self.ch_hard_data, indent=4)
 
     def get_env_data(self):
