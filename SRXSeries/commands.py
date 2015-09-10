@@ -230,7 +230,7 @@ class Commands:
                     break
                 output += line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         chassisname = ""
         i = 0
         soup = BeautifulSoup(output, "lxml")
@@ -409,7 +409,7 @@ class Commands:
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
         #output = output.split("\n")
-        self.output = output
+        self.output = output.split("\n")
 
         record_count = 0
         #print output
@@ -497,7 +497,7 @@ class Commands:
                     break
                 output += line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         chassisname = ""
         soup = BeautifulSoup(output, "lxml")
         output = output.split("\n")
@@ -738,6 +738,7 @@ class Commands:
                     output = output + line
         #print output
         output = output.split("\n")
+        self.output = output
         record_count = 0
         self.pfe_st_notif_data[record_count] = {}
         for line in output:
@@ -1012,9 +1013,9 @@ class Commands:
                 if line.startswith("[----BEGIN"):
                         break
                 output += line
-        print output
+        #print output
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         i = 0
         for record in soup.findAll("alg-status"):
             children = record.findChildren()
@@ -1038,7 +1039,7 @@ class Commands:
                         break
                 output += line
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         rename = ""
         for line in output.split("\n"):
             m = re.match(r"<re-name>(.*)<\/re-name>", line.strip(), re.I | re.M)
@@ -1069,7 +1070,7 @@ class Commands:
                 output += line
         #print output
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         i = 0
         for record in soup.findAll("anti-spam-statistics"):
             children = record.findChildren()
@@ -1094,7 +1095,7 @@ class Commands:
                 output += line
         #print output
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         i = 0
         for record in soup.findAll("anti-virus-status"):
             children = record.findChildren()
@@ -1119,7 +1120,7 @@ class Commands:
                 output += line
         #print output
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         i = 0
         for record in soup.findAll("anti-virus-statistics"):
             children = record.findChildren()
@@ -1144,7 +1145,7 @@ class Commands:
                 output += line
         #print output
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         i = 0
         for record in soup.findAll("utmd-status"):
             children = record.findChildren()
@@ -1169,7 +1170,7 @@ class Commands:
                 output += line
         #print output
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         i = 0
         for record in soup.findAll("utmd-web-filtering-status"):
             children = record.findChildren()
@@ -1194,7 +1195,7 @@ class Commands:
                 output += line
         #print output
         soup = BeautifulSoup(output, "lxml")
-        self.output = output
+        self.output = output.split("\n")
         i = 0
         for record in soup.findAll("utmd-web-filtering-statistics"):
             children = record.findChildren()
@@ -1242,7 +1243,7 @@ class Commands:
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
         #output = output.split("\n")
-        self.output = output
+        self.output = output.split("\n")
 
         record_count = 0
         #print output
@@ -1288,7 +1289,7 @@ class Commands:
                         if line.startswith("[----BEGIN"):
                             break
                         output = output + line
-        self.output = output
+        self.output = output.split("\n")
         #print(output)
         if output_type == "xml":
             soup = BeautifulSoup(output, "lxml")
@@ -1332,7 +1333,7 @@ class Commands:
                         break
                 output += line
         #print output
-        self.output = output
+        self.output = output.split("\n")
         soup = BeautifulSoup(output, "lxml")
         i = 0
         for record in soup.findAll("license"):
@@ -1689,7 +1690,7 @@ class Commands:
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
         #output = output.split("\n")
-        self.output = output
+        self.output = output.split("\n")
 
         record_count = 0
         #print output
@@ -1724,7 +1725,7 @@ class Commands:
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
         #output = output.split("\n")
-        self.output = output
+        self.output = output.split("\n")
 
         record_count = 0
         #print output
@@ -1759,7 +1760,7 @@ class Commands:
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
         #output = output.split("\n")
-        self.output = output
+        self.output = output.split("\n")
 
         record_count = 0
         #print output
@@ -1794,7 +1795,7 @@ class Commands:
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
         #output = output.split("\n")
-        self.output = output
+        self.output = output.split("\n")
 
         record_count = 0
         #print output

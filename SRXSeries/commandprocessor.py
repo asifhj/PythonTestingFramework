@@ -273,8 +273,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            if size < 2:
-            #if True:
+            #if size < 2:
+            if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
@@ -405,46 +405,48 @@ if __name__ == "__main__":
                     cur.execute("refresh ch_alarm_data")
                     #print json.dumps(C.ch_alarm_data, indent=4)
                     how_many = len(C.ch_alarm_data)
-                    for i in range(0, how_many):
-                        command_report.append(str(phc.replace(phcs_home_dir,"")))
-                        command_report.append("show chassis alarm")
-                        command_report.append("ch_alarn_data")
-                        status = []
-                        status.append("ch_alarn_data")
-                        status.append(C.phdct_utc)
-                        C.build_common_query("ch_alarm_data")
-                        C.build_ch_alarm_query(C.ch_alarm_data[i])
-                        query = C.common_query + C.command_query
-                        cur.execute(query)
-                        result_set = cur.fetchall()
-                        if len(result_set) < 1:
-                            print "\n\t\t\t\t\t\t******************No ch_alarm_data Match Found*********************"
-                            status.append("NA")
-                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
-                            cur.execute(C.common_query)
+                    alarm_exist = C.ch_alarm_data[0].get("alarm_time", False)
+                    if alarm_exist:
+                        for i in range(0, how_many):
+                            command_report.append(str(phc.replace(phcs_home_dir,"")))
+                            command_report.append("show chassis alarm")
+                            command_report.append("ch_alarn_data")
+                            status = []
+                            status.append("ch_alarn_data")
+                            status.append(C.phdct_utc)
+                            C.build_common_query("ch_alarm_data")
+                            C.build_ch_alarm_query(C.ch_alarm_data[i])
+                            query = C.common_query + C.command_query
+                            cur.execute(query)
                             result_set = cur.fetchall()
                             if len(result_set) < 1:
-                                print "Collected time: "+str(C.phdct_utc)
-                                command_report = C.command_report1(C, command_report)
+                                print "\n\t\t\t\t\t\t******************No ch_alarm_data Match Found*********************"
+                                status.append("NA")
+                                print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                                cur.execute(C.common_query)
+                                result_set = cur.fetchall()
+                                if len(result_set) < 1:
+                                    print "Collected time: "+str(C.phdct_utc)
+                                    command_report = C.command_report1(C, command_report)
+                                else:
+                                    command_report = C.command_report2(C, command_report, result_set)
+                                status.append("No Match Found")
                             else:
-                                command_report = C.command_report2(C, command_report, result_set)
-                            status.append("No Match Found")
-                        else:
-                            print "\n\t\t\t\t\t\t******************ch_alarm_data Match Found*********************"
-                            # C.tabulate_print(result_set)
-                            status.append(result_set[0][2])
-                            command_report = C.command_report3(C, command_report, result_set)
-                            status.append("ch_alarm_data Match Found")
-                        if print_query == 1:
-                            print query
-                        if print_data == 1:
-                            print json.dumps(C.ch_alarm_data[i], indent=4)
-                        if print_output == 1:
-                            print C.output
-                        status.append(phc)
-                        summary.append(status)
-                        file_report.append(command_report)
-                        command_report = C.report_writer(writer, command_report)
+                                print "\n\t\t\t\t\t\t******************ch_alarm_data Match Found*********************"
+                                # C.tabulate_print(result_set)
+                                status.append(result_set[0][2])
+                                command_report = C.command_report3(C, command_report, result_set)
+                                status.append("ch_alarm_data Match Found")
+                            if print_query == 1:
+                                print query
+                            if print_data == 1:
+                                print json.dumps(C.ch_alarm_data[i], indent=4)
+                            if print_output == 1:
+                                print C.output
+                            status.append(phc)
+                            summary.append(status)
+                            file_report.append(command_report)
+                            command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis alarm")
