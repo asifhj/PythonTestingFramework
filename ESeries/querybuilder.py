@@ -60,8 +60,10 @@ class Querybuilder:
         reqsForMbufsDelayed = buff_data.get("mbuf requests delayed", 0)[0]
         reqsForClustersDelayed = buff_data.get("cluster requests delayed", 0)[0]
 
+        #"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"
+        # Chassisname is present in output but hadoop does not have chassisname as perl script is not extracting that info.
         self.command_query = ""
-        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and currentmbufs="+str(currentMbufs)+" and cachembufs="+str(cacheMbufs)+" and \
+        self.command_query =" and chassisname is NULL and currentmbufs="+str(currentMbufs)+" and cachembufs="+str(cacheMbufs)+" and \
                             totalmbufs="+str(totalMbufs)+" and currentmbufclusters="+str(currentMbufClusters)+" and \
                             cachembufclusters="+str(cacheMbufClusters)+" and totalmbufclusters="+str(totalMbufClusters)+" \
                             and reqsformbufsdenied="+str(reqsForMbufsDenied)+" and reqsforclustersdenied="+str(reqsForClustersDenied)+" " \
@@ -75,7 +77,7 @@ class Querybuilder:
         alarm_text = ch_alarm_data.get('alarm_description', "NULL")
         alarm_time = ch_alarm_data.get('alarm_time', "NULL")
         self.command_query = ""
-        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="NULL" else "='"+str(chassisname)+"'" )+" \
+        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="NULL" or chassisname.strip()=="" else "='"+str(chassisname)+"'" )+" \
                             and alarmclass"+str(" is NULL" if alarm_class=="NULL" else "='"+str(alarm_class)+"'" )+" \
                             and alarmtext"+str(" is NULL" if alarm_text=="NULL" else "='"+str(alarm_text)+"'" )+" \
                             and alarmtime"+str(" is NULL" if alarm_time=="NULL" else "='"+str(alarm_time)+"'" )+" order by collector_time"
@@ -1111,7 +1113,7 @@ class Querybuilder:
         verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
         firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
-        self.command_query = " and chassisname='"+str(chassisname)+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
+        self.command_query = " and chassisname='"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
             verbaseossoftware='"+str(verbaseossoftware)+"' and verkernelsoftware='"+str(verkernelsoftware)+"' and \
             vercryptosoftware='"+str(vercryptosoftware)+"' and verpfesupportcommon='"+str(verpfesupportcommon)+"' and \
             verdoc='"+str(verdoc)+"' and versoftwarerelease='"+str(versoftwarerelease)+"' and \

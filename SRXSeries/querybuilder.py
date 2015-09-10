@@ -60,6 +60,9 @@ class Querybuilder:
         reqsForMbufsDelayed = buff_data.get("mbuf requests delayed", 0)[0]
         reqsForClustersDelayed = buff_data.get("cluster requests delayed", 0)[0]
 
+        #"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"
+        # Chassisname is present in output but hadoop does not have chassisname as perl script is not extracting that info.
+
         self.command_query = ""
         self.command_query =" and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and currentmbufs="+str(currentMbufs)+" and cachembufs="+str(cacheMbufs)+" and \
                             totalmbufs="+str(totalMbufs)+" and currentmbufclusters="+str(currentMbufClusters)+" and \
@@ -870,7 +873,7 @@ class Querybuilder:
 
     # For SRX only
     def build_sys_ver_data_query(self, sys_ver_data):
-        #print json.dumps(sys_ver_data, indent=4)
+        print json.dumps(sys_ver_data, indent=4)
         chassisname = sys_ver_data.get("chassisname","")
         verbaseosboot = sys_ver_data.get("JUNOS Base OS boot","not found")
         verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "not found")
@@ -878,13 +881,13 @@ class Querybuilder:
         vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
         verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (MX Common)", "not found")
         verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
-        versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
+        versoftwarerelease = sys_ver_data.get("JUNOS Software Release", "not found")
         verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")
         verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
         firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
         self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" \
-            and verkernelsoftware"+str(" is NULL" if verkernelsoftware=="" else "='"+str(verkernelsoftware)+"'" )+"  \
+            and versoftwarerelease"+str(" is NULL" if versoftwarerelease=="" else "='"+str(versoftwarerelease)+"'" )+"  \
             order by collector_time"
 
     def build_sys_vm_swap_query(self, sys_vm_swap):

@@ -19,7 +19,7 @@ class Querybuilder:
             tmp = "devicenode='" + str(self.node) + "'"
         self.common_query = "select * from "+tablename+" where \
             hostname='" + str(self.host_name) + "' and serialnumber='" + str(self.serial_number) + "' and \
-            product='" + str(self.product) + "' and baseproduct='" + str(self.base_product_name) + "' and \
+            product='" + str(self.product) + "' and baseproduct like '%" + str(self.base_product_name) + "%' and \
             os='" + str(self.platform) + "' and aiscriptversion='" + str(self.aiscript_version) + "' and \
             softwarerelease='" + str(self.software_release) + "' and collectortype='PHC' and \
             spaceversion='" + str(self.space_version) + "' and "+str(tmp)+" and\
@@ -60,7 +60,7 @@ class Querybuilder:
         alarm_text = ch_alarm_data.get('alarm_description', "NULL")
         alarm_time = ch_alarm_data.get('alarm_time', "NULL")
         self.command_query = ""
-        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="NULL" else "='"+str(chassisname)+"'" )+" \
+        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="NULL" or chassisname.strip()=="" else "='"+str(chassisname)+"'" )+" \
                             and alarmclass"+str(" is NULL" if alarm_class=="NULL" else "='"+str(alarm_class)+"'" )+" \
                             and alarmtext"+str(" is NULL" if alarm_text=="NULL" else "='"+str(alarm_text)+"'" )+" \
                             and alarmtime"+str(" is NULL" if alarm_time=="NULL" else "='"+str(alarm_time)+"'" )+" order by collector_time"
@@ -218,11 +218,12 @@ class Querybuilder:
         jtreememtotalbytes= jtree_mem.get("jtreememtotalbytes", 0)
         device= jtree_mem.get("device", 0)
         devicenum= jtree_mem.get("devicenum", 0)
+        jtreeinstid= jtree_mem.get("jtreeinstid", 0)
         self.command_query = ""
-        self.command_query = " and jtreemembadcookies="+str(jtreemembadcookies)+" and jtreebytesfromfreepages="+str(jtreebytesfromfreepages)+" \
+        self.command_query = " and device='"+str(device)+"' and devicenum="+str(devicenum)+" and jtreeinstid="+str(jtreeinstid)+" and \
+        jtreemembadcookies="+str(jtreemembadcookies)+" and jtreebytesfromfreepages="+str(jtreebytesfromfreepages)+" \
         and jtreemembytesused="+str(jtreemembytesused)+" and jtreememallocs="+str(jtreememallocs)+" and jtreememfailedfrees="+str(jtreememfailedfrees)+" \
-        and jtreemembytesfree="+str(jtreemembytesfree)+" and jtreememallocsfailed="+str(jtreememallocsfailed)+" and jtreememtotalbytes="+str(jtreememtotalbytes)+" \
-        and device='"+str(device)+"' and devicenum="+str(devicenum)+" "
+        and jtreemembytesfree="+str(jtreemembytesfree)+" and jtreememallocsfailed="+str(jtreememallocsfailed)+" and jtreememtotalbytes="+str(jtreememtotalbytes)+" "
 
     def build_krt_q_query(self, krt_q):
         routetbladd = krt_q.get("Routing table add queue", 0)
@@ -1180,7 +1181,7 @@ class Querybuilder:
         verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
         firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
-        self.command_query = " and chassisname='"+str(chassisname)+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
+        self.command_query = " and chassisname='"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
             verbaseossoftware='"+str(verbaseossoftware)+"' and verkernelsoftware='"+str(verkernelsoftware)+"' and \
             vercryptosoftware='"+str(vercryptosoftware)+"' and verpfesupportcommon='"+str(verpfesupportcommon)+"' and \
             verdoc='"+str(verdoc)+"' and versoftwarerelease='"+str(versoftwarerelease)+"' and \

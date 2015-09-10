@@ -378,14 +378,16 @@ class Commands:
         self.jtree_mem[record_count] = {}
         device = ""
         devicenum = ""
+        jtreeinstid = ""
         #print self.model
 
         for line in output:
             if line.strip():
-                m = re.match(".*@.*>\srequest pfe execute command \"show jtree 0 memory extensive\" target (\S+)(\d+)", line, re.M | re.I)
+                m = re.match(".*@.*>\srequest pfe execute command \"show jtree (\d+) memory extensive\" target (\S+)(\d+)", line, re.M | re.I)
                 if m:
-                    device = m.groups(0)[0]
-                    devicenum = m.groups(0)[1]
+                    jtreeinstid = m.groups(0)[0]
+                    device = m.groups(0)[1]
+                    devicenum = m.groups(0)[2]
 
                 m = re.match(r'(m7i|m10i|m5|m10|m40e|m160|m40|m20)', self.model, re.M|re.I)
                 if m:
@@ -434,6 +436,7 @@ class Commands:
                         self.jtree_mem[record_count]['jtreemembadcookies'] = m.groups(0)[0]
                         self.jtree_mem[record_count]['device'] = device
                         self.jtree_mem[record_count]['devicenum'] = devicenum
+                        self.jtree_mem[record_count]['jtreeinstid'] = jtreeinstid
                         record_count += 1
                         self.jtree_mem[record_count] = {}
 
@@ -488,6 +491,7 @@ class Commands:
                         self.jtree_mem[record_count]['jtreemembadcookies'] = m.groups(0)[0]
                         self.jtree_mem[record_count]['device'] = device
                         self.jtree_mem[record_count]['devicenum'] = devicenum
+                        self.jtree_mem[record_count]['jtreeinstid'] = jtreeinstid
                         record_count += 1
                         self.jtree_mem[record_count] = {}
 
@@ -525,6 +529,7 @@ class Commands:
                         self.jtree_mem[record_count]['jtreememfailedfrees'] = m.groups(0)[0]
                         self.jtree_mem[record_count]['device'] = device
                         self.jtree_mem[record_count]['devicenum'] = devicenum
+                        self.jtree_mem[record_count]['jtreeinstid'] = jtreeinstid
                         record_count += 1
                         self.jtree_mem[record_count] = {}
         #print json.dumps(self.jtree_mem, indent=4)
