@@ -1174,14 +1174,14 @@ class Querybuilder:
         verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "not found")
         verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "not found")
         vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
-        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (MX Common)", "not found")
+        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
         verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
         versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
         verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")
-        verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
+        verpfesupport = "not found"
         firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
-        self.command_query = " and chassisname='"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
             verbaseossoftware='"+str(verbaseossoftware)+"' and verkernelsoftware='"+str(verkernelsoftware)+"' and \
             vercryptosoftware='"+str(vercryptosoftware)+"' and verpfesupportcommon='"+str(verpfesupportcommon)+"' and \
             verdoc='"+str(verdoc)+"' and versoftwarerelease='"+str(versoftwarerelease)+"' and \

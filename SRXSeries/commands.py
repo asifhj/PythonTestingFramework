@@ -737,9 +737,11 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
+        #print "hi"
         output = output.split("\n")
         self.output = output
         record_count = 0
+        #print output
         self.pfe_st_notif_data[record_count] = {}
         for line in output:
            if line.strip():

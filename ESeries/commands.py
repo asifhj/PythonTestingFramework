@@ -668,6 +668,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         #print output
+        #print "hi"
         self.output = output.split("\n")
         output = output.split("\n")
         record_count = 0
@@ -1353,9 +1354,12 @@ class Commands:
                 m = re.match(r'(?P<chassisname>[sfc[0-9]+.*:|lcc[0-9]+.*:|fpc[0-9]+.*:])', line, re.M | re.I)
                 if m:
                     chassisname = m.groups(0)[0]
-                m = re.match(r'JUNOS Packet Forwarding Engine Support.*\[(.*)\]', line, re.M | re.I)
+                m = re.match(r'JUNOS[ \t]+Packet[ \t]+Forwarding[ \t]+Engine[ \t]+Support[ \t]+\(M\/T\/EX[ \t]+Common\)[ \t]+\[(.*)\]', line, re.M | re.I)
                 if m:
-                    self.sys_ver_data["JUNOS Packet Forwarding Engine Support"] = m.groups(0)[0].strip()
+                    self.sys_ver_data["JUNOS Packet Forwarding Engine Support Common"] = m.groups(0)[0].strip()
+                m = re.match(r'JUNOS[ \t]+Packet[ \t]+Forwarding[ \t]+Engine[ \t]+Support[ \t]+\([\/\-MJTsrie0-9]+\)[ \t]+\[(.*)\]', line, re.M | re.I)
+                if m:
+                    self.sys_ver_data["JUNOS Packet Forwarding Engine Support Specific"] = m.groups(0)[0].strip()
                 m = re.match(r'([a-z]+):(.*)', line, re.M | re.I)
                 if m:
                     self.sys_ver_data[m.groups(0)[0].strip()] = m.groups(0)[1].strip()

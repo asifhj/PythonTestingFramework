@@ -678,7 +678,7 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+(\d)\s+pool\s+summary"\s+target\s+(\w+)(\d)', line, re.M | re.I)
+                m = re.match('.*@.*>\s+request\s+pfe\s+execute\s+command\s+"show\s+jnh\s+(\d)\s+pool\s+summary"\s+target\s+(\w+\d)', line, re.M | re.I)
                 if m:
                     fpc = m.groups(0)[1]
                     jnhid = m.groups(0)[0]

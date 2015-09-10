@@ -1093,9 +1093,9 @@ class Querybuilder:
             else:
                 capacity = int(capacity)
             capacity = int(capacity)
-
+        # Chassisname is not using anywhere as hadoop is not using it, though it present in output.
         self.command_query = ""
-        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and filesystem='"+str(filesystem)+"' and \
+        self.command_query = " and chassisname is NULL and filesystem='"+str(filesystem)+"' and \
             `size`="+str(size)+" and used="+str(used)+" and avail="+str(avail)+" and \
             capacity="+str(capacity)+" and mountedon='"+str(mountedon)+"' order by collector_time"
 
@@ -1106,11 +1106,11 @@ class Querybuilder:
         verbaseossoftware = sys_ver_data.get("JUNOS Base OS Software Suite", "not found")
         verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "not found")
         vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
-        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support (MX Common)", "not found")
+        verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support Common", "not found")
         verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
         versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
         verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")
-        verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
+        verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support Specific", "not found")
         firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
         self.command_query = " and chassisname='"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
