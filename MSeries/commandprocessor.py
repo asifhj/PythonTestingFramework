@@ -248,15 +248,14 @@ if __name__ == "__main__":
     chassis_cluster_statistics_data = 0
 
 
-
     arp_data = 0
     buff_data = 0
     ch_alarm_data = 0
     ch_fab_map_data = 0
     ch_fab_sum_data = 0
     ch_fpc_pic_data = 0
-    ch_hard_data = 1
-    env_data = 0
+    ch_hard_data = 0
+    env_data = 1
     eth_sw_err_age_msg_data = 0
     eth_sw_stat_maclrnerr_data = 0
     eth_sw_tbl_summ_data = 0
@@ -305,14 +304,13 @@ if __name__ == "__main__":
     vc_stat_data = 0
     vc_vcp_stat_data = 0
     chassis_cluster_statistics_data = 0
-
     report = []
     file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\mx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\mx\\"
 
-    file = "test.txt"
+    file = "mx-80-sn_phdc_jmb_ais_health_20150914_172402.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -330,8 +328,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            #if size < 2:
-            if True:
+            if size < 2:
+            #if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
@@ -580,8 +578,8 @@ if __name__ == "__main__":
                         status.append("ch_hard_data")
                         status.append(C.phdct_utc)
                         C.build_common_query("ch_hard_data")
-                        #C.build_ch_hard_data_query(k)
-                        #query = C.common_query + C.command_query
+                        C.build_ch_hard_data_query(k)
+                        query = C.common_query + C.command_query
                         cur.execute(query)
                         #print query
                         result_set = cur.fetchall()

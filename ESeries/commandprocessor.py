@@ -251,7 +251,7 @@ if __name__ == "__main__":
     report = []
     file_report = []
 
-    reports_dir = "C:\\tmp\\PHCreports\\ex\\"
+    reports_dir = "C:\\tmp\\PHCreports\\ex1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\"
 
     file = "*.txt"

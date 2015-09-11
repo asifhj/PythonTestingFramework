@@ -294,6 +294,7 @@ class Commands:
                 #else:
                 #    print "\n\t\t\t"+self.questions()+"env_data data not found!"+self.questions()
         #self.env_data = self.removeWhiteSpaceFromDict(self.env_data)
+        print json.dumps(self.env_data['Temp'], indent=4)
 
     def get_fan_data(self):
         # env_data

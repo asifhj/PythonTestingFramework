@@ -120,26 +120,24 @@ class Querybuilder:
         q = ""
         bk_parttype = ""
         m = re.match(r'([\S|\s]+)(\d)$', str(self.ch_hard_data[k]["item"]), re.M | re.I)
-        bk_parttype = self.ch_hard_data[k]["item"]
+        bk_parttype = self.ch_hard_data[k]["item"].upper()
         if m:
-            #print m.groups()
             parttype = m.groups()[0].strip()
-            #print bk_parttype
+            bk_parttype = m.groups()[0].strip().upper()
             if len(parttype.split(" "))>1:
                 parttype = parttype.split(" ")[1]
             slot = m.groups()[1]
             if parttype=="PIC":
-                q = "and slot is NULL and pic_slot="+str(slot)+""
+                q = "and upper(parttype)='"+str(bk_parttype)+"' and slot is NULL and pic_slot="+str(slot)+""
             else:
-                q = "and slot="+str(slot)+" and pic_slot is NULL"
+                q = "and upper(parttype)='"+str(bk_parttype)+"' and slot="+str(slot)+" and pic_slot is NULL"
             if parttype=="Xcvr":
                 parttype = parttype.upper()
-                q = "and slot is NULL and pic_slot is NULL and sfp_slot="+str(slot)+""
+                q = "and upper(parttype)='"+str(bk_parttype)+"' and slot is NULL and pic_slot is NULL and sfp_slot="+str(slot)+""
         else:
-            parttype = k
-            #print parttype
             slot = "NULL"
-            q = "and slot is "+str(slot)+""
+            q = "and upper(parttype)='"+str(bk_parttype)+"' and slot is "+str(slot)+""
+
         q = q + " and partrev='"+str(self.ch_hard_data[k]["version"].strip())+"' \
             and partasnum='"+str(self.ch_hard_data[k]["part_number"]).strip()+"' " \
             "and partserial='"+str(self.ch_hard_data[k]["serial_number"]).strip()+"' \
@@ -148,18 +146,16 @@ class Querybuilder:
 
     def build_env_data_query(self, env_data):
         tempc = ""
-        chassispartstatus = env_data.get('status','')
-        chassisname = env_data.get('chassisname','')
-        chassispart = env_data.get('chassispart', '')
+        chassispartstatus = env_data.get('status','').strip()
+        chassisname = env_data.get('chassisname','').strip()
+        chassispart = env_data.get('item', '').strip()
 
         self.command_query = ""
         m = re.match(r'(\d+).*', env_data['measurement'].strip(), re.I | re.M)
         if m:
-            #print "hi"
             tempc = m.groups(0)[0]
-            self.command_query = " and chassispartstatus='"+str(chassispartstatus)+"' and \
-            chassispart='"+str(chassispart)+"' and chassisname='"+str(chassisname)+"' \
-            and tempc='"+str(tempc)+"'"
+            self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and chassispartstatus='"+str(chassispartstatus)+"' and \
+            chassispart='"+str(chassispart)+"' and tempc='"+str(tempc)+"'"
 
     def build_eth_sw_err_age_msg_data_query(self, eth_sw_err_age_msg_data):
         erroragemessages = eth_sw_err_age_msg_data.get('erroragemessages', 0)

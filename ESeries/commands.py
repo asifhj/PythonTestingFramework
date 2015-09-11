@@ -306,8 +306,8 @@ class Commands:
                             line = line + " "
                     m = re.match(r'(?P<item>[\S|\s|\d]{17})(?P<version>[REV|\s\d|\s]{9})(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN]{13})(?P<serial_number>[\S|\s|BUILTIN]{18})(?P<description>.*)', line, re.M|re.I)
                     if m:
-                        self.ch_hard_data[str(record_num)]=m.groupdict()
-                        record_num = record_num + 1
+                        self.ch_hard_data[str(record_count)]=m.groupdict()
+                        record_count = record_count + 1
             self.ch_hard_data = self.removeWhiteSpaceFromDict(self.ch_hard_data)
         #print json.dumps(self.ch_hard_data, indent=4)
 
