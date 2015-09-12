@@ -189,4 +189,10 @@ srx
     vc_prtcl_stat_data = 0
     vc_stat_data = 0
     vc_vcp_stat_data = 0
-    chassis_cluster_statistics_data = 0
+    ch_cluster_stat_data
+    ch_fab_plane_data = 0
+    fab_fpc_data = 0
+    fab_sibs_data = 0
+    fpc_feb_conn_data = 0
+    fab_pl_loc_data = 0
+    eth_sw_data = 0

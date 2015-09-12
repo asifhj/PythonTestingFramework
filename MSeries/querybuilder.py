@@ -167,7 +167,7 @@ class Querybuilder:
         fanstatus = fan_data.get("fanstatus", "").strip()
         fanspeed = fan_data.get("fanspeed", "").strip()
         self.command_query = ""
-        self.command_query = " and chassisname='"+chassisname+"' and fanloc='"+str(fanloc)+"' and \
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and fanloc='"+str(fanloc)+"' and \
             fanstatus='"+str(fanstatus)+"' and fanspeed='"+str(fanspeed)+"' order by collector_time"
 
     def build_fpc_data_query(self, fpc_data):
@@ -1171,6 +1171,7 @@ class Querybuilder:
         verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "not found")
         vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
         verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
+        verpfesupportcommon = "not found"
         verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
         versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
         verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")
@@ -1253,3 +1254,116 @@ class Querybuilder:
                 boot_time='"+str(boot_time)+"' and protocols_start_date='"+str(protocols_start_date)+"' and \
                 protocol_start_time='"+str(protocol_start_time)+"' and config_date='"+str(config_date)+"' and \
                 config_time='"+str(config_time)+"' order by collector_time"
+
+    def build_vc_prtcl_adj_data_query(self, vc_prtcl_adj_data):
+        interface = vc_prtcl_adj_data.get('interface', "")
+        system = vc_prtcl_adj_data.get('system', "")
+        hold = vc_prtcl_adj_data.get('state', 0)
+        state = vc_prtcl_adj_data.get('hold', "")
+        member = vc_prtcl_adj_data.get('member', 0)
+        self.command_query = ""
+        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+
+    def build_vc_prtcl_stat_data_query(self, vc_prtcl_stat_data):
+        interface = vc_prtcl_stat_data.get('interface', "")
+        system = vc_prtcl_stat_data.get('system', "")
+        hold = vc_prtcl_stat_data.get('state', 0)
+        state = vc_prtcl_stat_data.get('hold', "")
+        member = vc_prtcl_stat_data.get('member', 0)
+        self.command_query = ""
+        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+
+
+    def build_vc_stat_data_query(self, vc_stat_data):
+        interface = vc_stat_data.get('interface', "")
+        system = vc_stat_data.get('system', "")
+        hold = vc_stat_data.get('state', 0)
+        state = vc_stat_data.get('hold', "")
+        member = vc_stat_data.get('member', 0)
+        self.command_query = ""
+        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+
+    def build_vc_vcp_stat_data_query(self, vc_vcp_stat_data):
+        interface = vc_vcp_stat_data.get('interface', "")
+        system = vc_vcp_stat_data.get('system', "")
+        hold = vc_vcp_stat_data.get('state', 0)
+        state = vc_vcp_stat_data.get('hold', "")
+        member = vc_vcp_stat_data.get('member', 0)
+        self.command_query = ""
+        self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+
+    def build_ch_cluster_stat_data_query(self, ch_cluster_stat_data):
+        control_interface_index = ch_cluster_stat_data.get('control_interface_index', "")
+        heartbeats_errors = ch_cluster_stat_data.get('heartbeats_errors', "")
+        fabric_probe_errors = ch_cluster_stat_data.get('fabric_probe_errors', 0)
+        self.command_query = ""
+        self.command_query = " and control_interface_index='"+str(control_interface_index)+"' and heartbeats_errors='"+str(heartbeats_errors)+"' \
+         and fabric_probe_errors='"+str(fabric_probe_errors)+"'"
+
+    def build_ch_fab_plane_data_query(self, ch_fab_plane_data):
+        chassisname = ch_fab_plane_data.get('chassisname', "")
+        planenum = ch_fab_plane_data.get('planenum', 0)
+        planestate = ch_fab_plane_data.get('planestate', "")
+        fpcnum = ch_fab_plane_data.get('fpcnum', 0)
+        pfenum = ch_fab_plane_data.get('pfenum', 0)
+        linkstate = ch_fab_plane_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else " is "+str(chassisname)+"" )+" \
+         and planenum="+str(planenum)+" \
+         and planestate='"+str(planestate)+"' and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" \
+         and linkstate='"+str(linkstate)+"'"
+
+    def build_ch_fab_plane_data_query(self, fab_fpc_data):
+        chassisname = fab_fpc_data.get('chassisname', "")
+        planenum = fab_fpc_data.get('planenum', 0)
+        planestate = fab_fpc_data.get('planestate', "")
+        fpcnum = fab_fpc_data.get('fpcnum', 0)
+        pfenum = fab_fpc_data.get('pfenum', 0)
+        self.command_query = ""
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else " is "+str(chassisname)+"" )+" \
+         and planenum="+str(planenum)+" \
+         and planestate='"+str(planestate)+"' and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" "
+
+    def build_fab_sibs_data_query(self, fab_sibs_data):
+        sibnum = fab_sibs_data.get('sibnum', "")
+        planestate = fab_sibs_data.get('planestate', "")
+        fpcnum = fab_sibs_data.get('fpcnum', 0)
+        pfenum = fab_sibs_data.get('pfenum', 0)
+        linkstate = fab_sibs_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and sibnum="+str(sibnum)+" \
+         and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" \
+         and planestate='"+str(planestate)+"' \
+         and linkstate='"+str(linkstate)+"' "
+
+    def build_fpc_feb_conn_data_query(self, fpc_feb_conn_data):
+        fpc = fpc_feb_conn_data.get('fpc', "")
+        fpctype = fpc_feb_conn_data.get('fpctype', "")
+        fpcstate = fpc_feb_conn_data.get('fpcstate', "")
+        connectfeb = fpc_feb_conn_data.get('connectfeb', "")
+        febstate = fpc_feb_conn_data.get('febstate', "")
+        linkstate = fpc_feb_conn_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and fpc="+str(fpc)+" \
+         and fpctype='"+str(fpctype)+"' and fpcstate='"+str(fpcstate)+"' and connectfeb="+str(connectfeb)+" and \
+         febstate='"+str(febstate)+"' and linkstate='"+str(linkstate)+"'"
+
+    def build_fab_pl_loc_data_query(self, fab_pl_loc_data):
+        plane = fab_pl_loc_data.get('plane', "")
+        controlboard = fab_pl_loc_data.get('controlboard', "")
+        self.command_query = ""
+        self.command_query = " and plane="+str(plane)+" \
+         and controlboard="+str(controlboard)+" "
+
+    def build_eth_sw_data_query(self, eth_sw_data):
+        linkstatus = eth_sw_data.get('linkstatus', "")
+        linkport = eth_sw_data.get('linkport', 0)
+        linkdevice = eth_sw_data.get('linkdevice', "")
+        linkspeed = eth_sw_data.get('linkspeed', "")
+        linkduplex = eth_sw_data.get('linkduplex', "")
+        self.command_query = ""
+        self.command_query = " and linkstatus"+str(" is NULL" if linkstatus=="" else "='"+str(linkstatus)+"'" )+" \
+         and linkport="+str(linkport)+" \
+         and linkdevice"+str(" is NULL" if linkdevice=="" else "='"+str(linkdevice)+"'" )+" and \
+          linkspeed"+str(" is NULL" if linkspeed=="" else "='"+str(linkspeed)+"'" )+" and \
+          linkduplex"+str(" is NULL" if linkduplex=="" else "='"+str(linkduplex)+"'" )+" "

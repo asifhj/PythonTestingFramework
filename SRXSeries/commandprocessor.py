@@ -33,6 +33,7 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         self.arp_data = OrderedDict()
         self.ch_alarm_data = OrderedDict()
         self.ch_fpc_pic_data = OrderedDict()
+        self.fan_data = OrderedDict()
         self.fpc_data = OrderedDict()
         self.ipsec_stats_data = OrderedDict()
         self.jtree_mem = OrderedDict()
@@ -41,6 +42,13 @@ class CommandProcessor(object, metadata, Utils, Commands, Querybuilder):
         self.vc_prtcl_stat_data = OrderedDict()
         self.vc_stat_data = OrderedDict()
         self.vc_vcp_stat_data = OrderedDict()
+        self.ch_cluster_stat_data = OrderedDict()
+        self.ch_fab_plane_data = OrderedDict()
+        self.fab_fpc_data = OrderedDict()
+        self.fab_sibs_data = OrderedDict()
+        self.fpc_feb_conn_data = OrderedDict()
+        self.fab_pl_loc_data = OrderedDict()
+        self.eth_sw_data = OrderedDict()
         self.sys_ver_data = OrderedDict()
         self.ch_hard_data = OrderedDict()
         self.env_data = OrderedDict()
@@ -245,8 +253,76 @@ if __name__ == "__main__":
     vc_prtcl_stat_data = 0
     vc_stat_data = 0
     vc_vcp_stat_data = 0
-    chassis_cluster_statistics_data = 1
+    ch_cluster_stat_data = 1
+    ch_fab_plane_data = 1
+    fab_fpc_data = 1
+    fab_sibs_data = 1
+    fpc_feb_conn_data = 1
+    fab_pl_loc_data = 1
+    eth_sw_data = 1
 
+    arp_data = 0
+    buff_data = 0
+    ch_alarm_data = 0
+    ch_fab_map_data = 0
+    ch_fab_sum_data = 0
+    ch_fpc_pic_data = 0
+    ch_hard_data = 0
+    env_data = 0
+    eth_sw_err_age_msg_data = 0
+    eth_sw_stat_maclrnerr_data = 0
+    eth_sw_tbl_summ_data = 0
+    fan_data = 0
+    fpc_data = 0
+    ipsec_stats_data = 0
+    jtree_mem = 0
+    krt_q = 0
+    krt_st = 0
+    mpc_jnh_summ_data = 0
+    nhdb_zones = 0
+    pfe_err_ichip = 0
+    pfe_err_ichip_mx = 0
+    pfe_err_lchip = 0
+    pfe_heap_mem = 0
+    pfe_st_err = 0
+    pfe_st_notif_data = 0
+    pfe_tr_data = 0
+    proc_mem_data = 0
+    ps_data = 0
+    pwr_data = 0
+    re_data = 0
+    rt_sum_data = 0
+    sec_alg_st_data = 0
+    sec_nat_intf_nat_prts_data = 0
+    sec_utm_aspam_stats_data = 0
+    sec_utm_av_st_data = 0
+    sec_utm_av_stats_data = 0
+    sec_utm_st_data = 0
+    sec_utm_web_st_data = 0
+    sec_utm_web_stat_data = 0
+    sh_mem_frag_data = 0
+    stp_stats_data = 0
+    sys_cores_data = 0
+    sys_license_data = 0
+    sys_stats_data = 0
+    sys_stor_data = 0
+    sys_ver_data = 0
+    sys_vm_swap = 0
+    task_io_data = 0
+    task_mem_data = 0
+    ukern_trace_mem_comp_data = 0
+    up_data = 0
+    vc_prtcl_adj_data = 0
+    vc_prtcl_stat_data = 0
+    vc_stat_data = 0
+    vc_vcp_stat_data = 0
+    ch_cluster_stat_data = 1
+    ch_fab_plane_data = 1
+    fab_fpc_data = 1
+    fab_sibs_data = 1
+    fpc_feb_conn_data = 0
+    fab_pl_loc_data = 0
+    eth_sw_data = 0
 
 
     report = []
@@ -255,7 +331,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\srx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
 
-    file = "*.txt"
+    file = "usrx3ka_phdc_jmb_ais_health_20150831_181935.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -841,7 +917,6 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
-
                 # eth_sw_tbl_summ_data
                 if eth_sw_tbl_summ_data==1:
                     C.get_eth_sw_tbl_summ_data()
@@ -1000,6 +1075,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis environment no-forwarding-Fan")
+                        command_report.append("fan_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -1109,6 +1185,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show security ipsec statistics | display xml")
+                        command_report.append("ipsec_stats_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -2207,14 +2284,17 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
-
                 # stp_stats_data
                 if stp_stats_data==1:
                     C.get_stp_stats_data()
                     cur.execute("refresh stp_stats_data")
-                    how_many = len(C.stp_stats_data)
+                    how_many = 0
+                    if bool(C.stp_stats_data[0])==False:
+                        how_many = 0
+                    else:
+                        how_many = len(C.stp_stats_data)
                     for i in range (0, how_many):
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show spanning-tree bridge brief")
                         command_report.append("stp_stats_data")
                         status = []
@@ -2254,7 +2334,7 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
                     if len(C.output)==1:
-                        command_report.append(str(phc.replace("C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\sam\\","")))
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show spanning-tree bridge brief")
                         command_report.append("stp_stats_data")
                         command_report = C.command_report4(command_report)
@@ -2791,6 +2871,370 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system uptime no-forwarding")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
+                # ch_cluster_stat_data
+                if ch_cluster_stat_data==1:
+                    C.get_ch_cluster_stat_data()
+                    cur.execute("refresh ch_cluster_stat_data")
+                    how_many = len(C.ch_cluster_stat_data)
+                    if how_many:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis cluster statistics | display xml")
+                        command_report.append("ch_cluster_stat_data")
+                        status = []
+                        status.append("ch_cluster_stat_data")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("ch_cluster_stat_data")
+                        C.build_ch_cluster_stat_data_query(C.ch_cluster_stat_data)
+                        query = C.common_query + C.command_query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No ch_cluster_stat_data Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("ch_cluster_stat_data No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************ch_cluster_stat_data Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("Match Found")
+                        if print_query == 1:
+                            print query
+                        if print_data == 1:
+                            print json.dumps(C.ch_cluster_stat_data, indent=4)
+                        if print_output == 1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis cluster statistics | display xml")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
+                # ch_fab_plane_data
+                if ch_fab_plane_data==1:
+                    C.get_ch_fab_plane_data()
+                    cur.execute("refresh ch_fab_plane_data")
+                    how_many = len(C.ch_fab_plane_data)
+                    for i in range(0, how_many):
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric plane")
+                        command_report.append("ch_fab_plane_data")
+                        status = []
+                        status.append("ch_fab_plane_data")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("ch_fab_plane_data")
+                        C.build_ch_fab_plane_data_query(C.ch_fab_plane_data[i])
+                        query = C.common_query + C.command_query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No ch_fab_plane_data Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("ch_fab_plane_data No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************ch_fab_plane_data Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("Match Found")
+                        if print_query == 1:
+                            print query
+                        if print_data == 1:
+                            print json.dumps(C.ch_fab_plane_data, indent=4)
+                        if print_output == 1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric plane")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
+                # fab_fpc_data
+                if fab_fpc_data==1:
+                    C.get_fab_fpc_data()
+                    cur.execute("refresh fab_fpc_data")
+                    how_many = len(C.fab_fpc_data)
+                    for i in range(0, how_many):
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric fpcs")
+                        command_report.append("fab_fpc_data")
+                        status = []
+                        status.append("fab_fpc_data")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("fab_fpc_data")
+                        C.build_fab_fpc_data_query(C.fab_fpc_data[i])
+                        query = C.common_query + C.command_query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No fab_fpc_data Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("fab_fpc_data No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************fab_fpc_data Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("Match Found")
+                        if print_query == 1:
+                            print query
+                        if print_data == 1:
+                            print json.dumps(C.fab_fpc_data, indent=4)
+                        if print_output == 1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric fpcs")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
+                # fab_sibs_data
+                if fab_sibs_data==1:
+                    C.get_fab_sibs_data()
+                    cur.execute("refresh fab_sibs_data")
+                    how_many = len(C.fab_sibs_data)
+                    for i in range(0, how_many):
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric sibs")
+                        command_report.append("fab_sibs_data")
+                        status = []
+                        status.append("fab_sibs_data")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("fab_sibs_data")
+                        C.build_fab_sibs_data_query(C.fab_sibs_data[i])
+                        query = C.common_query + C.command_query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No fab_sibs_data Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("fab_sibs_data No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************fab_sibs_data Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("Match Found")
+                        if print_query == 1:
+                            print query
+                        if print_data == 1:
+                            print json.dumps(C.fab_sibs_data, indent=4)
+                        if print_output == 1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric sibs")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
+                # fpc_feb_conn_data
+                if fpc_feb_conn_data==1:
+                    C.get_fpc_feb_conn_data()
+                    cur.execute("refresh fpc_feb_conn_data")
+                    how_many = len(C.fpc_feb_conn_data)
+                    for i in range(0, how_many):
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fpc-feb-connectivity")
+                        command_report.append("fpc_feb_conn_data")
+                        status = []
+                        status.append("fpc_feb_conn_data")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("fpc_feb_conn_data")
+                        C.build_fpc_feb_conn_data_query(C.fpc_feb_conn_data[i])
+                        query = C.common_query + C.command_query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No fpc_feb_conn_data Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("fpc_feb_conn_data No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************fpc_feb_conn_data Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("Match Found")
+                        if print_query == 1:
+                            print query
+                        if print_data == 1:
+                            print json.dumps(C.fpc_feb_conn_data, indent=4)
+                        if print_output == 1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fpc-feb-connectivity")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
+                # fab_pl_loc_data
+                if fab_pl_loc_data==1:
+                    C.get_fab_pl_loc_data()
+                    cur.execute("refresh fab_pl_loc_data")
+                    how_many = len(C.fab_pl_loc_data)
+                    for i in range(0, how_many):
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric plane-location")
+                        command_report.append("fab_pl_loc_data")
+                        status = []
+                        status.append("fab_pl_loc_data")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("fab_pl_loc_data")
+                        C.build_fab_pl_loc_data_query(C.fab_pl_loc_data[i])
+                        query = C.common_query + C.command_query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No fab_pl_loc_data Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("fab_pl_loc_data No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************fab_pl_loc_data Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("Match Found")
+                        if print_query == 1:
+                            print query
+                        if print_data == 1:
+                            print json.dumps(C.fab_pl_loc_data, indent=4)
+                        if print_output == 1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis fabric plane-location")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
+                # eth_sw_data
+                if eth_sw_data==1:
+                    C.get_eth_sw_data()
+                    cur.execute("refresh eth_sw_data")
+                    how_many = len(C.eth_sw_data)
+                    if how_many:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis ethernet-switch")
+                        command_report.append("eth_sw_data")
+                        status = []
+                        status.append("eth_sw_data")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("eth_sw_data")
+                        C.build_eth_sw_data_query(C.eth_sw_data)
+                        query = C.common_query + C.command_query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No eth_sw_data Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("eth_sw_data No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************eth_sw_data Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("Match Found")
+                        if print_query == 1:
+                            print query
+                        if print_data == 1:
+                            print json.dumps(C.eth_sw_data, indent=4)
+                        if print_output == 1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append("show chassis ethernet-switch")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)

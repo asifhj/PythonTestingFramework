@@ -408,11 +408,9 @@ class Commands:
             output=['']
         #output = output.split("\n")
         self.output = output.split("\n")
-
         record_count = 0
         #print output
-        #print("hi")
-        for line in output:
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'Number\s+of\s+topology\s+changes\s+:\s+(?P<numberoftopologychanges>\d+)', line.strip(), re.M|re.I)
                 if m:
@@ -438,7 +436,6 @@ class Commands:
         self.output = output.split("\n")
         #print output
         output = output.split("\n")
-        self.fan_data = {}
         record_count = 0
         chassisname = ""
         for line in output:
@@ -449,15 +446,18 @@ class Commands:
                 if line.startswith("Fans"):
                     m = re.match(r'Fans\s+(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent|Check)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
+                        self.fan_data[record_count] = {}
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 if line.strip().startswith("Fan"):
                     m = re.match(r'(?P<fanloc>[\S|\s|\d]{5,31})\s(?P<fanstatus>OK|Absent|Check)\s+Spinning\sat\s(?P<fanspeed>high)\sspeed$', line.strip(), re.M|re.I)
                     if m:
+                        self.fan_data[record_count] = {}
                         self.fan_data[record_count] = m.groupdict()
                         self.fan_data[record_count]["chassiname"] = chassisname
                         record_count += 1
+
         #print json.dumps(self.fan_data, indent=4)
 
     def get_fpc_data(self):
@@ -736,8 +736,8 @@ class Commands:
                     output = output + line
         #print output
         #print "hi"
+        self.output = output.split("\n")
         output = output.split("\n")
-        self.output = output
         record_count = 0
         #print output
         self.pfe_st_notif_data[record_count] = {}
@@ -788,8 +788,8 @@ class Commands:
                 m = re.match(r'Reject\s+[0-9]+\s+[0-9]+\s+(?P<reject_failed>[0-9]+)\s+[0-9]+', line.strip(), re.M|re.I)
                 if m:
                     self.pfe_st_notif_data[record_count]["reject_failed"] = m.groupdict(0)["reject_failed"]
-        #print json.dumps(self.pfe_st_notif_data, indent=4)
 
+     #print json.dumps(self.pfe_heap_mem, indent=4)
 
     def get_pfe_tr_data(self):
         output = ""
@@ -926,15 +926,18 @@ class Commands:
                 if line.startswith("Power"):
                     m = re.match(r'Power\s+(?P<item>[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
+                        self.pwr_data[record_count] = {}
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname
                         record_count += 1
                 else:
                     m = re.match(r'[Temp|\s]*(?P<item>P[\S|\s|\d]{5,31})\s(?P<status>OK|Absent|Check)\s*(?P<measurement>.*)$', line.strip(), re.M|re.I)
                     if m:
+                        self.pwr_data[record_count] = {}
                         self.pwr_data[record_count] = m.groupdict()
                         self.pwr_data[record_count]["chassiname"] = chassisname
                         record_count += 1
+
         #self.pwr_data = self.removeWhiteSpaceFromDict(self.pwr_data)
         #print json.dumps(self.pwr_data, indent=4)
 
@@ -1231,6 +1234,7 @@ class Commands:
 
     def get_stp_stats_data(self):
         output = ""
+        #print "hi1"
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
                 if not re.match(".*@.*>\\s+show\\s+spanning\-tree\\s+bridge\\s+brief.*", line, re.M | re.I) == None:
@@ -1247,16 +1251,18 @@ class Commands:
 
         record_count = 0
         #print output
+        output = output.split("\n")
         #print("hi")
+        self.stp_stats_data[record_count] = {}
         for line in output:
             if line.strip():
-                m = re.match(r'Number\s+of\s+topology\s+changes\s+:\s+(?P<numberoftopologychanges>\d+)', line.strip(), re.M|re.I)
+                m = re.match(r'Number\s+of\s+topology\s+changes\s+:\s+(\d+)', line.strip(), re.M|re.I)
                 if m:
-                    self.stp_stats_data[record_count] = m.groupdict()
-                m = re.match(r'Time\s+since\s+last\s+topology\s+change\s+:\s+(?P<timesincelasttopologychange>\d+)', line.strip(), re.M|re.I)
+                    self.stp_stats_data[record_count]["numberoftopologychanges"] = m.groups(0)[0]
+                m = re.match(r'Time\s+since\s+last\s+topology\s+change\s+:\s+(\d+)', line.strip(), re.M|re.I)
                 if m:
-                    self.stp_stats_data[record_count] = m.groupdict()
-                record_count = record_count + 1
+                    self.stp_stats_data[record_count]["timesincelasttopologychange"] = m.groups(0)[0]
+                    record_count = record_count + 1
         #print json.dumps(self.stp_stats_data, indent=4)
 
     # For SRX xml and tabular
@@ -1411,36 +1417,6 @@ class Commands:
                         tmp.append(chassisname)
                         self.sys_stor_data[record_count]=tuple(tmp)
                         record_count = record_count + 1
-
-    ''' Old only for tabular
-    def get_sys_ver_data(self):
-        # hi#
-        output = ""
-        with open(self.file_name, "rb") as fopen:
-            for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+\\s+version\\s+no.*", line, re.M | re.I) == None:
-                    break
-            for line in fopen:
-                if not line.strip() == "":
-                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
-                        break
-                    output = output + line
-        output = output.split("\n")
-        self.output = output
-        chassisname = ""
-        for line in output:
-            m = re.match(r'(?P<chassisname>[sfc[0-9]+.*:|lcc[0-9]+.*:|fpc[0-9]+.*:])', line, re.M | re.I)
-            if m:
-                chassisname = m.groups(0)[0]
-            m = re.match(r'([a-z]+):(.*)', line, re.M | re.I)
-            if m:
-                self.sys_ver_data[m.groups(0)[0].strip()] = m.groups(0)[1].strip()
-                self.sys_ver_data['chassisname'] = chassisname
-            m = re.match(r'(.*)\[(.*)\]', line, re.M | re.I)
-            if m:
-                self.sys_ver_data[m.groups(0)[0].strip()] = m.groups(0)[1]
-                self.sys_ver_data['chassisname'] = chassisname
-                continue'''
 
     def get_sys_ver_data(self):
         # sys_ver_data
@@ -1689,33 +1665,36 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output.split("\n")
-
         record_count = 0
         #print output
         #print("hi")
         member = ""
-        for line in output:
+        #self.vc_prtcl_adj_data[record_count] = {}
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
                     member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                m = re.match(r'(?P<interface>vcp-\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_prtcl_adj_data[record_count] = {}
                     self.vc_prtcl_adj_data[record_count] = m.groupdict()
-
+                    self.vc_prtcl_adj_data[record_count]['member'] = member
+                    record_count += 1
                 m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_prtcl_adj_data[record_count] = {}
                     self.vc_prtcl_adj_data[record_count] = m.groupdict()
-                self.vc_prtcl_adj_data[record_count]['member'] = member
-                record_count = record_count + 1
+                    self.vc_prtcl_adj_data[record_count]['member'] = member
+                    record_count += 1
+        #print json.dumps(self.vc_prtcl_adj_data, indent=4)
 
     def get_vc_prtcl_stat_data(self):
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+statistics.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -1724,33 +1703,34 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output.split("\n")
 
         record_count = 0
-        #print output
-        #print("hi")
-        member = ""
-        for line in output:
+        member = 0
+        isisid = ""
+        #self.vc_prtcl_stat_data[record_count] = {}
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
                     member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                m = re.match(r'IS-IS statistics for (\w+.\w+.\w+):', line.strip(), re.M|re.I)
                 if m:
-                    self.vc_prtcl_stat_data[record_count] = m.groupdict()
-
-                m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
+                    isisid = m.groups(0)[0]
+                m = re.match(r'(?P<pdutype>[A-Z]+)\s+\d+\s+\d+\s+(?P<drops>\d+)\s+\d+\s+\d+', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_prtcl_stat_data[record_count] = {}
                     self.vc_prtcl_stat_data[record_count] = m.groupdict()
-                self.vc_prtcl_stat_data[record_count]['member'] = member
-                record_count = record_count + 1
+                    self.vc_prtcl_stat_data[record_count]['isisid'] = isisid
+                    self.vc_prtcl_stat_data[record_count]['member'] = member
+                    record_count = record_count + 1
+        #print json.dumps(self.vc_prtcl_stat_data, indent=4)
 
     def get_vc_stat_data(self):
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+status.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -1759,33 +1739,55 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output.split("\n")
-
         record_count = 0
         #print output
-        #print("hi")
         member = ""
-        for line in output:
+        vcid = ""
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
                     member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                m = re.match(r'Virtual\sChassis\sID: ([a-f0-9]{4}\.[a-f0-9]{4}\.[a-f0-9]{4})', line.strip(), re.M|re.I)
                 if m:
-                    self.vc_stat_data[record_count] = m.groupdict()
-
-                m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
+                    vcid = m.groups(0)[0]
+                m = re.match(r'(?P<memberid>[0-9]+)\s\(FPC\s(?P<fpc>[0-9]+)\)\s+(?P<status>[a-z]{5,8})\s+[a-z0-9]{11,14}\s+(?P<modelid>ex[0-8]{4}-?[0-9]?[0-9]?[ft]?)\s+(?P<priority>[0-9]{1,4})\s+(?P<role>[a-z]+).*', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_stat_data[record_count] = {}
                     self.vc_stat_data[record_count] = m.groupdict()
-                self.vc_stat_data[record_count]['member'] = member
-                record_count = record_count + 1
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "p4000"
+                    record_count = record_count + 1
+                m = re.match(r'.*(?P<status>Unprvsnd).*', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_stat_data[record_count] = {}
+                    self.vc_stat_data[record_count] = m.groupdict()
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "u4000"
+                    self.vc_stat_data[record_count]['role'] = ""
+                    self.vc_stat_data[record_count]['priority'] = ""
+                    record_count = record_count + 1
+                m = re.match(r'(?P<memberid>[0-9]+)\s\(FPC\s(?P<fpc>[0-9]+-[0-9]+)\)\s+(?P<status>[a-z]{5,8})\s+[a-z0-9]{11,14}\s+(?P<modelid>ex[0-8]{4}-?[0-9]?[0-9]?[ft]?)\s+(?P<priority>[0-9]{1,4})\s+(?P<role>[a-z]+).*', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_stat_data[record_count] = {}
+                    self.vc_stat_data[record_count] = m.groupdict()
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "p8000"
+                m = re.match(r'(?P<memberid>[0-9]+)\s\(FPC\s(?P<fpc>[0-9]+-[0-9]+)\)\s+(?P<status>[a-z]{5,8})\s+[a-z0-9]{11,14}\s+(?P<modelid>ex-xre)\s+(?P<priority>[0-9]{1,4})\s+(?P<role>[a-z]+).*', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_stat_data[record_count] = {}
+                    self.vc_stat_data[record_count] = m.groupdict()
+                    self.vc_stat_data[record_count]['vcid'] = vcid
+                    self.vc_stat_data[record_count]['type'] = "p8000-xre"
+                    record_count = record_count + 1
+        #print json.dumps(self.vc_stat_data, indent=4)
 
     def get_vc_vcp_stat_data(self):
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+protocol\\s+adjacency.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+virtual\-chassis\\s+vc\-port.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -1794,27 +1796,458 @@ class Commands:
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
             output=['']
-        #output = output.split("\n")
         self.output = output.split("\n")
-
         record_count = 0
         #print output
-        #print("hi")
         member = ""
-        for line in output:
+        for line in output.split("\n"):
             if line.strip():
                 m = re.match(r'member|fpc(\d+):', line.strip(), re.M|re.I)
                 if m:
-                    member = m.groups(0)[0]
-                m = re.match(r'(?P<interface>vcp-\d+\/\d+\/?\d*.\d+)\s+\w+.\w+.\w+\s+(?P<state>Up|Down|New|One-way|Initializing|Rejected)', line.strip(), re.M|re.I)
+                    memberid = m.groups(0)[0]
+                m = re.match(r'(?P<interface>vcp-\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>\w+)\s+(?P<speed>\d+)\s+(?P<nghbr>\d+)\s+(?P<nghbrif>.*)', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_vcp_stat_data[record_count] = {}
                     self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    record_count += 1
 
-                m = re.match(r'(?P<interface>\w+-\d+\/\d+)\s+(?P<system>\d*\w*\.\d*\w*\.\d*\w*)\s+(?P<state>\w+)\s+(?P<hold>\d+)', line.strip(), re.M|re.I)
+                m = re.match(r'(?P<interface>\d+\/?\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>\w+)\s+(?P<speed>\d+)\s+(?P<nghbr>\d+)\s+(?P<nghbrif>.*)', line.strip(), re.M|re.I)
                 if m:
+                    self.vc_vcp_stat_data[record_count] = {}
                     self.vc_vcp_stat_data[record_count] = m.groupdict()
-                self.vc_vcp_stat_data[record_count]['member'] = member
-                record_count = record_count + 1
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    record_count += 1
+
+                m = re.match(r'(?P<interface>vcp-\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>Down|Disabled)\s+(?P<speed>\d+)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    record_count += 1
+
+                m = re.match(r'(?P<interface>\d+\/?\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<trunk>-?\d+)\s+(?P<status>Down|Disabled)\s+(?P<speed>\d+)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    record_count += 1
+
+                m = re.match(r'(?P<interface>vcp-\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<status>Absent)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    self.vc_vcp_stat_data[record_count]["trunk"] = ""
+                    self.vc_vcp_stat_data[record_count]["speed"] = ""
+                    record_count += 1
+
+                m = re.match(r'(?P<interface>\d+\/?\d+\/?\d*)\s+(?P<type>[a-z]+-?[a-z]*)\s+(?P<status>Absent)', line.strip(), re.M|re.I)
+                if m:
+                    self.vc_vcp_stat_data[record_count] = {}
+                    self.vc_vcp_stat_data[record_count] = m.groupdict()
+                    self.vc_vcp_stat_data[record_count]["memberid"] = memberid
+                    self.vc_vcp_stat_data[record_count]["nghbr"] = ""
+                    self.vc_vcp_stat_data[record_count]["nghbrif"] = ""
+                    self.vc_vcp_stat_data[record_count]["trunk"] = ""
+                    self.vc_vcp_stat_data[record_count]["speed"] = ""
+                    record_count += 1
+        #print json.dumps(self.vc_vcp_stat_data, indent=4)
+
+
+    # For SRX display xml
+    def get_ch_cluster_stat_data(self):
+        # hi#
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+cluster\\s+statistics\\s.\\sdisplay.", line, re.M | re.I) == None:
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
+                    break
+                output += line
+        print output
+        self.output = output.split("\n")
+        output = output.split("\n")
+        control_interface_index = ""
+        heartbeats_errors = ""
+        fabric_probe_errors = ""
+        record_count = 0
+        for line in output:
+            if line.strip():
+                m = re.match(r'<control-interface-index>(.*)<\/control-interface-index>', line, re.M|re.I)
+                if m:
+                    control_interface_index = m.groups(0)[0]
+                m = re.match(r'<heartbeat-errors>(.*)<\/heartbeat-errors>', line, re.M|re.I)
+                if m:
+                    control_interface_index = m.groups(0)[0]
+                m = re.match(r'<fabric-probe-errors>(.*)<\/fabric-probe-errors>', line, re.M|re.I)
+                if m:
+                    control_interface_index = m.groups(0)[0]
+                m = re.match(r'<\/chassis-cluster-interfaces>', line, re.M|re.I)
+                if m:
+                    self.ch_cluster_stat_data[record_count] = {}
+                    self.ch_cluster_stat_data[record_count]["control_interface_index"] = control_interface_index
+                    self.ch_cluster_stat_data[record_count]["heartbeats_errors"] = heartbeats_errors
+                    self.ch_cluster_stat_data[record_count]["fabric_probe_errors"] = fabric_probe_errors
+                    record_count += 1
+        print json.dumps(self.ch_cluster_stat_data, indent=4)
+
+    # For SRX display xml
+    def get_ch_fab_plane_data(self):
+        # hi#
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                # show chassis fabric plane
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+plane.*", line, re.M | re.I) == None:
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
+                    break
+                output += line
+        #print output
+        self.output = output.split("\n")
+        output = output.split("\n")
+        chassisname = ""
+        planenum = ""
+        planestate = ""
+        fpcnum = ""
+        pfenum = ""
+        linkstate = ""
+        record_count = 0
+        for line in output:
+            if line.strip():
+                print(line)
+                m = re.match(r'(node[0-9]+.*:)', line, re.M|re.I)
+                if m:
+                    chassisname = m.groups(0)[0]
+                m = re.match(r'Fabric management PLANE state.*', line, re.M|re.I)
+                if m:
+                    chassisname = "NULL"
+                m = re.match(r'Plane\s+([0-9]+)', line, re.M|re.I)
+                if m:
+                    planenum = m.groups(0)[0]
+                m = re.match(r'Plane state:\s(.*)', line.strip(), re.M|re.I)
+                if m:
+                    planestate = m.groups(0)[0]
+                m = re.match(r'fpc[ \s]+([0-9]+)', line.strip(), re.M|re.I)
+                if m:
+                    fpcnum = m.groups(0)[0]
+                m = re.match(r'pfe[\s]+([0-9]+)[\s]*:[\s]*(.*)', line.strip(), re.M|re.I)
+                if m:
+                    pfenum = m.groups(0)[0]
+                    linkstate = m.groups(0)[1]
+                    self.ch_fab_plane_data[record_count] = {}
+                    self.ch_fab_plane_data[record_count]["chassisname"] = chassisname
+                    self.ch_fab_plane_data[record_count]["planenum"] = planenum
+                    self.ch_fab_plane_data[record_count]["planestate"] = planestate
+                    self.ch_fab_plane_data[record_count]["fpcnum"] = fpcnum
+                    self.ch_fab_plane_data[record_count]["pfenum"] = pfenum
+                    self.ch_fab_plane_data[record_count]["linkstate"] = linkstate
+                    record_count += 1
+        #print json.dumps(self.ch_fab_plane_data, indent=4)
+
+    # For SRX display xml
+    def get_fab_fpc_data(self):
+        # hi#
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                # show chassis fabric plane
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+fpcs", line, re.M | re.I) == None:
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
+                    break
+                output += line
+        print output
+        self.output = output.split("\n")
+        output = output.split("\n")
+        chassisname = ""
+        planenum = ""
+        planestate = ""
+        fpcnum = ""
+        pfenum = ""
+        record_count = 0
+        for line in output:
+            if line.strip():
+                print(line)
+                m = re.match(r'(node[0-9]+.*:)', line, re.M|re.I)
+                if m:
+                    chassisname = m.groups(0)[0]
+                m = re.match(r'Fabric management FPC state.*', line, re.M|re.I)
+                if m:
+                    chassisname = "NULL"
+                m = re.match(r'fpc[ \t]+#?([0-9]+)', line.strip(), re.M|re.I)
+                if m:
+                    fpcnum = m.groups(0)[0]
+                m = re.match(r'pfe[ \t]+#([0-9]+)', line.strip(), re.M|re.I)
+                if m:
+                    pfenum = m.groups(0)[0]
+                m = re.match(r'Plane[ \t]+([0-9]+):[ \t]+(.*)', line.strip(), re.M|re.I) # MX
+                if m:
+                    planenum = m.groups(0)[0]
+                    planestate = m.groups(0)[1]
+                    self.fab_fpc_data[record_count] = {}
+                    self.fab_fpc_data[record_count]["chassisname"] = chassisname
+                    self.fab_fpc_data[record_count]["planenum"] = planenum
+                    self.fab_fpc_data[record_count]["planestate"] = planestate
+                    self.fab_fpc_data[record_count]["fpcnum"] = fpcnum
+                    self.fab_fpc_data[record_count]["pfenum"] = pfenum
+                    record_count += 1
+
+                # Old Perl script code
+                m = re.match(r'sib[ \t]+#([0-9]+)[ \t]+([A-Za-z]+ [A-Za-z]+)', line.strip(), re.M|re.I)
+                if m:
+                    planenum = m.groups(0)[0]
+                    planestate = m.groups(0)[1]
+                    self.fab_fpc_data[record_count] = {}
+                    self.fab_fpc_data[record_count]["chassisname"] = chassisname
+                    self.fab_fpc_data[record_count]["planenum"] = planenum
+                    self.fab_fpc_data[record_count]["planestate"] = planestate
+                    self.fab_fpc_data[record_count]["fpcnum"] = fpcnum
+                    self.fab_fpc_data[record_count]["pfenum"] = pfenum
+                    record_count += 1
+
+                m = re.match(r'sib[ \t]+#([0-9]+)$', line.strip(), re.M|re.I)
+                if m:
+                    planenum = m.groups(0)[0]
+                m = re.match(r'sib #(\d+)', line.strip(), re.M|re.I) # For SIB number for M320
+                if m:
+                    planenum = m.groups(0)[0]
+                m = re.match(r'([A-Za-z]+ [A-Za-z]+)$', line.strip(), re.M|re.I)
+                if m:
+                    planestate = m.groups(0)[0]
+                    self.fab_fpc_data[record_count] = {}
+                    self.fab_fpc_data[record_count]["chassisname"] = chassisname
+                    self.fab_fpc_data[record_count]["planenum"] = planenum
+                    self.fab_fpc_data[record_count]["planestate"] = planestate
+                    self.fab_fpc_data[record_count]["fpcnum"] = fpcnum
+                    self.fab_fpc_data[record_count]["pfenum"] = pfenum
+                    record_count += 1
+                m = re.match(r'\s+ (\w+ ?.*)', line.strip(), re.M|re.I) # For plane state for M320
+                if m:
+                    planestate = m.groups(0)[0]
+                    self.fab_fpc_data[record_count] = {}
+                    self.fab_fpc_data[record_count]["chassisname"] = chassisname
+                    self.fab_fpc_data[record_count]["planenum"] = planenum
+                    self.fab_fpc_data[record_count]["planestate"] = planestate
+                    self.fab_fpc_data[record_count]["fpcnum"] = fpcnum
+                    self.fab_fpc_data[record_count]["pfenum"] = pfenum
+                    record_count += 1
+        print json.dumps(self.ch_fab_plane_data, indent=4)
+
+    # For SRX display xml
+    def get_fab_sibs_data(self):
+        # hi#
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                # show chassis fabric plane
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+sibs", line, re.M | re.I) == None:
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
+                    break
+                output += line
+        #print output
+        self.output = output.split("\n")
+        output = output.split("\n")
+        sibnum = ""
+        planenum = ""
+        planestate = ""
+        fpcnum = ""
+        pfenum = ""
+        linkstate = ""
+        record_count = 0
+        for line in output:
+            if line.strip():
+                print(line)
+                m = re.match(r'sib[ \t]+#([0-9]+)', line, re.M|re.I)
+                if m:
+                    sibnum = m.groups(0)[0]
+                m = re.match(r'plane state:[ \t]+(.*)\r$', line, re.M|re.I)
+                if m:
+                    planestate = m.groups(0)[0]
+                m = re.match(r'fpc[ \t]+#([0-9]+)', line, re.M|re.I)
+                if m:
+                    fpcnum = m.groups(0)[0]
+                m = re.match(r'pfe[ \t]+#([0-9]+)[ \t]+:[ \t]+(.*)', line.strip(), re.M|re.I)
+                if m:
+                    pfenum = m.groups(0)[0]
+                    linkstate = m.groups(0)[1]
+                    self.fab_sibs_data[record_count] = {}
+                    self.fab_sibs_data[record_count]["sibnum"] = sibnum
+                    self.fab_sibs_data[record_count]["planestate"] = planestate
+                    self.fab_sibs_data[record_count]["fpcnum"] = fpcnum
+                    self.fab_sibs_data[record_count]["pfenum"] = pfenum
+                    self.fab_sibs_data[record_count]["linkstate"] = linkstate
+                    record_count += 1
+        #print json.dumps(self.fab_sibs_data, indent=4)
+
+
+    def get_fpc_feb_conn_data(self):
+        # hi#
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                # show chassis fpc-feb-connectivity
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fpc.feb.connectivity", line, re.M | re.I) == None:
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
+                    break
+                output += line
+        #print output
+        self.output = output.split("\n")
+        output = output.split("\n")
+        fpc          = ""
+        fpctype      = ""
+        fpcstate     = ""
+        connectedfeb = ""
+        febstate     = ""
+        linkstatus   = ""
+        record_count = 0
+        for line in output:
+            if line.strip():
+                print(line)
+                m = re.match(r'([0-9]+)\s+(cFPC)\s+([a-z]+)\s+([0-9]+)\s+([a-z]+)\s+([a-z]+)', line, re.M|re.I)
+                if m:
+                    fpc          = m.groups(0)[0]
+                    fpctype      = m.groups(0)[1]
+                    fpcstate     = m.groups(0)[2]
+                    connectedfeb = m.groups(0)[3]
+                    febstate     = m.groups(0)[4]
+                    linkstatus   = m.groups(0)[5]
+                    self.fpc_feb_conn_data[record_count] = {}
+                    self.fpc_feb_conn_data[record_count]["fpc"] = fpc
+                    self.fpc_feb_conn_data[record_count]["fpctype"] = fpctype
+                    self.fpc_feb_conn_data[record_count]["connectedfeb"] = connectedfeb
+                    self.fpc_feb_conn_data[record_count]["febstate"] = febstate
+                    self.fpc_feb_conn_data[record_count]["linkstatus"] = linkstatus
+                    record_count += 1
+                m = re.match(r'([0-9]+)\s+Empty\s+([0-9]+)\s+([a-z]+)', line, re.M|re.I)
+                if m:
+                    fpc          = m.groups(0)[0]
+                    fpctype      = ""
+                    fpcstate     = "Empty"
+                    connectedfeb = m.groups(0)[2]
+                    febstate     = m.groups(0)[3]
+                    linkstatus   = ""
+                    self.fpc_feb_conn_data[record_count] = {}
+                    self.fpc_feb_conn_data[record_count]["fpc"] = fpc
+                    self.fpc_feb_conn_data[record_count]["fpctype"] = fpctype
+                    self.fpc_feb_conn_data[record_count]["connectedfeb"] = connectedfeb
+                    self.fpc_feb_conn_data[record_count]["febstate"] = febstate
+                    self.fpc_feb_conn_data[record_count]["linkstatus"] = linkstatus
+                    record_count += 1
+                m = re.match(r'([0-9]+)\s+(Type\s*[0-9]+)\s+([a-z]+)\s+([0-9]+)\s+([a-z]+)\s+([a-z]+)', line, re.M|re.I)
+                if m:
+                    fpc          = m.groups(0)[0]
+                    fpctype      = m.groups(0)[1]
+                    fpcstate     = m.groups(0)[2]
+                    connectedfeb = m.groups(0)[3]
+                    febstate     = m.groups(0)[4]
+                    linkstatus   = m.groups(0)[5]
+                    self.fpc_feb_conn_data[record_count] = {}
+                    self.fpc_feb_conn_data[record_count]["fpc"] = fpc
+                    self.fpc_feb_conn_data[record_count]["fpctype"] = fpctype
+                    self.fpc_feb_conn_data[record_count]["connectedfeb"] = connectedfeb
+                    self.fpc_feb_conn_data[record_count]["febstate"] = febstate
+                    self.fpc_feb_conn_data[record_count]["linkstatus"] = linkstatus
+                    record_count += 1
+        print json.dumps(self.fpc_feb_conn_data, indent=4)
+
+    def get_fab_pl_loc_data(self):
+        # hi#
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                # show chassis fpc-feb-connectivity
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+plane.location", line, re.M | re.I) == None:
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
+                    break
+                output += line
+        #print output
+        self.output = output.split("\n")
+        output = output.split("\n")
+        record_count = 0
+        for line in output:
+            if line.strip():
+                print(line)
+                m = re.match(r'Plane\s+([0-9]+)\s+Control\s+Board\s+([0-9]+)', line, re.M|re.I)
+                if m:
+                    plane          = m.groups(0)[0]
+                    controlboard      = m.groups(0)[1]
+                    self.fab_pl_loc_data[record_count] = {}
+                    self.fab_pl_loc_data[record_count]["plane"] = plane
+                    self.fab_pl_loc_data[record_count]["controlborad"] = controlboard
+                    record_count += 1
+        print json.dumps(self.fpc_feb_conn_data, indent=4)
+
+    def get_eth_sw_data(self):
+        # hi#
+        output = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                # show chassis fpc-feb-connectivity
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+ethernet.switch", line, re.M | re.I) == None:
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
+                    break
+                output += line
+        #print output
+        self.output = output.split("\n")
+        output = output.split("\n")
+        record_count = 0
+        for line in output:
+            if line.strip():
+                print(line)
+                m = re.match(r'Link\s+is\s+(.*)[ \t]+on[ \t]+GE\s+port\s+([0-9]+)[ \t]+connected[ \t]+to[ \t]+device:[ \t]+(.*)\r$', line, re.M|re.I)
+                if m:
+                    linkstatus    = m.groups(0)[0]
+                    linkport      = m.groups(0)[1]
+                    linkdevice    = m.groups(0)[2]
+                    self.eth_sw_data[record_count] = {}
+                    self.eth_sw_data[record_count]["linkstatus"] = linkstatus
+                    self.eth_sw_data[record_count]["linkport"] = linkport
+                    self.eth_sw_data[record_count]["linkdevice"] = linkdevice
+                    record_count += 1
+                m = re.match(r'Link\s+is\s+(.*)[ \t]+on[ \t]+XE\s+port\s+([0-9]+)[ \t]+connected[ \t]+to[ \t]+device:[ \t]+(.*)\r$', line, re.M|re.I)
+                if m:
+                    linkstatus    = m.groups(0)[0]
+                    linkport      = m.groups(0)[1]
+                    linkdevice    = m.groups(0)[2]
+                    self.eth_sw_data[record_count] = {}
+                    self.eth_sw_data[record_count]["linkstatus"] = linkstatus
+                    self.eth_sw_data[record_count]["linkport"] = linkport
+                    self.eth_sw_data[record_count]["linkdevice"] = linkdevice
+                    record_count += 1
+                m = re.match(r'Speed[ \t]+is[ \t]+(.*)\r$', line, re.M|re.I)
+                if m:
+                    linkspeed     = m.groups(0)[0]
+                    self.eth_sw_data[record_count] = {}
+                    self.eth_sw_data[record_count]["linkspeed"] = linkspeed
+                    record_count += 1
+                m = re.match(r'Duplex[ \t]+is[ \t]+(.*)\r$', line, re.M|re.I)
+                if m:
+                    linkduplex     = m.groups(0)[0]
+                    self.eth_sw_data[record_count] = {}
+                    self.eth_sw_data[record_count]["linkduplex"] = linkduplex
+                    record_count += 1
+        print json.dumps(self.eth_sw_data, indent=4)
+
     #####################################################################################
 
     def getNHDBZones(self):

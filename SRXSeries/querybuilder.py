@@ -78,7 +78,7 @@ class Querybuilder:
         alarm_text = ch_alarm_data.get('alarm_description', "NULL")
         alarm_time = ch_alarm_data.get('alarm_time', "NULL")
         self.command_query = ""
-        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="NULL" else "='"+str(chassisname)+"'" )+" \
+        self.command_query =" and chassisname"+str(" is NULL" if chassisname=="NULL" or chassisname.strip()=="" else "='"+str(chassisname)+"'" )+" \
                             and alarmclass"+str(" is NULL" if alarm_class=="NULL" else "='"+str(alarm_class)+"'" )+" \
                             and alarmtext"+str(" is NULL" if alarm_text=="NULL" else "='"+str(alarm_text)+"'" )+" \
                             and alarmtime"+str(" is NULL" if alarm_time=="NULL" else "='"+str(alarm_time)+"'" )+" order by collector_time"
@@ -144,6 +144,7 @@ class Querybuilder:
             "and partserial='"+str(self.ch_hard_data[k]["serial_number"]).strip()+"' \
              and partdesc='"+str(self.ch_hard_data[k]["description"]).strip()+"'"
         self.command_query = q
+
     def build_env_data_query(self, env_data):
         tempc = ""
         chassispartstatus = env_data.get('status','').strip()
@@ -184,7 +185,7 @@ class Querybuilder:
         fanstatus = fan_data.get("fanstatus", "").strip()
         fanspeed = fan_data.get("fanspeed", "").strip()
         self.command_query = ""
-        self.command_query = " and chassisname='"+chassisname+"' and fanloc='"+str(fanloc)+"' and \
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and fanloc='"+str(fanloc)+"' and \
             fanstatus='"+str(fanstatus)+"' and fanspeed='"+str(fanspeed)+"' order by collector_time"
 
     def build_fpc_data_query(self, fpc_data):
@@ -219,6 +220,24 @@ class Querybuilder:
                             and bad_trailers"+str(" is NULL" if bad_trailers=="NULL" else "='"+str(bad_trailers)+"'" )+" \
                             and replay_errors"+str(" is NULL" if replay_errors=="NULL" else "='"+str(replay_errors)+"'" )+" \
                             order by collector_time"
+
+    def build_jtree_mem_query(self, jtree_mem):
+        jtreemembadcookies= jtree_mem.get("jtreemembadcookies", 0)
+        jtreebytesfromfreepages= jtree_mem.get("jtreebytesfromfreepages", 0)
+        jtreemembytesused= jtree_mem.get("jtreemembytesused", 0)
+        jtreememallocs= jtree_mem.get("jtreememallocs", 0)
+        jtreememfailedfrees= jtree_mem.get("jtreememfailedfrees", 0)
+        jtreemembytesfree= jtree_mem.get("jtreemembytesfree", 0)
+        jtreememallocsfailed= jtree_mem.get("jtreememallocsfailed", 0)
+        jtreememtotalbytes= jtree_mem.get("jtreememtotalbytes", 0)
+        device= jtree_mem.get("device", 0)
+        devicenum= jtree_mem.get("devicenum", 0)
+        jtreeinstid= jtree_mem.get("jtreeinstid", 0)
+        self.command_query = ""
+        self.command_query = " and device='"+str(device)+"' and devicenum="+str(devicenum)+" and jtreeinstid="+str(jtreeinstid)+" and \
+        jtreemembadcookies="+str(jtreemembadcookies)+" and jtreebytesfromfreepages="+str(jtreebytesfromfreepages)+" \
+        and jtreemembytesused="+str(jtreemembytesused)+" and jtreememallocs="+str(jtreememallocs)+" and jtreememfailedfrees="+str(jtreememfailedfrees)+" \
+        and jtreemembytesfree="+str(jtreemembytesfree)+" and jtreememallocsfailed="+str(jtreememallocsfailed)+" and jtreememtotalbytes="+str(jtreememtotalbytes)+" "
 
     def build_krt_q_query(self, krt_q):
         routetbladd = krt_q.get("Routing table add queue", 0)
@@ -282,13 +301,13 @@ class Querybuilder:
 
     def build_mpc_jnh_summ_data_query(self, mpc_jnh_summ_data):
         #chassisname = mpc_jnh_summ_data.get("chassiname", "NULL")
-        mpc = mpc_jnh_summ_data.get("mpc", 0)
+        fpc = mpc_jnh_summ_data.get("fpc", "")
         jnhid = mpc_jnh_summ_data.get("jnhid", "")
         name = mpc_jnh_summ_data.get("name", "").strip()
         size = mpc_jnh_summ_data.get("size", 0)
         allocated = mpc_jnh_summ_data.get("allocated", 0)
         utilization = mpc_jnh_summ_data.get("utilization", 0)
-        self.command_query = " and mpc="+str(mpc)+" and jnhid="+str(jnhid)+" and name"+str(" is NULL" if name=="NULL" else "='"+str(name)+"'" )+" \
+        self.command_query = " and fpc='"+str(fpc)+"' and jnhid="+str(jnhid)+" and name"+str(" is NULL" if name=="NULL" else "='"+str(name)+"'" )+" \
                                and size="+str(size)+" and allocated="+str(allocated)+" and utilization="+str(utilization)+""
 
     def build_nhdb_zones_query(self, nhdb_zones):
@@ -317,6 +336,35 @@ class Querybuilder:
 
         
         query = " order by collector_time"
+
+    def build_pfe_heap_mem_query(self, pfe_heap_mem):
+        pfeheapfree = pfe_heap_mem.get("pfeheapfree", "")
+        pfeheapused = pfe_heap_mem.get("pfeheapused", "")
+        pfeheapbase = pfe_heap_mem.get("pfeheapbase", "")
+        pfeheapname = pfe_heap_mem.get("pfeheapname", "")
+        pfeheapid = pfe_heap_mem.get("pfeheapid", 0)
+        pfeheaptotal = pfe_heap_mem.get("pfeheaptotal", "")
+        pfeheappercent = pfe_heap_mem.get("pfeheappercent", 0)
+        totalfreebytes = pfe_heap_mem.get("totalfreebytes", 0)
+        totalfreeblocks = pfe_heap_mem.get("totalfreeblocks", 0)
+        totalallocs = pfe_heap_mem.get("totalallocs", 0)
+        totalfrees = pfe_heap_mem.get("totalfrees", 0)
+        device = pfe_heap_mem.get("device", "NULL")
+        devicenum = pfe_heap_mem.get("devicenum", 0)
+
+        self.command_query = " and pfeheapfree"+str(" is NULL" if pfeheapfree=="" else "='"+str(pfeheapfree)+"'" )+" \
+                            and pfeheapused"+str(" is NULL" if pfeheapused=="" else "='"+str(pfeheapused)+"'" )+" \
+                            and pfeheapbase"+str(" is NULL" if pfeheapbase=="" else "='"+str(pfeheapbase)+"'" )+" \
+                            and pfeheapname"+str(" is NULL" if pfeheapname=="" else "='"+str(pfeheapname)+"'" )+" \
+                            and pfeheapid="+str(pfeheapid)+" \
+                            and pfeheappercent="+str(pfeheappercent)+" \
+                            and pfeheaptotal"+str(" is NULL" if pfeheaptotal=="" else "='"+str(pfeheaptotal)+"'" )+" \
+                            and totalfreeblocks="+str(totalfreeblocks)+" \
+                            and totalfreebytes="+str(totalfreebytes)+" \
+                            and totalallocs="+str(totalallocs)+" \
+                            and totalfrees="+str(totalfrees)+" \
+                            and device"+str(" is NULL" if device=="" else "='"+str(device)+"'" )+" \
+                            and devicenum="+str(devicenum)+" order by collector_time"
 
     def build_pfe_st_notif_data_query(self, pfe_st_notif_data):
         print json.dumps(pfe_st_notif_data, indent=4)
@@ -991,3 +1039,79 @@ class Querybuilder:
         member = vc_vcp_stat_data.get('member', 0)
         self.command_query = ""
         self.command_query = " and interface='"+str(interface)+"' and state='"+str(state)+"' and system='"+str(system)+"'  and  and hold="+str(hold)+" and member="+str(member)+""
+
+    def build_ch_cluster_stat_data_query(self, ch_cluster_stat_data):
+        control_interface_index = ch_cluster_stat_data.get('control_interface_index', "")
+        heartbeats_errors = ch_cluster_stat_data.get('heartbeats_errors', "")
+        fabric_probe_errors = ch_cluster_stat_data.get('fabric_probe_errors', 0)
+        self.command_query = ""
+        self.command_query = " and control_interface_index='"+str(control_interface_index)+"' and heartbeats_errors='"+str(heartbeats_errors)+"' \
+         and fabric_probe_errors='"+str(fabric_probe_errors)+"'"
+
+    def build_ch_fab_plane_data_query(self, ch_fab_plane_data):
+        chassisname = ch_fab_plane_data.get('chassisname', "")
+        planenum = ch_fab_plane_data.get('planenum', 0)
+        planestate = ch_fab_plane_data.get('planestate', "")
+        fpcnum = ch_fab_plane_data.get('fpcnum', 0)
+        pfenum = ch_fab_plane_data.get('pfenum', 0)
+        linkstate = ch_fab_plane_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else " is "+str(chassisname)+"" )+" \
+         and planenum="+str(planenum)+" \
+         and planestate='"+str(planestate)+"' and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" \
+         and linkstate='"+str(linkstate)+"'"
+
+    def build_ch_fab_plane_data_query(self, fab_fpc_data):
+        chassisname = fab_fpc_data.get('chassisname', "")
+        planenum = fab_fpc_data.get('planenum', 0)
+        planestate = fab_fpc_data.get('planestate', "")
+        fpcnum = fab_fpc_data.get('fpcnum', 0)
+        pfenum = fab_fpc_data.get('pfenum', 0)
+        self.command_query = ""
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else " is "+str(chassisname)+"" )+" \
+         and planenum="+str(planenum)+" \
+         and planestate='"+str(planestate)+"' and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" "
+
+    def build_fab_sibs_data_query(self, fab_sibs_data):
+        sibnum = fab_sibs_data.get('sibnum', "")
+        planestate = fab_sibs_data.get('planestate', "")
+        fpcnum = fab_sibs_data.get('fpcnum', 0)
+        pfenum = fab_sibs_data.get('pfenum', 0)
+        linkstate = fab_sibs_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and sibnum="+str(sibnum)+" \
+         and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" \
+         and planestate='"+str(planestate)+"' \
+         and linkstate='"+str(linkstate)+"' "
+
+    def build_fpc_feb_conn_data_query(self, fpc_feb_conn_data):
+        fpc = fpc_feb_conn_data.get('fpc', "")
+        fpctype = fpc_feb_conn_data.get('fpctype', "")
+        fpcstate = fpc_feb_conn_data.get('fpcstate', "")
+        connectfeb = fpc_feb_conn_data.get('connectfeb', "")
+        febstate = fpc_feb_conn_data.get('febstate', "")
+        linkstate = fpc_feb_conn_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and fpc="+str(fpc)+" \
+         and fpctype='"+str(fpctype)+"' and fpcstate='"+str(fpcstate)+"' and connectfeb="+str(connectfeb)+" and \
+         febstate='"+str(febstate)+"' and linkstate='"+str(linkstate)+"'"
+
+    def build_fab_pl_loc_data_query(self, fab_pl_loc_data):
+        plane = fab_pl_loc_data.get('plane', "")
+        controlboard = fab_pl_loc_data.get('controlboard', "")
+        self.command_query = ""
+        self.command_query = " and plane="+str(plane)+" \
+         and controlboard="+str(controlboard)+" "
+
+    def build_eth_sw_data_query(self, eth_sw_data):
+        linkstatus = eth_sw_data.get('linkstatus', "")
+        linkport = eth_sw_data.get('linkport', 0)
+        linkdevice = eth_sw_data.get('linkdevice', "")
+        linkspeed = eth_sw_data.get('linkspeed', "")
+        linkduplex = eth_sw_data.get('linkduplex', "")
+        self.command_query = ""
+        self.command_query = " and linkstatus"+str(" is NULL" if linkstatus=="" else "='"+str(linkstatus)+"'" )+" \
+         and linkport="+str(linkport)+" \
+         and linkdevice"+str(" is NULL" if linkdevice=="" else "='"+str(linkdevice)+"'" )+" and \
+          linkspeed"+str(" is NULL" if linkspeed=="" else "='"+str(linkspeed)+"'" )+" and \
+          linkduplex"+str(" is NULL" if linkduplex=="" else "='"+str(linkduplex)+"'" )+" "

@@ -184,7 +184,7 @@ class Querybuilder:
         fanstatus = fan_data.get("fanstatus", "").strip()
         fanspeed = fan_data.get("fanspeed", "").strip()
         self.command_query = ""
-        self.command_query = " and chassisname='"+chassisname+"' and fanloc='"+str(fanloc)+"' and \
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and fanloc='"+str(fanloc)+"' and \
             fanstatus='"+str(fanstatus)+"' and fanspeed='"+str(fanspeed)+"' order by collector_time"
 
     def build_fpc_data_query(self, fpc_data):
@@ -1103,13 +1103,15 @@ class Querybuilder:
         verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "not found")
         vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
         verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support Common", "not found")
+        if verpfesupportcommon=="not found":
+            verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Enterprise Software Suite", "not found")
         verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
         versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
         verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")
         verpfesupport = sys_ver_data.get("JUNOS Packet Forwarding Engine Support Specific", "not found")
         firmware_software = sys_ver_data.get("JUNOS Firmware Software Suite", "not found")
         self.command_query = ""
-        self.command_query = " and chassisname='"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+"' and verbaseosboot='"+str(verbaseosboot)+"' and \
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else "='"+str(chassisname)+"'" )+" and verbaseosboot='"+str(verbaseosboot)+"' and \
             verbaseossoftware='"+str(verbaseossoftware)+"' and verkernelsoftware='"+str(verkernelsoftware)+"' and \
             vercryptosoftware='"+str(vercryptosoftware)+"' and verpfesupportcommon='"+str(verpfesupportcommon)+"' and \
             verdoc='"+str(verdoc)+"' and versoftwarerelease='"+str(versoftwarerelease)+"' and \
@@ -1235,8 +1237,8 @@ class Querybuilder:
         nghbrif = vc_vcp_stat_data.get('nghbrif', "")
         type = vc_vcp_stat_data.get('type', "")
         speed = vc_vcp_stat_data.get("speed", 0)
-        ngbhr = vc_vcp_stat_data.get("ngbhr", 0)
+        nghbr = vc_vcp_stat_data.get("nghbr", 0)
         self.command_query = ""
         self.command_query = " and memberid='"+str(memberid)+"' and interface='"+str(interface)+"' and type='"+str(type)+"' \
                              and trunk='"+str(trunk)+"' and status='"+str(status)+"'  and speed="+str(speed)+" \
-                             and nghbr="+str(ngbhr)+" and nghbrif='"+str(nghbrif)+"' "
+                             and nghbr='"+str(nghbr)+"' and nghbrif='"+str(nghbrif)+"' "
