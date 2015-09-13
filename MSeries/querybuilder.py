@@ -1179,7 +1179,7 @@ class Querybuilder:
         verkernelsoftware = sys_ver_data.get("JUNOS Kernel Software Suite", "not found")
         vercryptosoftware = sys_ver_data.get("JUNOS Crypto Software Suite", "not found")
         verpfesupportcommon = sys_ver_data.get("JUNOS Packet Forwarding Engine Support", "not found")
-        verpfesupportcommon = "not found"
+        #verpfesupportcommon = "not found"
         verdoc = sys_ver_data.get("JUNOS Online Documentation", "not found")
         versoftwarerelease = sys_ver_data.get("JUNOS platform Software Suite", "not found")
         verroutingsoftware = sys_ver_data.get("JUNOS Routing Software Suite", "not found")

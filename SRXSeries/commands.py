@@ -1832,7 +1832,6 @@ class Commands:
                     record_count += 1
         #print json.dumps(self.vc_vcp_stat_data, indent=4)
 
-    # For SRX display xml
     def get_ch_cluster_stat_data(self):
         # hi#
         output = ""
@@ -1872,24 +1871,22 @@ class Commands:
                     record_count += 1
         #print json.dumps(self.ch_cluster_stat_data, indent=4)
 
-    # For SRX display xml
     def get_ch_fab_plane_data(self):
         # hi#
         output = ""
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
                 # show chassis fabric plane
-                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+plane.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+plane$", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        #print output
         if "error: command is not valid" in output:
             output = ""
         self.output = output.split("\n")
-        print self.output
+        #print self.output
         output = output.split("\n")
         chassisname = ""
         planenum = ""
@@ -1900,7 +1897,6 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                print(line)
                 m = re.match(r'(node[0-9]+.*:)', line, re.M|re.I)
                 if m:
                     chassisname = m.groups(0)[0]
@@ -1930,7 +1926,6 @@ class Commands:
                     record_count += 1
         #print json.dumps(self.ch_fab_plane_data, indent=4)
 
-    # For SRX display xml
     def get_fab_fpc_data(self):
         # hi#
         output = ""
@@ -1943,8 +1938,9 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        if "error: command is not valid" in output:
+        if "error: command is not valid" in output or "Fabric management FPC state" in output:
             output = ""
+        #print output
         self.output = output.split("\n")
         output = output.split("\n")
         chassisname = ""
@@ -1955,7 +1951,6 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                print(line)
                 m = re.match(r'(node[0-9]+.*:)', line, re.M|re.I)
                 if m:
                     chassisname = m.groups(0)[0]
@@ -2019,7 +2014,7 @@ class Commands:
                     self.fab_fpc_data[record_count]["fpcnum"] = fpcnum
                     self.fab_fpc_data[record_count]["pfenum"] = pfenum
                     record_count += 1
-        #print json.dumps(self.ch_fab_plane_data, indent=4)
+        #print json.dumps(self.fab_fpc_data, indent=4)
 
     # For SRX display xml
     def get_fab_sibs_data(self):
@@ -2028,7 +2023,7 @@ class Commands:
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
                 # show chassis fabric plane
-                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+sibs", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fabric\\s+sibs.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -2047,7 +2042,6 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                print(line)
                 m = re.match(r'sib[ \t]+#([0-9]+)', line, re.M|re.I)
                 if m:
                     sibnum = m.groups(0)[0]
@@ -2077,7 +2071,7 @@ class Commands:
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
                 # show chassis fpc-feb-connectivity
-                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fpc.feb.connectivity", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fpc.feb.connectivity.*", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -2096,7 +2090,6 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                print(line)
                 m = re.match(r'([0-9]+)\s+(cFPC)\s+([a-z]+)\s+([0-9]+)\s+([a-z]+)\s+([a-z]+)', line, re.M|re.I)
                 if m:
                     fpc          = m.groups(0)[0]
@@ -2163,16 +2156,15 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                print(line)
                 m = re.match(r'Plane\s+([0-9]+)\s+Control\s+Board\s+([0-9]+)', line, re.M|re.I)
                 if m:
                     plane          = m.groups(0)[0]
                     controlboard      = m.groups(0)[1]
                     self.fab_pl_loc_data[record_count] = {}
                     self.fab_pl_loc_data[record_count]["plane"] = plane
-                    self.fab_pl_loc_data[record_count]["controlborad"] = controlboard
+                    self.fab_pl_loc_data[record_count]["controlboard"] = controlboard
                     record_count += 1
-        #print json.dumps(self.fpc_feb_conn_data, indent=4)
+        #print json.dumps(self.fab_pl_loc_data, indent=4)
 
     def get_eth_sw_data(self):
         # hi#
@@ -2188,13 +2180,24 @@ class Commands:
                 output += line
         if "error: command is not valid" in output:
             output = ""
+        #print output
         self.output = output.split("\n")
         output = output.split("\n")
         record_count = 0
         for line in output:
             if line.strip():
-                print(line)
-                m = re.match(r'Link\s+is\s+(.*)[ \t]+on[ \t]+GE\s+port\s+([0-9]+)[ \t]+connected[ \t]+to[ \t]+device:[ \t]+(.*)\r$', line, re.M|re.I)
+                m = re.match(r'Link\s+is\s+(.*)\s+on\s+GE\s+port\s+([0-9]+)\s+connected\s+to\s+device:\s+(.*)', line, re.M|re.I)
+                if m:
+                    print line
+                    linkstatus    = m.groups(0)[0]
+                    linkport      = m.groups(0)[1]
+                    linkdevice    = m.groups(0)[2]
+                    self.eth_sw_data[record_count] = {}
+                    self.eth_sw_data[record_count]["linkstatus"] = linkstatus
+                    self.eth_sw_data[record_count]["linkport"] = linkport
+                    self.eth_sw_data[record_count]["linkdevice"] = linkdevice
+                    record_count += 1
+                m = re.match(r'Link\s+is\s+(.*)\s+on\s+XE\s+port\s+([0-9]+)\s+connected\s+to\s+device:\s+(.*)', line, re.M|re.I)
                 if m:
                     linkstatus    = m.groups(0)[0]
                     linkport      = m.groups(0)[1]
@@ -2204,76 +2207,16 @@ class Commands:
                     self.eth_sw_data[record_count]["linkport"] = linkport
                     self.eth_sw_data[record_count]["linkdevice"] = linkdevice
                     record_count += 1
-                m = re.match(r'Link\s+is\s+(.*)[ \t]+on[ \t]+XE\s+port\s+([0-9]+)[ \t]+connected[ \t]+to[ \t]+device:[ \t]+(.*)\r$', line, re.M|re.I)
-                if m:
-                    linkstatus    = m.groups(0)[0]
-                    linkport      = m.groups(0)[1]
-                    linkdevice    = m.groups(0)[2]
-                    self.eth_sw_data[record_count] = {}
-                    self.eth_sw_data[record_count]["linkstatus"] = linkstatus
-                    self.eth_sw_data[record_count]["linkport"] = linkport
-                    self.eth_sw_data[record_count]["linkdevice"] = linkdevice
-                    record_count += 1
-                m = re.match(r'Speed[ \t]+is[ \t]+(.*)\r$', line, re.M|re.I)
+                m = re.match(r'Speed\s+is\s+(.*)', line.strip(), re.M|re.I)
                 if m:
                     linkspeed     = m.groups(0)[0]
                     self.eth_sw_data[record_count] = {}
                     self.eth_sw_data[record_count]["linkspeed"] = linkspeed
                     record_count += 1
-                m = re.match(r'Duplex[ \t]+is[ \t]+(.*)\r$', line, re.M|re.I)
+                m = re.match(r'Duplex\s+is\s+(.*)', line.strip(), re.M|re.I)
                 if m:
                     linkduplex     = m.groups(0)[0]
                     self.eth_sw_data[record_count] = {}
                     self.eth_sw_data[record_count]["linkduplex"] = linkduplex
                     record_count += 1
         #print json.dumps(self.eth_sw_data, indent=4)
-
-    #####################################################################################
-
-    def getNHDBZones(self):
-        #   root@sn-space-mx320-sys> request pfe execute command "show nhdb zones" target fpc0
-
-        #   SENT: Ukern command: show nhdb zones
-        #   GOT:
-        #   GOT: Chip  Start   Size   Rsvd   Used/Hi Water/Total  Size  Name
-        #   GOT: ----  -----  -----  -----  --------------------  ----  ----
-        #   GOT:    0  200000  200000  00000           0/0/2097024     1  Multicast Lists
-        #   GOT:    0  400000  400000  00200         14/14/4194176     2  L2 Descriptors
-        #   GOT:    0  250000  00200  00000                3/3/64     8  L2 Programs
-        #   GOT:    1  200000  200000  00000           0/0/2097024     1  Multicast Lists
-        #   GOT:    1  400000  400000  00200           0/0/4194176     2  L2 Descriptors
-        #   GOT:    1  250000  00200  00000                1/1/64     8  L2 Programs
-        #   LOCAL: End of file
-        if self.product.startswith("*"):
-            output = ""
-            device = ""
-            devicenum = ""
-            with open(self.file_name, "rb") as fopen:
-                for line in fopen:
-                    if not re.match(".*@.*>\\s+request\\s+pfe\\s+execute\\s+command\\s+\"show\\s+nhdb\\s+zones.*", line, re.M | re.I) == None:
-                        output = output + line
-                        break
-                for line in fopen:
-                    if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
-                        break
-                    if line.strip():
-                        output = output + line
-            #print output
-            chassisname = ""
-            output = output.split("\n")
-            record_count = 0
-            for line in output:
-                if line.strip():
-                    m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:)', line, re.M|re.I)
-                    if m:
-                        chassisname = m.groups(0)[0]
-                    m = re.match(".*@.*>\\s+request\\s+pfe\\s+execute\\s+command\\s+\"show\\s+nhdb\\s+zones.*target\\s+([a-z]+)(\d+)$", line, re.M | re.I)
-                    if m:
-                        device = m.groups(0)[0]
-                        devicenum = m.groups(0)[1]
-                    m = re.match(r'\S+:\s+(?P<nhdbchip>\d+)\s+(?P<nhdbstart>\d+)\s+(?P<nhdbsize1>\d+)\s+(?P<nhdbrsvd>\d+)\s+(?P<nhdbused>\d+)/(?P<nhdbhiwater>\d+)/(?P<nhdbtotal>\d+)\s+(?P<nhdbsize2>\d+)\s+(?P<nhdbname>.*)$', line.strip(), re.M|re.I)
-                    if m:
-                        self.nhdb_zones[record_count] = m.groupdict()
-                        self.nhdb_zones[record_count]["device"] = device
-                        self.nhdb_zones[record_count]["devicenum"] = devicenum
-                        record_count = record_count + 1

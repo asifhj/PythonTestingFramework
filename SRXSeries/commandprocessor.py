@@ -261,6 +261,9 @@ if __name__ == "__main__":
     fab_pl_loc_data = 1
     eth_sw_data = 1
 
+
+
+
     report = []
     file_report = []
 
@@ -2379,6 +2382,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show system license | display xml")
+                        command_report.append("sys_license_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
