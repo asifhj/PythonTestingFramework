@@ -1832,6 +1832,7 @@ class Commands:
                     record_count += 1
         #print json.dumps(self.vc_vcp_stat_data, indent=4)
 
+
     def get_ch_cluster_stat_data(self):
         # hi#
         output = ""
@@ -1853,13 +1854,13 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'<control-interface-index>(.*)<\/control-interface-index>', line, re.M|re.I)
+                m = re.match(r'<control-interface-index>(.*)<\/control-interface-index>', line.strip(), re.M|re.I)
                 if m:
                     control_interface_index = m.groups(0)[0]
-                m = re.match(r'<heartbeat-errors>(.*)<\/heartbeat-errors>', line, re.M|re.I)
+                m = re.match(r'<heartbeat-errors>(.*)<\/heartbeat-errors>', line.strip(), re.M|re.I)
                 if m:
                     control_interface_index = m.groups(0)[0]
-                m = re.match(r'<fabric-probe-errors>(.*)<\/fabric-probe-errors>', line, re.M|re.I)
+                m = re.match(r'<fabric-probe-errors>(.*)<\/fabric-probe-errors>', line.strip(), re.M|re.I)
                 if m:
                     control_interface_index = m.groups(0)[0]
                 m = re.match(r'<\/chassis-cluster-interfaces>', line, re.M|re.I)
@@ -1897,10 +1898,10 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'(node[0-9]+.*:)', line, re.M|re.I)
+                m = re.match(r'(node[0-9]+.*:)', line.strip(), re.M|re.I)
                 if m:
                     chassisname = m.groups(0)[0]
-                m = re.match(r'Fabric management PLANE state.*', line, re.M|re.I)
+                m = re.match(r'Fabric management PLANE state.*', line.strip(), re.M|re.I)
                 if m:
                     chassisname = "NULL"
                 m = re.match(r'Plane\s+([0-9]+)', line, re.M|re.I)
@@ -1951,10 +1952,10 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'(node[0-9]+.*:)', line, re.M|re.I)
+                m = re.match(r'(node[0-9]+.*:)', line.strip(), re.M|re.I)
                 if m:
                     chassisname = m.groups(0)[0]
-                m = re.match(r'Fabric management FPC state.*', line, re.M|re.I)
+                m = re.match(r'Fabric management FPC state.*', line.strip(), re.M|re.I)
                 if m:
                     chassisname = "NULL"
                 m = re.match(r'fpc[ \t]+#?([0-9]+)', line.strip(), re.M|re.I)
@@ -2042,13 +2043,13 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'sib[ \t]+#([0-9]+)', line, re.M|re.I)
+                m = re.match(r'sib[ \t]+#([0-9]+)', line.strip(), re.M|re.I)
                 if m:
                     sibnum = m.groups(0)[0]
-                m = re.match(r'plane state:[ \t]+(.*)\r$', line, re.M|re.I)
+                m = re.match(r'plane state:[ \t]+(.*)', line.strip(), re.M|re.I)
                 if m:
                     planestate = m.groups(0)[0]
-                m = re.match(r'fpc[ \t]+#([0-9]+)', line, re.M|re.I)
+                m = re.match(r'fpc[ \t]+#([0-9]+)', line.strip(), re.M|re.I)
                 if m:
                     fpcnum = m.groups(0)[0]
                 m = re.match(r'pfe[ \t]+#([0-9]+)[ \t]+:[ \t]+(.*)', line.strip(), re.M|re.I)
@@ -2071,7 +2072,7 @@ class Commands:
         with open(self.file_name, "rb") as fopen:
             for line in fopen:
                 # show chassis fpc-feb-connectivity
-                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fpc.feb.connectivity.*", line, re.M | re.I) == None:
+                if not re.match(".*@.*>\\s+show\\s+chassis\\s+fpc.feb.connectivity", line, re.M | re.I) == None:
                     break
             for line in fopen:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
@@ -2090,7 +2091,7 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'([0-9]+)\s+(cFPC)\s+([a-z]+)\s+([0-9]+)\s+([a-z]+)\s+([a-z]+)', line, re.M|re.I)
+                m = re.match(r'([0-9]+)\s+(cFPC)\s+([a-z]+)\s+([0-9]+)\s+([a-z]+)\s+([a-z]+)', line.strip(), re.M|re.I)
                 if m:
                     fpc          = m.groups(0)[0]
                     fpctype      = m.groups(0)[1]
@@ -2105,7 +2106,7 @@ class Commands:
                     self.fpc_feb_conn_data[record_count]["febstate"] = febstate
                     self.fpc_feb_conn_data[record_count]["linkstatus"] = linkstatus
                     record_count += 1
-                m = re.match(r'([0-9]+)\s+Empty\s+([0-9]+)\s+([a-z]+)', line, re.M|re.I)
+                m = re.match(r'([0-9]+)\s+Empty\s+([0-9]+)\s+([a-z]+)', line.strip(), re.M|re.I)
                 if m:
                     fpc          = m.groups(0)[0]
                     fpctype      = ""
@@ -2120,7 +2121,7 @@ class Commands:
                     self.fpc_feb_conn_data[record_count]["febstate"] = febstate
                     self.fpc_feb_conn_data[record_count]["linkstatus"] = linkstatus
                     record_count += 1
-                m = re.match(r'([0-9]+)\s+(Type\s*[0-9]+)\s+([a-z]+)\s+([0-9]+)\s+([a-z]+)\s+([a-z]+)', line, re.M|re.I)
+                m = re.match(r'([0-9]+)\s+(Type\s*[0-9]+)\s+([a-z]+)\s+([0-9]+)\s+([a-z]+)\s+([a-z]+)', line.strip(), re.M|re.I)
                 if m:
                     fpc          = m.groups(0)[0]
                     fpctype      = m.groups(0)[1]
@@ -2156,7 +2157,7 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'Plane\s+([0-9]+)\s+Control\s+Board\s+([0-9]+)', line, re.M|re.I)
+                m = re.match(r'Plane\s+([0-9]+)\s+Control\s+Board\s+([0-9]+)', line.strip(), re.M|re.I)
                 if m:
                     plane          = m.groups(0)[0]
                     controlboard      = m.groups(0)[1]
@@ -2186,7 +2187,7 @@ class Commands:
         record_count = 0
         for line in output:
             if line.strip():
-                m = re.match(r'Link\s+is\s+(.*)\s+on\s+GE\s+port\s+([0-9]+)\s+connected\s+to\s+device:\s+(.*)', line, re.M|re.I)
+                m = re.match(r'Link\s+is\s+(.*)\s+on\s+GE\s+port\s+([0-9]+)\s+connected\s+to\s+device:\s+(.*)', line.strip(), re.M|re.I)
                 if m:
                     print line
                     linkstatus    = m.groups(0)[0]
@@ -2197,7 +2198,7 @@ class Commands:
                     self.eth_sw_data[record_count]["linkport"] = linkport
                     self.eth_sw_data[record_count]["linkdevice"] = linkdevice
                     record_count += 1
-                m = re.match(r'Link\s+is\s+(.*)\s+on\s+XE\s+port\s+([0-9]+)\s+connected\s+to\s+device:\s+(.*)', line, re.M|re.I)
+                m = re.match(r'Link\s+is\s+(.*)\s+on\s+XE\s+port\s+([0-9]+)\s+connected\s+to\s+device:\s+(.*)', line.strip(), re.M|re.I)
                 if m:
                     linkstatus    = m.groups(0)[0]
                     linkport      = m.groups(0)[1]
