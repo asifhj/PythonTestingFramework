@@ -741,6 +741,63 @@ class Commands:
                     record_count += 1
         #print json.dumps(self.nhdb_zones, indent=4)
 
+    def get_pfe_err_ichip(self):
+        #   root@sn-space-mx320-sys> request pfe execute command "show nhdb zones" target fpc0
+
+        #   SENT: Ukern command: show nhdb zones
+        #   GOT:
+        #   GOT: Chip  Start   Size   Rsvd   Used/Hi Water/Total  Size  Name
+        #   GOT: ----  -----  -----  -----  --------------------  ----  ----
+        #   GOT:    0  200000  200000  00000           0/0/2097024     1  Multicast Lists
+        #   GOT:    0  400000  400000  00200         14/14/4194176     2  L2 Descriptors
+        #   GOT:    0  250000  00200  00000                3/3/64     8  L2 Programs
+        #   GOT:    1  200000  200000  00000           0/0/2097024     1  Multicast Lists
+        #   GOT:    1  400000  400000  00200           0/0/4194176     2  L2 Descriptors
+        #   GOT:    1  250000  00200  00000                1/1/64     8  L2 Programs
+        #   LOCAL: End of file
+        #if self.product.startswith(""):
+        output = ""
+        device = ""
+        devicenum = ""
+        with open(self.file_name, "rb") as fopen:
+            for line in fopen:
+                if not re.match(".*@.*>\s+show\s+pfe\s+statistics\s+error.*", line, re.M | re.I) == None:
+                    output = output + line
+                    break
+            for line in fopen:
+                if not re.match(".*@.*>\s+show\s.*", line, re.M | re.I) == None:
+                    break
+                if line.strip():
+                    output = output + line
+        #print output
+        slot = ""
+        ichip_spi4_tx_errors = ""
+        ichip_spi4_rx_errors = ""
+        ichip_wan_side_errors = ""
+        output = output.split("\n")
+        self.output = output
+        record_count = 0
+        for line in output:
+            if line.strip():
+                m = re.match(r'slot\s+([0-9]+)', line, re.M|re.I)
+                if m:
+                    slot = m.groups(0)[0]
+                m = re.match("spi4\s+tx\s+errors:\s+([0-9]+)", line, re.M | re.I)
+                if m:
+                    ichip_spi4_tx_errors = m.groups(0)[0]
+                m = re.match("spi4\s+rx\s+errors:\s+([0-9]+)", line, re.M | re.I)
+                if m:
+                    ichip_spi4_rx_errors = m.groups(0)[0]
+                m = re.match(r'wan\s+side\s+errors:\s+([0-9]+)', line.strip(), re.M|re.I)
+                if m:
+                    ichip_wan_side_errors = m.groupdict(0)[0]
+                    self.pfe_err_ichip[record_count]["slot"] = slot
+                    self.pfe_err_ichip[record_count]["ichip_spi4_tx_errors"] = ichip_spi4_tx_errors
+                    self.pfe_err_ichip[record_count]["ichip_spi4_rx_errors"] = ichip_spi4_rx_errors
+                    self.pfe_err_ichip[record_count]["ichip_wan_side_errors"] = ichip_wan_side_errors
+                    record_count += 1
+        #print json.dumps(self.nhdb_zones, indent=4)
+
     def get_pfe_heap_mem(self):
         output = ""
         with open(self.file_name, "rb") as fopen:

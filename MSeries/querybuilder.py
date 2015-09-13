@@ -316,8 +316,16 @@ class Querybuilder:
         and nhdbsize2"+str(" is NULL" if nhdbsize2=="" else "='"+str(nhdbsize2)+"'" )+" \
         and nhdbname"+str(" is NULL" if nhdbname=="" else "='"+str(nhdbname)+"'" )+" "
 
-        
-        query = " order by collector_time"
+    def build_pfe_err_ichip_query(self, pfe_err_ichip):
+        slot = pfe_err_ichip.get("slot","")
+        ichip_spi4_tx_errors = pfe_err_ichip.get("ichip_spi4_tx_errors", 0)
+        ichip_spi4_rx_errors = pfe_err_ichip.get("ichip_spi4_rx_errors", 0)
+        ichip_wan_side_errors = pfe_err_ichip.get("ichip_wan_side_errors","")
+        nhdbsize1 = pfe_err_ichip.get("nhdbsize1","")
+        self.command_query = " and slot="+str(slot)+" \
+        and ichip_spi4_tx_errors="+str(ichip_spi4_tx_errors)+"  \
+        and ichip_spi4_rx_errors="+str(ichip_spi4_rx_errors)+"  \
+        and ichip_wan_side_errors="+str(ichip_wan_side_errors)+" "
 
     def build_pfe_heap_mem_query(self, pfe_heap_mem):
         pfeheapfree = pfe_heap_mem.get("pfeheapfree", "")

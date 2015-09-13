@@ -1355,6 +1355,64 @@ if __name__ == "__main__":
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
 
+                # pfe_err_ichip
+                if pfe_err_ichip==1:
+                    # Command error on MX series
+                    C.get_pfe_err_ichip()
+                    cur.execute("refresh pfe_err_ichip")
+                    how_many = len(C.pfe_err_ichip)
+                    #print json.dumps(C.pfe_err_ichip, indent=4)
+                    for i in range (0,how_many):
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append('show pfe statistics error')
+                        command_report.append("pfe_err_ichip")
+                        status = []
+                        status.append("pfe_err_ichip")
+                        status.append(C.phdct_utc)
+                        C.build_common_query("pfe_err_ichip")
+                        C.build_pfe_err_ichip_query(C.pfe_err_ichip[i])
+                        #print json.dumps(C.pfe_err_ichip, indent=4)
+                        query = C.common_query + C.command_query
+                        print query
+                        cur.execute(query)
+                        result_set = cur.fetchall()
+                        if len(result_set) < 1:
+                            print "\n\t\t\t\t\t\t******************No pfe_err_ichip Match Found*********************"
+                            status.append("NA")
+                            print "\t\t\t\t\t\t\t\t"+C.phdct_utc
+                            cur.execute(C.common_query)
+                            result_set = cur.fetchall()
+                            if len(result_set) < 1:
+                                command_report = C.command_report1(C, command_report)
+                            else:
+                                command_report = C.command_report2(C, command_report, result_set)
+                            status.append("pfe_err_ichip No Match Found")
+                        else:
+                            print "\n\t\t\t\t\t\t******************pfe_err_ichip Match Found*********************"
+                            # C.tabulate_print(result_set)
+                            #print result_set
+                            status.append(result_set[0][2])
+                            command_report = C.command_report3(C, command_report, result_set)
+                            status.append("pfe_err_ichip Match Found")
+                        if print_query==1:
+                            print query
+                        if print_data==1:
+                            print json.dumps(C.fpc_data[i], indent=4)
+                        if print_output==1:
+                            print C.output
+                        status.append(phc)
+                        summary.append(status)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+                    #print C.pfe_err_ichip
+                    if len(C.output)==1:
+                        command_report.append(str(phc.replace(phcs_home_dir,"")))
+                        command_report.append('show pfe statistics error')
+                        command_report.append("pfe_err_ichip")
+                        command_report = C.command_report4(command_report)
+                        file_report.append(command_report)
+                        command_report = C.report_writer(writer, command_report)
+
                 # pfe_heap_mem
                 if pfe_heap_mem==1:
                     # Command error on MX series

@@ -1242,3 +1242,79 @@ class Querybuilder:
         self.command_query = " and memberid='"+str(memberid)+"' and interface='"+str(interface)+"' and type='"+str(type)+"' \
                              and trunk='"+str(trunk)+"' and status='"+str(status)+"'  and speed="+str(speed)+" \
                              and nghbr='"+str(nghbr)+"' and nghbrif='"+str(nghbrif)+"' "
+
+    def build_ch_cluster_stat_data_query(self, ch_cluster_stat_data):
+        control_interface_index = ch_cluster_stat_data.get('control_interface_index', "")
+        heartbeats_errors = ch_cluster_stat_data.get('heartbeats_errors', "")
+        fabric_probe_errors = ch_cluster_stat_data.get('fabric_probe_errors', 0)
+        self.command_query = ""
+        self.command_query = " and control_interface_index='"+str(control_interface_index)+"' and heartbeats_errors='"+str(heartbeats_errors)+"' \
+         and fabric_probe_errors='"+str(fabric_probe_errors)+"'"
+
+    def build_ch_fab_plane_data_query(self, ch_fab_plane_data):
+        chassisname = ch_fab_plane_data.get('chassisname', "")
+        planenum = ch_fab_plane_data.get('planenum', 0)
+        planestate = ch_fab_plane_data.get('planestate', "")
+        fpcnum = ch_fab_plane_data.get('fpcnum', 0)
+        pfenum = ch_fab_plane_data.get('pfenum', 0)
+        linkstate = ch_fab_plane_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else " is "+str(chassisname)+"" )+" \
+         and planenum="+str(planenum)+" \
+         and planestate='"+str(planestate)+"' and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" \
+         and linkstate='"+str(linkstate)+"'"
+
+    def build_ch_fab_plane_data_query(self, fab_fpc_data):
+        chassisname = fab_fpc_data.get('chassisname', "")
+        planenum = fab_fpc_data.get('planenum', 0)
+        planestate = fab_fpc_data.get('planestate', "")
+        fpcnum = fab_fpc_data.get('fpcnum', 0)
+        pfenum = fab_fpc_data.get('pfenum', 0)
+        self.command_query = ""
+        self.command_query = " and chassisname"+str(" is NULL" if chassisname=="" else " is "+str(chassisname)+"" )+" \
+         and planenum="+str(planenum)+" \
+         and planestate='"+str(planestate)+"' and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" "
+
+    def build_fab_sibs_data_query(self, fab_sibs_data):
+        sibnum = fab_sibs_data.get('sibnum', "")
+        planestate = fab_sibs_data.get('planestate', "")
+        fpcnum = fab_sibs_data.get('fpcnum', 0)
+        pfenum = fab_sibs_data.get('pfenum', 0)
+        linkstate = fab_sibs_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and sibnum="+str(sibnum)+" \
+         and fpcnum="+str(fpcnum)+" and pfenum="+str(pfenum)+" \
+         and planestate='"+str(planestate)+"' \
+         and linkstate='"+str(linkstate)+"' "
+
+    def build_fpc_feb_conn_data_query(self, fpc_feb_conn_data):
+        fpc = fpc_feb_conn_data.get('fpc', "")
+        fpctype = fpc_feb_conn_data.get('fpctype', "")
+        fpcstate = fpc_feb_conn_data.get('fpcstate', "")
+        connectfeb = fpc_feb_conn_data.get('connectfeb', "")
+        febstate = fpc_feb_conn_data.get('febstate', "")
+        linkstate = fpc_feb_conn_data.get('linkstate', "")
+        self.command_query = ""
+        self.command_query = " and fpc="+str(fpc)+" \
+         and fpctype='"+str(fpctype)+"' and fpcstate='"+str(fpcstate)+"' and connectfeb="+str(connectfeb)+" and \
+         febstate='"+str(febstate)+"' and linkstate='"+str(linkstate)+"'"
+
+    def build_fab_pl_loc_data_query(self, fab_pl_loc_data):
+        plane = fab_pl_loc_data.get('plane', 0)
+        controlboard = fab_pl_loc_data.get('controlboard', 0)
+        self.command_query = ""
+        self.command_query = " and plane="+str(plane)+" \
+         and controlboard="+str(controlboard)+" "
+
+    def build_eth_sw_data_query(self, eth_sw_data):
+        linkstatus = eth_sw_data.get('linkstatus', "")
+        linkport = eth_sw_data.get('linkport', 0)
+        linkdevice = eth_sw_data.get('linkdevice', "")
+        linkspeed = eth_sw_data.get('linkspeed', "")
+        linkduplex = eth_sw_data.get('linkduplex', "")
+        self.command_query = ""
+        self.command_query = " and linkstatus"+str(" is NULL" if linkstatus=="" else "='"+str(linkstatus)+"'" )+" \
+         and linkport="+str(linkport)+" \
+         and linkdevice"+str(" is NULL" if linkdevice=="" else "='"+str(linkdevice)+"'" )+" and \
+          linkspeed"+str(" is NULL" if linkspeed=="" else "='"+str(linkspeed)+"'" )+" and \
+          linkduplex"+str(" is NULL" if linkduplex=="" else "='"+str(linkduplex)+"'" )+" "
