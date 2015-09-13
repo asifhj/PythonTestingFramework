@@ -425,33 +425,7 @@ class Commands:
                     record_count = record_count + 1
         #print json.dumps(self.eth_sw_tbl_summ_data, indent=4)
 
-    def get_stp_stats_data(self):
-        output = ""
-        with open(self.file_name, "rb") as fopen:
-            for line in fopen:
-                if not re.match(".*@.*>\\s+show\\s+spanning\-tree\\s+bridge\\s+brief.*", line, re.M | re.I) == None:
-                    break
-            for line in fopen:
-                if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
-                    break
-                if line.strip():
-                    output = output + line
-        if output.startswith("Spanning-tree is not enabled at global level."):
-            output=['']
-        #output = output.split("\n")
-        self.output = output.split("\n")
-        record_count = 0
-        #print output
-        for line in output.split("\n"):
-            if line.strip():
-                m = re.match(r'Number\s+of\s+topology\s+changes\s+:\s+(?P<numberoftopologychanges>\d+)', line.strip(), re.M|re.I)
-                if m:
-                    self.stp_stats_data[record_count] = m.groupdict()
-                m = re.match(r'Time\s+since\s+last\s+topology\s+change\s+:\s+(?P<timesincelasttopologychange>\d+)', line.strip(), re.M|re.I)
-                if m:
-                    self.stp_stats_data[record_count] = m.groupdict()
-                record_count = record_count + 1
-        #print json.dumps(self.stp_stats_data, indent=4)
+
 
     def get_fan_data(self):
         # env_data
@@ -1176,7 +1150,7 @@ class Commands:
                 if line.strip():
                     output = output + line
         if output.startswith("Spanning-tree is not enabled at global level."):
-            output=['']
+            output=""
         #output = output.split("\n")
         self.output = output.split("\n")
 
@@ -1770,7 +1744,8 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        print output
+        if "error: command is not valid" in output:
+            output = ""
         self.output = output.split("\n")
         output = output.split("\n")
         control_interface_index = ""
@@ -1795,7 +1770,7 @@ class Commands:
                     self.ch_cluster_stat_data[record_count]["heartbeats_errors"] = heartbeats_errors
                     self.ch_cluster_stat_data[record_count]["fabric_probe_errors"] = fabric_probe_errors
                     record_count += 1
-        print json.dumps(self.ch_cluster_stat_data, indent=4)
+        #print json.dumps(self.ch_cluster_stat_data, indent=4)
 
     # For SRX display xml
     def get_ch_fab_plane_data(self):
@@ -1811,7 +1786,10 @@ class Commands:
                     break
                 output += line
         #print output
+        if "error: command is not valid" in output:
+            output = ""
         self.output = output.split("\n")
+        print self.output
         output = output.split("\n")
         chassisname = ""
         planenum = ""
@@ -1865,7 +1843,8 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        print output
+        if "error: command is not valid" in output:
+            output = ""
         self.output = output.split("\n")
         output = output.split("\n")
         chassisname = ""
@@ -1940,7 +1919,7 @@ class Commands:
                     self.fab_fpc_data[record_count]["fpcnum"] = fpcnum
                     self.fab_fpc_data[record_count]["pfenum"] = pfenum
                     record_count += 1
-        print json.dumps(self.ch_fab_plane_data, indent=4)
+        #print json.dumps(self.ch_fab_plane_data, indent=4)
 
     # For SRX display xml
     def get_fab_sibs_data(self):
@@ -1955,7 +1934,8 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        #print output
+        if "error: command is not valid" in output:
+            output = ""
         self.output = output.split("\n")
         output = output.split("\n")
         sibnum = ""
@@ -2003,7 +1983,8 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        #print output
+        if "error: command is not valid" in output:
+            output = ""
         self.output = output.split("\n")
         output = output.split("\n")
         fpc          = ""
@@ -2061,7 +2042,7 @@ class Commands:
                     self.fpc_feb_conn_data[record_count]["febstate"] = febstate
                     self.fpc_feb_conn_data[record_count]["linkstatus"] = linkstatus
                     record_count += 1
-        print json.dumps(self.fpc_feb_conn_data, indent=4)
+        #print json.dumps(self.fpc_feb_conn_data, indent=4)
 
     def get_fab_pl_loc_data(self):
         # hi#
@@ -2075,7 +2056,8 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        #print output
+        if "error: command is not valid" in output:
+            output = ""
         self.output = output.split("\n")
         output = output.split("\n")
         record_count = 0
@@ -2090,7 +2072,7 @@ class Commands:
                     self.fab_pl_loc_data[record_count]["plane"] = plane
                     self.fab_pl_loc_data[record_count]["controlborad"] = controlboard
                     record_count += 1
-        print json.dumps(self.fpc_feb_conn_data, indent=4)
+        #print json.dumps(self.fpc_feb_conn_data, indent=4)
 
     def get_eth_sw_data(self):
         # hi#
@@ -2104,7 +2086,8 @@ class Commands:
                 if not re.match(".*@.*>\\s+show.*", line, re.M | re.I) == None:
                     break
                 output += line
-        #print output
+        if "error: command is not valid" in output:
+            output = ""
         self.output = output.split("\n")
         output = output.split("\n")
         record_count = 0
@@ -2143,7 +2126,7 @@ class Commands:
                     self.eth_sw_data[record_count] = {}
                     self.eth_sw_data[record_count]["linkduplex"] = linkduplex
                     record_count += 1
-        print json.dumps(self.eth_sw_data, indent=4)
+        #print json.dumps(self.eth_sw_data, indent=4)
 
     #####################################################################################
 

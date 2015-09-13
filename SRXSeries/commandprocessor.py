@@ -261,77 +261,13 @@ if __name__ == "__main__":
     fab_pl_loc_data = 1
     eth_sw_data = 1
 
-    arp_data = 0
-    buff_data = 0
-    ch_alarm_data = 0
-    ch_fab_map_data = 0
-    ch_fab_sum_data = 0
-    ch_fpc_pic_data = 0
-    ch_hard_data = 0
-    env_data = 0
-    eth_sw_err_age_msg_data = 0
-    eth_sw_stat_maclrnerr_data = 0
-    eth_sw_tbl_summ_data = 0
-    fan_data = 0
-    fpc_data = 0
-    ipsec_stats_data = 0
-    jtree_mem = 0
-    krt_q = 0
-    krt_st = 0
-    mpc_jnh_summ_data = 0
-    nhdb_zones = 0
-    pfe_err_ichip = 0
-    pfe_err_ichip_mx = 0
-    pfe_err_lchip = 0
-    pfe_heap_mem = 0
-    pfe_st_err = 0
-    pfe_st_notif_data = 0
-    pfe_tr_data = 0
-    proc_mem_data = 0
-    ps_data = 0
-    pwr_data = 0
-    re_data = 0
-    rt_sum_data = 0
-    sec_alg_st_data = 0
-    sec_nat_intf_nat_prts_data = 0
-    sec_utm_aspam_stats_data = 0
-    sec_utm_av_st_data = 0
-    sec_utm_av_stats_data = 0
-    sec_utm_st_data = 0
-    sec_utm_web_st_data = 0
-    sec_utm_web_stat_data = 0
-    sh_mem_frag_data = 0
-    stp_stats_data = 0
-    sys_cores_data = 0
-    sys_license_data = 0
-    sys_stats_data = 0
-    sys_stor_data = 0
-    sys_ver_data = 0
-    sys_vm_swap = 0
-    task_io_data = 0
-    task_mem_data = 0
-    ukern_trace_mem_comp_data = 0
-    up_data = 0
-    vc_prtcl_adj_data = 0
-    vc_prtcl_stat_data = 0
-    vc_stat_data = 0
-    vc_vcp_stat_data = 0
-    ch_cluster_stat_data = 1
-    ch_fab_plane_data = 1
-    fab_fpc_data = 1
-    fab_sibs_data = 1
-    fpc_feb_conn_data = 0
-    fab_pl_loc_data = 0
-    eth_sw_data = 0
-
-
     report = []
     file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\srx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
 
-    file = "usrx3ka_phdc_jmb_ais_health_20150831_181935.txt"
+    file = "*.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -2874,13 +2810,12 @@ if __name__ == "__main__":
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-
                 # ch_cluster_stat_data
                 if ch_cluster_stat_data==1:
                     C.get_ch_cluster_stat_data()
                     cur.execute("refresh ch_cluster_stat_data")
                     how_many = len(C.ch_cluster_stat_data)
-                    if how_many:
+                    for i in range(0, how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis cluster statistics | display xml")
                         command_report.append("ch_cluster_stat_data")
@@ -2923,6 +2858,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis cluster statistics | display xml")
+                        command_report.append("ch_cluster_stat_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -2975,6 +2911,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric plane")
+                        command_report.append("ch_fab_plane_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -3027,6 +2964,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric fpcs")
+                        command_report.append("fab_fpc_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -3079,6 +3017,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric sibs")
+                        command_report.append("fab_sibs_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -3131,6 +3070,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fpc-feb-connectivity")
+                        command_report.append("fpc_feb_conn_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -3183,6 +3123,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fabric plane-location")
+                        command_report.append("fab_pl_loc_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
@@ -3192,7 +3133,7 @@ if __name__ == "__main__":
                     C.get_eth_sw_data()
                     cur.execute("refresh eth_sw_data")
                     how_many = len(C.eth_sw_data)
-                    if how_many:
+                    for i in range(0, how_many):
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis ethernet-switch")
                         command_report.append("eth_sw_data")
@@ -3235,6 +3176,7 @@ if __name__ == "__main__":
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis ethernet-switch")
+                        command_report.append("eth_sw_data")
                         command_report = C.command_report4(command_report)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
