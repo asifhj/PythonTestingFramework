@@ -243,8 +243,8 @@ class Commands:
             if line.strip() and not line.startswith("Hardware inventory") and not line.strip()=="Item             Version  Part number  Serial number     Description":
                 if len(line)<=60:
                     while len(line)<85:
-                        line = line + " "
-                m = re.match(r'(?P<item>[\S|\s|\d]{17})(?P<version>[REV|\s\d|\s]{9})(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN]{13})(?P<serial_number>[\S|\s|BUILTIN]{18})(?P<description>.*)', line, re.M|re.I)
+                        line = line + "           "
+                m = re.match(r'(?P<item>[\S|\s|\d]{17})(?P<version>[REV|\s\d|\s|N\\A]{9})(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN|N\\A]{13})(?P<serial_number>[\S|\s|BUILTIN|N\\A]{18})(?P<description>.*)', line, re.M|re.I)
                 if m:
                     self.ch_hard_data[str(record_num)]=m.groupdict()
                     record_num = record_num + 1

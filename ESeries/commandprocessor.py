@@ -267,7 +267,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\ex1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\ex\\"
 
-    file = "ex-8200-sn1_phdc_jmb_ais_health_20150911_221933.txt"
+    file = "*.txt"
     #file = "sn-space-ex6200-sys_phdc_jmb_ais_health_20150823_091949.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -285,8 +285,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            #if size < 2:
-            if True:
+            if size < 2:
+            #if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
