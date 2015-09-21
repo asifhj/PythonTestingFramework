@@ -247,15 +247,21 @@ class Commands:
         output = output.split("\n")
         for line in output:
             if line.strip():
-                m = re.match(r'<re-name>(.*)<\/re-name>', line, re.M|re.I)
+                m = re.match(r'<re-name>(.*)<\/re-name>', line.strip(), re.M|re.I)
                 if m:
+                    print m.groups(0)
+
+                    chassisname = m.groups(0)[0]
+                m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:|fpc[0-9]+.*:|node[0-9]+:)', line.strip(), re.M | re.I)
+                if m:
+                    print m.groups(0)
                     chassisname = m.groups(0)[0]
         for record in soup.findAll("fpc"):
             children = record.findChildren()
             self.ch_fpc_pic_data[i] = {}
             for child in children:
                 self.ch_fpc_pic_data[i][child.name.strip().replace("-", "_")] = child.text.strip()
-                self.ch_fpc_pic_data[i]["chassiname"] = chassisname
+                self.ch_fpc_pic_data[i]["chassisname"] = chassisname
             i += 1
         #print json.dumps(self.ch_fpc_pic_data, indent=4)
 
@@ -484,8 +490,9 @@ class Commands:
         output = output.split("\n")
         for line in output:
             if line.strip():
-                m = re.match(r'<re-name>(.*)<\/re-name>', line, re.M|re.I)
+                m = re.match(r'<re-name>(.*)</re-name>', line.strip(), re.M|re.I)
                 if m:
+                    print m.groups(0)[0]
                     chassisname = m.groups(0)[0]
         i = 0
         for record in soup.findAll("usp-ipsec-total-statistics-information"):
@@ -1331,6 +1338,12 @@ class Commands:
             for child in children:
                 self.sys_license_data[i][child.name.strip().replace("-", "_")] = child.text.strip()
             i += 1
+        for record in soup.findAll("license-usage-summary"):
+            children = record.findChildren()
+            self.sys_license_data[i] = {}
+            for child in children:
+                self.sys_license_data[i][child.name.strip().replace("-", "_")] = child.text.strip()
+            i += 1
         #print json.dumps(self.sys_license_data, indent=4)
 
     # Only for SRX
@@ -1390,8 +1403,9 @@ class Commands:
             for line in output:
                 if line.strip():
                     #m = re.match(r'\s?(?P<alloctype>\S+):\spages\sin\suse\s+(?P<pages_in_use>\d+)\s+pages\sneeded\s(?P<pages_needed>[\d|.]+)\s+fragmentation\s(?P<frag>[\d|.]+)%.*', line, re.M|re.I)
-                    m = re.match(r'(?P<chassisname>[sfc[0-9]+.*:|lcc[0-9]+.*:|fpc[0-9]+.*:])', line, re.M | re.I)
+                    m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:|fpc[0-9]+.*:|node[0-9]+:)', line.strip(), re.M | re.I)
                     if m:
+                        #print m.groups(0)[0]
                         chassisname = m.groups(0)[0]
                     m = re.match(r'(?P<filesystem>.*)\s+(?P<size>[0-9\.]+[BKMG])\s+(?P<used>[0-9\.]+[BKMG])\s+(?P<avail>[0-9\.]+[BKMG])\s+(?P<capacity>[0-9]+)%\s+(?P<location>.*)', line, re.M | re.I)
                     if m:
@@ -1400,6 +1414,7 @@ class Commands:
                         tmp.append(chassisname)
                         self.sys_stor_data[record_count]=tuple(tmp)
                         record_count = record_count + 1
+            #print json.dumps(self.sys_stor_data, indent=4)
 
     def get_sys_ver_data(self):
         # sys_ver_data

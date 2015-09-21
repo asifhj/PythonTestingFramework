@@ -262,15 +262,12 @@ if __name__ == "__main__":
     eth_sw_data = 1
 
 
-
-
     report = []
     file_report = []
 
     reports_dir = "C:\\tmp\\PHCreports\\srx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
-
-    file = "srx-3600-sn1_phdc_jmb_ais_health_20150917*.txt"
+    file = "*2015091*.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -288,8 +285,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            if size < 2:
-            #if True:
+            #if size < 2:
+            if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 

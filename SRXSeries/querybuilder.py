@@ -112,10 +112,9 @@ class Querybuilder:
         self.command_query = ""
         self.command_query =" and `rename`"+str(" is NULL" if rename=="NULL" else "='"+str(rename)+"'" )+" \
                             and fpcslot"+str(" is NULL" if slot=="NULL" else "='"+str(slot)+"'" )+" \
-                            and picstate"+str(" is NULL" if pic_state=="NULL" else "='"+str(pic_state)+"'" )+" \
                             and picslot"+str(" is NULL" if pic_slot=="NULL" else "='"+str(pic_slot)+"'" )+" \
                             and fpcdesc"+str(" is NULL" if description=="NULL" else "='"+str(description)+"'" )+" \
-                            and picstate"+str(" is NULL" if state=="NULL" else "='"+str(state)+"'" )+" \
+                            and picstate"+str(" is NULL" if state=="NULL" else "='"+str(pic_state)+"'" )+" \
                             and pictype"+str(" is NULL" if pic_type=="NULL" else "='"+str(pic_type)+"'" )+" \
                             order by collector_time"
 
@@ -124,9 +123,10 @@ class Querybuilder:
         self.command_query = ""
         q = ""
         bk_parttype = ""
-        m = re.match(r'([\S|\s]+)(\d)$', str(self.ch_hard_data[k]["item"]), re.M | re.I)
+        m = re.match(r'([a-zA-Z\s]+)\s(\d+)', str(self.ch_hard_data[k]["item"]).strip(), re.M | re.I)
         bk_parttype = self.ch_hard_data[k]["item"].upper()
         if m:
+            #print m.groups(0)
             parttype = m.groups()[0].strip()
             bk_parttype = m.groups()[0].strip().upper()
             if len(parttype.split(" "))>1:
@@ -1007,8 +1007,8 @@ class Querybuilder:
         chassisname = up_data.get("chassisname", "")
         self.command_query = ""
         self.command_query =" and boot_date='"+str(boot_date)+"' and \
-                boot_time='"+str(boot_time)+"' and protocols_start_date='"+str(protocols_start_date)+"' and \
-                protocol_start_time='"+str(protocol_start_time)+"' and config_date='"+str(config_date)+"' and \
+                boot_time='"+str(boot_time)+"' and protocols_start_date"+str(" is NULL" if protocols_start_date=="" else "='"+str(protocols_start_date)+"'" )+" and \
+                protocol_start_time"+str(" is NULL" if protocol_start_time=="" else "='"+str(protocol_start_time)+"'" )+" and config_date='"+str(config_date)+"' and \
                 config_time='"+str(config_time)+"' order by collector_time"
 
     def build_vc_prtcl_adj_data_query(self, vc_prtcl_adj_data):
