@@ -46,6 +46,10 @@ class Querybuilder:
     def build_buff_data_query(self, buff_data):
         chassisname = buff_data.get("chassisname", "")
         currentMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[0]
+        m = re.match(r'\Soutput\S(\d+)', currentMbufs.strip(), re.I|re.M)
+        if m:
+            currentMbufs = m.groups(0)[0]
+        #print(currentMbufs)
         cacheMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[1]
         totalMbufs = buff_data.get("mbufs in use (current/cache/total)",0)[2]
 
@@ -537,6 +541,10 @@ class Querybuilder:
         self.command_query = ""
         tmp = ""
         rename = re_data.get('rename', "")
+        if rename=="NULL":
+            tmp += " and `rename` is NULL "
+        else:
+            tmp += " and `rename`='" + str(rename) + "'"
         slot = re_data.get('slot', "NULL")
         if slot=="NULL":
             tmp += " and slot is NULL "

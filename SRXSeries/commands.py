@@ -76,6 +76,9 @@ class Commands:
             m = re.match(r'((\S+\d+:).*)', line.strip(), re.M|re.I)
             if m:
                 self.buff_data[record_count]['chassisname']=m.groups(0)[0]
+            m = re.match(r'<re-name>(.*)</re-name>', line.strip(), re.M|re.I)
+            if m:
+                self.buff_data[record_count]['chassisname']=m.groups(0)[0]
             m = re.match(r'(.*)\/(.*)\/(.*)\s+mbufs\s+in\s+use\s+\(current\/cache\/total\)', line.strip(), re.M|re.I)
             if m:
                 self.buff_data[record_count]['mbufs in use (current/cache/total)']=m.groups(0)
@@ -104,6 +107,13 @@ class Commands:
             if m:
                 self.buff_data[record_count]['cluster requests delayed']=m.groups(0)
                 continue
+            m = re.match(r'</multi-routing-engine-item>', line.strip(), re.M|re.I)
+            if m:
+                record_count += 1
+                self.buff_data[record_count] = {}
+        if bool(self.buff_data[record_count]) == False and not record_count==0:
+            del self.buff_data[record_count]
+
         #print json.dumps(self.buff_data, indent=4)
 
     # For SRX display xml
@@ -272,7 +282,8 @@ class Commands:
                 if len(line)<=60:
                     while len(line)<85:
                         line = line + " "
-                m = re.match(r'(?P<item>[\S|\s|\d]{17})(?P<version>[REV|\s\d|\s|N\\A]{9})(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN|N\\A]{13})(?P<serial_number>[\S|\s|BUILTIN|N\\A]{18})(?P<description>.*)', line, re.M|re.I)
+                m = re.match(
+                    r'(?P<item>[\S|\s|\d]{17})(?P<version>[REV|\s\d|\s|N\\A]{9})(?P<part_number>[\d{3,3}\-\d{6,6}|\s|BUILTIN|N\\A]{13})(?P<serial_number>[\S|\s|BUILTIN|N\\A]{18})(?P<description>.*)', line, re.M|re.I)
                 if m:
                     self.ch_hard_data[str(record_num)]=m.groupdict()
                     record_num = record_num + 1
@@ -482,7 +493,7 @@ class Commands:
             self.ipsec_stats_data[i] = {}
             for child in children:
                 self.ipsec_stats_data[i][child.name.strip().replace("-", "_")] = child.text.strip()
-                self.ipsec_stats_data[i]["chassiname"] = chassisname
+                self.ipsec_stats_data[i]["chassisname"] = chassisname
             i += 1
         #print json.dumps(self.ipsec_stats_data, indent=4)
 
@@ -816,7 +827,7 @@ class Commands:
         output = output.split("\n")
         for line in output:
            if line.strip():
-                m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:)', line, re.M|re.I)
+                m = re.match(r'(sfc[0-9]+.*:|lcc[0-9]+.*:|node[0-9]+:)', line, re.M|re.I)
                 if m:
                     chassisname = m.groups(0)[0]
                 m = re.match(r'Mem:\s+(?P<activemem>\d+)M\s+\S+\s(?P<inactmem>\d+)M\s+\S+\s(?P<wiredmem>\d+)M\s\S+\s(?P<cachemem>\d+)M\s\S+\s(?P<bufmem>\d+)M\s+\S+\s(?P<freemem>\d+)M.*', line.strip(), re.M|re.I)
@@ -925,7 +936,7 @@ class Commands:
                     break
                 output = output + line
         self.output = output.split("\n")
-        rename = ""
+        rename = "NULL"
         for line in output.split("\n"):
             m = re.match(r"<re-name>(.*)<\/re-name>", line.strip(), re.I | re.M)
             if m:

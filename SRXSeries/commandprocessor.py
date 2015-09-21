@@ -270,7 +270,7 @@ if __name__ == "__main__":
     reports_dir = "C:\\tmp\\PHCreports\\srx1\\"
     phcs_home_dir = "C:\\Users\\asifj\\Desktop\\sandbox\\ImpalaTesting\\PHCFiles\\srx\\"
 
-    file = "*.txt"
+    file = "srx-3600-sn1_phdc_jmb_ais_health_20150917*.txt"
     #file = "sn-space-mx320-sys_phdc_jmb_ais_health_20150810_071932.txt"
     phcs = sorted(glob.glob(phcs_home_dir+file))
 
@@ -288,8 +288,8 @@ if __name__ == "__main__":
             except Exception:
                 size = 0
             #  os.path.isfile(reports_dir+str(tmp)+".csv") and
-            #if size < 2:
-            if True:
+            if size < 2:
+            #if True:
                 print "\n\n\n\n\n" + C.hashs() + "  START  " + C.hashs()
                 print "\nFilename: " + str(phc)
 
@@ -362,7 +362,7 @@ if __name__ == "__main__":
                     C.get_buff_data()
                     cur.execute("refresh buff_data")
                     how_many = 0
-                    if bool(C.buff_data[0])==False:
+                    if bool(C.buff_data[0]) == False:
                         how_many = 0
                     else:
                         how_many = len(C.buff_data)
@@ -625,8 +625,6 @@ if __name__ == "__main__":
                         summary.append(status)
                         file_report.append(command_report)
                         command_report = C.report_writer(writer, command_report)
-                    if how_many==0:
-                        print "\n\t\t\t\t\t\t******************ch_fpc_pic_data command not found in file*********************"
                     if len(C.output)==1:
                         command_report.append(str(phc.replace(phcs_home_dir,"")))
                         command_report.append("show chassis fpc pic-status | display xml")
